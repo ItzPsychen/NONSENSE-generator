@@ -4,17 +4,45 @@ import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
 import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
 import com.google.cloud.language.v1.Token;
 
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import java.lang.*;
 
 public class App {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter any sentence in English");
         String text = scan.nextLine();
-        scan.close();
 
-        // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
+        // declaration of the response
+        AnalyzeSyntaxResponse response = analyzeSentence(text);
+
+        // check if response exists
+        if (response == null) {
+            System.err.println("Language analysis failed");
+            return;
+        }
+
+        // creating the original sentence structure
+        StringBuilder sentenceStructure = new StringBuilder();
+        List<Token> tokens = response.getTokensList();
+
+        // list of Noun/Verb/Adjective
+        List<Noun> nouns = new ArrayList<>();
+        List<Verb> verbs = new ArrayList<>();
+        List<Adjective> adjectives = new ArrayList<>();
+
+        // fill the above lists and choose a new sentence structure
+        createLists(sentenceStructure, tokens, nouns, verbs, adjectives);
+        extractNewSentenceStructure(sentenceStructure);
+
+        scan.close();
+    }
+
+    public static AnalyzeSyntaxResponse analyzeSentence(String text) {
+        AnalyzeSyntaxResponse response;
+
+        // instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         try (com.google.cloud.language.v1.LanguageServiceClient language =
                      com.google.cloud.language.v1.LanguageServiceClient.create()) {
             com.google.cloud.language.v1.Document doc =
@@ -25,9 +53,9 @@ public class App {
                             .setDocument(doc)
                             .setEncodingType(com.google.cloud.language.v1.EncodingType.UTF16)
                             .build();
-            // Analyze the syntax in the given text
-            AnalyzeSyntaxResponse response = language.analyzeSyntax(request);
-            // Print the response
+            // analyze the syntax in the given text
+            response = language.analyzeSyntax(request);
+
             for (Token token : response.getTokensList()) {
                 System.out.printf("\tText: %s\n", token.getText().getContent());
                 System.out.printf("\tBeginOffset: %d\n", token.getText().getBeginOffset());
@@ -52,5 +80,46 @@ public class App {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return response;
+    }
+
+    public static void createLists(StringBuilder sentenceStructure, List<Token> tokens,
+                                   List<Noun> nouns, List<Verb> verbs, List<Adjective> adjectives) {
+        // check for every token (word written by user)
+        for (Token token : tokens) {
+            String word = token.getText().getContent();
+            String posTag = token.getPartOfSpeech().getTag().name();
+
+            // looking for the Tag of the word
+            switch (posTag) {
+                case "NOUN":
+                case "PRON":
+                    nouns.add(new Noun(word));
+                    sentenceStructure.append("[noun] ");
+                    break;
+                case "VERB":
+                    Verb current = new Verb(word);
+                    verbs.add(new Verb(word));
+                    sentenceStructure.append("[verb").append(current.form()).append("] ");
+                    break;
+                case "ADJ":
+                    adjectives.add(new Adjective(word));
+                    sentenceStructure.append("[adjective] ");
+                    break;
+                default:
+                    sentenceStructure.append(word).append(" ");
+                    break;
+            }
+
+            // remove the last space
+            if (!sentenceStructure.isEmpty()) {
+                sentenceStructure.setLength(sentenceStructure.length() - 1);
+            }
+        }
+    }
+
+    public static void extractNewSentenceStructure(StringBuilder sentenceStructure) {
+
     }
 }

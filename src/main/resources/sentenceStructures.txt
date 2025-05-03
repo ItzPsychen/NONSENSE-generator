@@ -1,436 +1,1337 @@
 [noun] [verb]
+1 1 0
+
 [noun] [verb] [noun]
+2 1 0
+
 [noun] [verb] the [noun]
+2 1 0
+
 [noun] [verb] the [adjective] [noun]
+2 1 1
+
 [noun] [verb] the [noun] in the [noun]
+3 1 0
+
 [noun] [verb] the [noun] with the [adjective] [noun]
+3 1 1
+
 [noun] [verb] to [verb] the [noun]
+2 2 0
+
 [noun] [verb] that [noun] [verb]
+2 2 0
+
 [noun] [verb] because [noun] [verb]
+2 2 0
+
 [adjective] [noun] [verb] the [noun]
+2 1 1
+
 [noun] [verb] while [noun] [verb]
-The [adjective] [noun] [verb] the [adjective] [noun]
+2 2 0
+
+the [adjective] [noun] [verb] the [adjective] [noun]
+2 1 2
+
 [noun] [verb] the [noun] in a [adjective] [noun]
+3 1 1
+
 [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
 [noun] [verb] the [noun] after [verb+ing] the [noun]
+3 2 0
+
 [noun] [verb] the [noun] who [verb] the [noun]
-The [noun] that [verb] [noun] [verb] the [noun]
-After [verb+ing] the [noun], the [noun] [verb]
+3 2 0
+
+the [noun] that [verb] [noun] [verb] the [noun]
+3 2 0
+
+after [verb+ing] the [noun] the [noun] [verb]
+2 2 0
+
 [noun] [verb] if [noun] [verb]
+2 2 0
+
 [noun] [verb] the [noun] as [noun] [verb]
+3 2 0
+
 [noun] [verb] although [noun] [verb]
-The [noun] [verb] the [adjective] [noun] in a [adjective] [noun] and [verb] the [noun]
-While the [adjective] [noun] [verb] the [noun], the [noun] [verb]
-As [noun] [verb] the [noun], the [adjective] [noun] [verb]
-[noun] [verb] [noun], but the [noun] [verb] [noun]
-In the [adjective] [noun], the [noun] [verb] the [noun] and [verb]
+2 2 0
+
+the [noun] [verb] the [adjective] [noun] in a [adjective] [noun] and [verb] the [noun]
+4 2 2
+
+while the [adjective] [noun] [verb] the [noun] the [noun] [verb]
+3 2 1
+
+as [noun] [verb] the [noun] the [adjective] [noun] [verb]
+3 2 1
+
+[noun] [verb] [noun] but the [noun] [verb] [noun]
+4 2 0
+
+in the [adjective] [noun] the [noun] [verb] the [noun] and [verb]
+3 2 1
+
 [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
 [noun] [verb] like [noun] [verb] the [adjective] [noun]
-Neither [noun] nor [noun] [verb] the [noun]
+3 2 1
+
+neither [noun] nor [noun] [verb] the [noun]
+3 1 0
+
 [noun] not only [verb] the [noun] but also [verb] the [noun]
+3 2 0
+
 [noun] [verb] the [noun] unless [noun] [verb]
-The [noun] [verb] the [noun]
-The [adjective] [noun] [verb] the [adjective] [noun]
-The [noun] [verb] in the [adjective] [noun]
-The [noun] that [verb] the [noun] [verb] the [noun]
-The [adjective] [noun] [verb] while the [noun] [verb]
-The [noun] [verb] the [noun] because the [noun] [verb]
-The [noun] [verb] the [noun] in a [noun] and [verb] the [noun]
-The [adjective] [noun] [verb] like the [adjective] [noun] [verb]
-The [noun] [verb] after the [noun] [verb] the [noun]
-The [noun] [verb] the [noun] although the [noun] [verb]
-The [noun] [verb] when the [noun] [verb] the [noun]
-The [adjective] [noun] [verb] the [noun] before the [noun] [verb]
-The [noun] [verb] if the [noun] [verb] the [noun]
-The [noun] [verb] the [noun] while the [noun] [verb] the [noun]
-The [adjective] [noun] who [verb] the [noun] [verb] the [noun]
-The [noun] not only [verb] the [noun] but also [verb] the [noun]
-The [noun] [verb] unless the [noun] [verb]
-The [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-The [noun] [verb] that the [noun] [verb] the [adjective] [noun]
-The [noun] [verb] because the [noun] [verb] in the [noun]
-While [noun] [verb] the [noun], [noun] [verb] the [noun]
-While the [noun] [verb], the [adjective] [noun] [verb] the [noun]
-While [verb+ing] the [noun], [noun] [verb] the [adjective] [noun]
-During the [noun], the [adjective] [noun] [verb] the [noun]
-During [noun] [verb+ing], [noun] [verb] the [noun]
-Before [noun] [verb] the [noun], [noun] [verb]
-After [noun] [verb] the [noun], [noun] [verb] the [adjective] [noun]
-Although [noun] [verb] the [noun], [noun] [verb] the [noun]
-Because [noun] [verb] the [noun], [noun] [verb] the [adjective] [noun]
-Unless [noun] [verb] the [noun], [noun] will not [verb]
-If [noun] [verb] the [noun], [noun] [verb] the [noun]
-Even though [noun] [verb], the [noun] still [verb]
-As soon as [noun] [verb], [noun] [verb] the [noun]
-Whenever [noun] [verb], [noun] [verb] the [adjective] [noun]
-Since [noun] [verb] the [noun], [noun] [verb] the [noun]
-While [noun] [verb] the [noun], [noun] [verb] the [noun]
-During the [noun], the [adjective] [noun] [verb] the [noun]
-As [noun] [verb] the [adjective] [noun], [noun] [verb]
-Because [noun] [verb] the [noun], [noun] [verb] the [noun]
-Although [noun] [verb] the [noun], [noun] still [verb]
-After [verb+ing] the [noun], [noun] [verb] the [noun]
-Before [noun] [verb] the [noun], [noun] [verb]
-When [noun] [verb] the [noun], [noun] [verb] the [noun]
-If [noun] [verb] the [noun], [noun] will [verb]
-Unless [noun] [verb] the [noun], [noun] won’t [verb]
-Since [noun] [verb] the [noun], [noun] has [verb+ed] the [noun]
-Even though [noun] [verb], [noun] [verb] anyway
-Wherever [noun] [verb], the [noun] [verb] the [noun]
-Once [noun] [verb] the [noun], [noun] [verb]
-Whether [noun] [verb] or not, [noun] [verb] the [noun]
-Though [noun] [verb] the [noun], [noun] [verb]
-Provided that [noun] [verb] the [noun], [noun] [verb]
-In case [noun] [verb] the [noun], [noun] [verb]
-Whenever [noun] [verb], [noun] [verb] the [noun]
-By the time [noun] [verb], [noun] will have [verb+ed]
-While [noun] [verb] [noun]
-While [noun] [verb] the [noun]
-While [noun] [verb] the [adjective] [noun]
-While [noun] [verb] [noun] and [verb] [noun]
-While [noun] [verb] [noun] before [verb+ing] the [noun]
-While [noun] [verb] [noun] after [verb+ing] the [noun]
-While [noun] [verb] [noun] when [noun] [verb] the [noun]
-While [noun] [verb] [noun] unless [noun] [verb]
-While [noun] [verb] [noun] although [noun] [verb]
-While [adjective] [noun] [verb] the [noun]
-While [adjective] [noun] [verb] [noun] because [noun] [verb]
-While [adjective] [noun] [verb] [noun] while [noun] [verb]
-While [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-While [adjective] [noun] [verb] the [noun] before [noun] [verb]
-While [noun] [verb] [adverb] [verb] the [noun]
-While [noun] [verb] the [noun] with [adverb] [noun]
-While [noun] [verb] [noun] so that [noun] [verb]
-While [noun] [verb] [noun] to [verb] the [noun]
-While [noun] [verb] that [noun] [verb] the [noun]
-While [noun] [verb] [noun] after the [noun] [verb]
-While [noun] [verb] [noun] because [noun] [verb] the [noun]
-While [noun] [verb] [noun] unless [noun] [verb] [noun]
-While [noun] [verb] [noun] while the [noun] [verb] [noun]
-While [noun] [verb] the [noun] when the [noun] [verb] [noun]
-While [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-During [noun] [verb] [noun]
-During [noun] [verb] the [noun]
-During [noun] [verb] the [adjective] [noun]
-During [noun] [verb] [noun] and [verb] [noun]
-During [noun] [verb] [noun] before [verb+ing] the [noun]
-During [noun] [verb] [noun] after [verb+ing] the [noun]
-During [noun] [verb] [noun] when [noun] [verb] the [noun]
-During [noun] [verb] [noun] unless [noun] [verb]
-During [noun] [verb] [noun] although [noun] [verb]
-During [adjective] [noun] [verb] the [noun]
-During [adjective] [noun] [verb] [noun] because [noun] [verb]
-During [adjective] [noun] [verb] [noun] while [noun] [verb]
-During [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-During [adjective] [noun] [verb] the [noun] before [noun] [verb]
-During [noun] [verb] [adverb] [verb] the [noun]
-During [noun] [verb] the [noun] with [adverb] [noun]
-During [noun] [verb] [noun] so that [noun] [verb]
-During [noun] [verb] [noun] to [verb] the [noun]
-During [noun] [verb] that [noun] [verb] the [noun]
-During [noun] [verb] [noun] after the [noun] [verb]
-During [noun] [verb] [noun] because [noun] [verb] the [noun]
-During [noun] [verb] [noun] unless [noun] [verb] [noun]
-During [noun] [verb] [noun] while the [noun] [verb] [noun]
-During [noun] [verb] the [noun] when the [noun] [verb] [noun]
-During [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-As [noun] [verb] [noun]
-As [noun] [verb] the [noun]
-As [noun] [verb] the [adjective] [noun]
-As [noun] [verb] [noun] and [verb] [noun]
-As [noun] [verb] [noun] before [verb+ing] the [noun]
-As [noun] [verb] [noun] after [verb+ing] the [noun]
-As [noun] [verb] [noun] when [noun] [verb] the [noun]
-As [noun] [verb] [noun] unless [noun] [verb]
-As [noun] [verb] [noun] although [noun] [verb]
-As [adjective] [noun] [verb] the [noun]
-As [adjective] [noun] [verb] [noun] because [noun] [verb]
-As [adjective] [noun] [verb] [noun] while [noun] [verb]
-As [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-As [adjective] [noun] [verb] the [noun] before [noun] [verb]
-As [noun] [verb] [adverb] [verb] the [noun]
-As [noun] [verb] the [noun] with [adverb] [noun]
-As [noun] [verb] [noun] so that [noun] [verb]
-As [noun] [verb] [noun] to [verb] the [noun]
-As [noun] [verb] that [noun] [verb] the [noun]
-As [noun] [verb] [noun] after the [noun] [verb]
-As [noun] [verb] [noun] because [noun] [verb] the [noun]
-As [noun] [verb] [noun] unless [noun] [verb] [noun]
-As [noun] [verb] [noun] while the [noun] [verb] [noun]
-As [noun] [verb] the [noun] when the [noun] [verb] [noun]
-As [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Because [noun] [verb] [noun]
-Because [noun] [verb] the [noun]
-Because [noun] [verb] the [adjective] [noun]
-Because [noun] [verb] [noun] and [verb] [noun]
-Because [noun] [verb] [noun] before [verb+ing] the [noun]
-Because [noun] [verb] [noun] after [verb+ing] the [noun]
-Because [noun] [verb] [noun] when [noun] [verb] the [noun]
-Because [noun] [verb] [noun] unless [noun] [verb]
-Because [noun] [verb] [noun] although [noun] [verb]
-Because [adjective] [noun] [verb] the [noun]
-Because [adjective] [noun] [verb] [noun] because [noun] [verb]
-Because [adjective] [noun] [verb] [noun] while [noun] [verb]
-Because [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Because [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Because [noun] [verb] [adverb] [verb] the [noun]
-Because [noun] [verb] the [noun] with [adverb] [noun]
-Because [noun] [verb] [noun] so that [noun] [verb]
-Because [noun] [verb] [noun] to [verb] the [noun]
-Because [noun] [verb] that [noun] [verb] the [noun]
-Because [noun] [verb] [noun] after the [noun] [verb]
-Because [noun] [verb] [noun] because [noun] [verb] the [noun]
-Because [noun] [verb] [noun] unless [noun] [verb] [noun]
-Because [noun] [verb] [noun] while the [noun] [verb] [noun]
-Because [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Because [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Although [noun] [verb] [noun]
-Although [noun] [verb] the [noun]
-Although [noun] [verb] the [adjective] [noun]
-Although [noun] [verb] [noun] and [verb] [noun]
-Although [noun] [verb] [noun] before [verb+ing] the [noun]
-Although [noun] [verb] [noun] after [verb+ing] the [noun]
-Although [noun] [verb] [noun] when [noun] [verb] the [noun]
-Although [noun] [verb] [noun] unless [noun] [verb]
-Although [noun] [verb] [noun] although [noun] [verb]
-Although [adjective] [noun] [verb] the [noun]
-Although [adjective] [noun] [verb] [noun] because [noun] [verb]
-Although [adjective] [noun] [verb] [noun] while [noun] [verb]
-Although [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Although [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Although [noun] [verb] [adverb] [verb] the [noun]
-Although [noun] [verb] the [noun] with [adverb] [noun]
-Although [noun] [verb] [noun] so that [noun] [verb]
-Although [noun] [verb] [noun] to [verb] the [noun]
-Although [noun] [verb] that [noun] [verb] the [noun]
-Although [noun] [verb] [noun] after the [noun] [verb]
-Although [noun] [verb] [noun] because [noun] [verb] the [noun]
-Although [noun] [verb] [noun] unless [noun] [verb] [noun]
-Although [noun] [verb] [noun] while the [noun] [verb] [noun]
-Although [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Although [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-After [noun] [verb] [noun]
-After [noun] [verb] the [noun]
-After [noun] [verb] the [adjective] [noun]
-After [noun] [verb] [noun] and [verb] [noun]
-After [noun] [verb] [noun] before [verb+ing] the [noun]
-After [noun] [verb] [noun] after [verb+ing] the [noun]
-After [noun] [verb] [noun] when [noun] [verb] the [noun]
-After [noun] [verb] [noun] unless [noun] [verb]
-After [noun] [verb] [noun] although [noun] [verb]
-After [adjective] [noun] [verb] the [noun]
-After [adjective] [noun] [verb] [noun] because [noun] [verb]
-After [adjective] [noun] [verb] [noun] while [noun] [verb]
-After [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-After [adjective] [noun] [verb] the [noun] before [noun] [verb]
-After [noun] [verb] [adverb] [verb] the [noun]
-After [noun] [verb] the [noun] with [adverb] [noun]
-After [noun] [verb] [noun] so that [noun] [verb]
-After [noun] [verb] [noun] to [verb] the [noun]
-After [noun] [verb] that [noun] [verb] the [noun]
-After [noun] [verb] [noun] after the [noun] [verb]
-After [noun] [verb] [noun] because [noun] [verb] the [noun]
-After [noun] [verb] [noun] unless [noun] [verb] [noun]
-After [noun] [verb] [noun] while the [noun] [verb] [noun]
-After [noun] [verb] the [noun] when the [noun] [verb] [noun]
-After [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Before [noun] [verb] [noun]
-Before [noun] [verb] the [noun]
-Before [noun] [verb] the [adjective] [noun]
-Before [noun] [verb] [noun] and [verb] [noun]
-Before [noun] [verb] [noun] before [verb+ing] the [noun]
-Before [noun] [verb] [noun] after [verb+ing] the [noun]
-Before [noun] [verb] [noun] when [noun] [verb] the [noun]
-Before [noun] [verb] [noun] unless [noun] [verb]
-Before [noun] [verb] [noun] although [noun] [verb]
-Before [adjective] [noun] [verb] the [noun]
-Before [adjective] [noun] [verb] [noun] because [noun] [verb]
-Before [adjective] [noun] [verb] [noun] while [noun] [verb]
-Before [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Before [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Before [noun] [verb] [adverb] [verb] the [noun]
-Before [noun] [verb] the [noun] with [adverb] [noun]
-Before [noun] [verb] [noun] so that [noun] [verb]
-Before [noun] [verb] [noun] to [verb] the [noun]
-Before [noun] [verb] that [noun] [verb] the [noun]
-Before [noun] [verb] [noun] after the [noun] [verb]
-Before [noun] [verb] [noun] because [noun] [verb] the [noun]
-Before [noun] [verb] [noun] unless [noun] [verb] [noun]
-Before [noun] [verb] [noun] while the [noun] [verb] [noun]
-Before [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Before [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-When [noun] [verb] [noun]
-When [noun] [verb] the [noun]
-When [noun] [verb] the [adjective] [noun]
-When [noun] [verb] [noun] and [verb] [noun]
-When [noun] [verb] [noun] before [verb+ing] the [noun]
-When [noun] [verb] [noun] after [verb+ing] the [noun]
-When [noun] [verb] [noun] when [noun] [verb] the [noun]
-When [noun] [verb] [noun] unless [noun] [verb]
-When [noun] [verb] [noun] although [noun] [verb]
-When [adjective] [noun] [verb] the [noun]
-When [adjective] [noun] [verb] [noun] because [noun] [verb]
-When [adjective] [noun] [verb] [noun] while [noun] [verb]
-When [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-When [adjective] [noun] [verb] the [noun] before [noun] [verb]
-When [noun] [verb] [adverb] [verb] the [noun]
-When [noun] [verb] the [noun] with [adverb] [noun]
-When [noun] [verb] [noun] so that [noun] [verb]
-When [noun] [verb] [noun] to [verb] the [noun]
-When [noun] [verb] that [noun] [verb] the [noun]
-When [noun] [verb] [noun] after the [noun] [verb]
-When [noun] [verb] [noun] because [noun] [verb] the [noun]
-When [noun] [verb] [noun] unless [noun] [verb] [noun]
-When [noun] [verb] [noun] while the [noun] [verb] [noun]
-When [noun] [verb] the [noun] when the [noun] [verb] [noun]
-When [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-If [noun] [verb] [noun]
-If [noun] [verb] the [noun]
-If [noun] [verb] the [adjective] [noun]
-If [noun] [verb] [noun] and [verb] [noun]
-If [noun] [verb] [noun] before [verb+ing] the [noun]
-If [noun] [verb] [noun] after [verb+ing] the [noun]
-If [noun] [verb] [noun] when [noun] [verb] the [noun]
-If [noun] [verb] [noun] unless [noun] [verb]
-If [noun] [verb] [noun] although [noun] [verb]
-If [adjective] [noun] [verb] the [noun]
-If [adjective] [noun] [verb] [noun] because [noun] [verb]
-If [adjective] [noun] [verb] [noun] while [noun] [verb]
-If [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-If [adjective] [noun] [verb] the [noun] before [noun] [verb]
-If [noun] [verb] [adverb] [verb] the [noun]
-If [noun] [verb] the [noun] with [adverb] [noun]
-If [noun] [verb] [noun] so that [noun] [verb]
-If [noun] [verb] [noun] to [verb] the [noun]
-If [noun] [verb] that [noun] [verb] the [noun]
-If [noun] [verb] [noun] after the [noun] [verb]
-If [noun] [verb] [noun] because [noun] [verb] the [noun]
-If [noun] [verb] [noun] unless [noun] [verb] [noun]
-If [noun] [verb] [noun] while the [noun] [verb] [noun]
-If [noun] [verb] the [noun] when the [noun] [verb] [noun]
-If [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Unless [noun] [verb] [noun]
-Unless [noun] [verb] the [noun]
-Unless [noun] [verb] the [adjective] [noun]
-Unless [noun] [verb] [noun] and [verb] [noun]
-Unless [noun] [verb] [noun] before [verb+ing] the [noun]
-Unless [noun] [verb] [noun] after [verb+ing] the [noun]
-Unless [noun] [verb] [noun] when [noun] [verb] the [noun]
-Unless [noun] [verb] [noun] unless [noun] [verb]
-Unless [noun] [verb] [noun] although [noun] [verb]
-Unless [adjective] [noun] [verb] the [noun]
-Unless [adjective] [noun] [verb] [noun] because [noun] [verb]
-Unless [adjective] [noun] [verb] [noun] while [noun] [verb]
-Unless [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Unless [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Unless [noun] [verb] [adverb] [verb] the [noun]
-Unless [noun] [verb] the [noun] with [adverb] [noun]
-Unless [noun] [verb] [noun] so that [noun] [verb]
-Unless [noun] [verb] [noun] to [verb] the [noun]
-Unless [noun] [verb] that [noun] [verb] the [noun]
-Unless [noun] [verb] [noun] after the [noun] [verb]
-Unless [noun] [verb] [noun] because [noun] [verb] the [noun]
-Unless [noun] [verb] [noun] unless [noun] [verb] [noun]
-Unless [noun] [verb] [noun] while the [noun] [verb] [noun]
-Unless [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Unless [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Since [noun] [verb] [noun]
-Since [noun] [verb] the [noun]
-Since [noun] [verb] the [adjective] [noun]
-Since [noun] [verb] [noun] and [verb] [noun]
-Since [noun] [verb] [noun] before [verb+ing] the [noun]
-Since [noun] [verb] [noun] after [verb+ing] the [noun]
-Since [noun] [verb] [noun] when [noun] [verb] the [noun]
-Since [noun] [verb] [noun] unless [noun] [verb]
-Since [noun] [verb] [noun] although [noun] [verb]
-Since [adjective] [noun] [verb] the [noun]
-Since [adjective] [noun] [verb] [noun] because [noun] [verb]
-Since [adjective] [noun] [verb] [noun] while [noun] [verb]
-Since [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Since [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Since [noun] [verb] [adverb] [verb] the [noun]
-Since [noun] [verb] the [noun] with [adverb] [noun]
-Since [noun] [verb] [noun] so that [noun] [verb]
-Since [noun] [verb] [noun] to [verb] the [noun]
-Since [noun] [verb] that [noun] [verb] the [noun]
-Since [noun] [verb] [noun] after the [noun] [verb]
-Since [noun] [verb] [noun] because [noun] [verb] the [noun]
-Since [noun] [verb] [noun] unless [noun] [verb] [noun]
-Since [noun] [verb] [noun] while the [noun] [verb] [noun]
-Since [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Since [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Even though [noun] [verb] [noun]
-Even though [noun] [verb] the [noun]
-Even though [noun] [verb] the [adjective] [noun]
-Even though [noun] [verb] [noun] and [verb] [noun]
-Even though [noun] [verb] [noun] before [verb+ing] the [noun]
-Even though [noun] [verb] [noun] after [verb+ing] the [noun]
-Even though [noun] [verb] [noun] when [noun] [verb] the [noun]
-Even though [noun] [verb] [noun] unless [noun] [verb]
-Even though [noun] [verb] [noun] although [noun] [verb]
-Even though [adjective] [noun] [verb] the [noun]
-Even though [adjective] [noun] [verb] [noun] because [noun] [verb]
-Even though [adjective] [noun] [verb] [noun] while [noun] [verb]
-Even though [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Even though [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Even though [noun] [verb] [adverb] [verb] the [noun]
-Even though [noun] [verb] the [noun] with [adverb] [noun]
-Even though [noun] [verb] [noun] so that [noun] [verb]
-Even though [noun] [verb] [noun] to [verb] the [noun]
-Even though [noun] [verb] that [noun] [verb] the [noun]
-Even though [noun] [verb] [noun] after the [noun] [verb]
-Even though [noun] [verb] [noun] because [noun] [verb] the [noun]
-Even though [noun] [verb] [noun] unless [noun] [verb] [noun]
-Even though [noun] [verb] [noun] while the [noun] [verb] [noun]
-Even though [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Even though [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Wherever [noun] [verb] [noun]
-Wherever [noun] [verb] the [noun]
-Wherever [noun] [verb] the [adjective] [noun]
-Wherever [noun] [verb] [noun] and [verb] [noun]
-Wherever [noun] [verb] [noun] before [verb+ing] the [noun]
-Wherever [noun] [verb] [noun] after [verb+ing] the [noun]
-Wherever [noun] [verb] [noun] when [noun] [verb] the [noun]
-Wherever [noun] [verb] [noun] unless [noun] [verb]
-Wherever [noun] [verb] [noun] although [noun] [verb]
-Wherever [adjective] [noun] [verb] the [noun]
-Wherever [adjective] [noun] [verb] [noun] because [noun] [verb]
-Wherever [adjective] [noun] [verb] [noun] while [noun] [verb]
-Wherever [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Wherever [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Wherever [noun] [verb] [adverb] [verb] the [noun]
-Wherever [noun] [verb] the [noun] with [adverb] [noun]
-Wherever [noun] [verb] [noun] so that [noun] [verb]
-Wherever [noun] [verb] [noun] to [verb] the [noun]
-Wherever [noun] [verb] that [noun] [verb] the [noun]
-Wherever [noun] [verb] [noun] after the [noun] [verb]
-Wherever [noun] [verb] [noun] because [noun] [verb] the [noun]
-Wherever [noun] [verb] [noun] unless [noun] [verb] [noun]
-Wherever [noun] [verb] [noun] while the [noun] [verb] [noun]
-Wherever [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Wherever [noun] [verb] the [noun] as the [adjective] [noun] [verb]
-Once [noun] [verb] [noun]
-Once [noun] [verb] the [noun]
-Once [noun] [verb] the [adjective] [noun]
-Once [noun] [verb] [noun] and [verb] [noun]
-Once [noun] [verb] [noun] before [verb+ing] the [noun]
-Once [noun] [verb] [noun] after [verb+ing] the [noun]
-Once [noun] [verb] [noun] when [noun] [verb] the [noun]
-Once [noun] [verb] [noun] unless [noun] [verb]
-Once [noun] [verb] [noun] although [noun] [verb]
-Once [adjective] [noun] [verb] the [noun]
-Once [adjective] [noun] [verb] [noun] because [noun] [verb]
-Once [adjective] [noun] [verb] [noun] while [noun] [verb]
-Once [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
-Once [adjective] [noun] [verb] the [noun] before [noun] [verb]
-Once [noun] [verb] [adverb] [verb] the [noun]
-Once [noun] [verb] the [noun] with [adverb] [noun]
-Once [noun] [verb] [noun] so that [noun] [verb]
-Once [noun] [verb] [noun] to [verb] the [noun]
-Once [noun] [verb] that [noun] [verb] the [noun]
-Once [noun] [verb] [noun] after the [noun] [verb]
-Once [noun] [verb] [noun] because [noun] [verb] the [noun]
-Once [noun] [verb] [noun] unless [noun] [verb] [noun]
-Once [noun] [verb] [noun] while the [noun] [verb] [noun]
-Once [noun] [verb] the [noun] when the [noun] [verb] [noun]
-Once [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 0
+
+the [noun] [verb] the [noun]
+2 1 0
+
+the [adjective] [noun] [verb] the [adjective] [noun]
+2 1 2
+
+the [noun] [verb] in the [adjective] [noun]
+2 1 1
+
+the [noun] that [verb] the [noun] [verb] the [noun]
+3 2 0
+
+the [adjective] [noun] [verb] while the [noun] [verb]
+2 2 1
+
+the [noun] [verb] the [noun] because the [noun] [verb]
+3 2 0
+
+the [noun] [verb] the [noun] in a [noun] and [verb] the [noun]
+4 2 0
+
+the [adjective] [noun] [verb] like the [adjective] [noun] [verb]
+2 2 2
+
+the [noun] [verb] after the [noun] [verb] the [noun]
+3 2 0
+
+the [noun] [verb] the [noun] although the [noun] [verb]
+3 2 0
+
+the [noun] [verb] when the [noun] [verb] the [noun]
+3 2 0
+
+the [adjective] [noun] [verb] the [noun] before the [noun] [verb]
+3 2 1
+
+the [noun] [verb] if the [noun] [verb] the [noun]
+3 2 0
+
+the [noun] [verb] the [noun] while the [noun] [verb] the [noun]
+4 2 0
+
+the [adjective] [noun] who [verb] the [noun] [verb] the [noun]
+3 2 1
+
+the [noun] not only [verb] the [noun] but also [verb] the [noun]
+3 2 0
+
+the [noun] [verb] unless the [noun] [verb]
+2 2 0
+
+the [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+the [noun] [verb] that the [noun] [verb] the [adjective] [noun]
+3 2 1
+
+the [noun] [verb] because the [noun] [verb] in the [noun]
+3 2 0
+
+while [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+while the [noun] [verb] the [adjective] [noun] [verb] the [noun]
+3 2 1
+
+while [verb+ing] the [noun] [noun] [verb] the [adjective] [noun]
+3 2 1
+
+during the [noun] the [adjective] [noun] [verb] the [noun]
+3 1 1
+
+during [noun] [verb+ing] [noun] [verb] the [noun]
+3 2 0
+
+before [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+after [noun] [verb] the [noun] [noun] [verb] the [adjective] [noun]
+4 2 1
+
+although [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+because [noun] [verb] the [noun] [noun] [verb] the [adjective] [noun]
+4 2 1
+
+unless [noun] [verb] the [noun] [noun] will not [verb]
+3 2 0
+
+if [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+even though [noun] [verb] the [noun] still [verb]
+2 2 0
+
+as soon as [noun] [verb] [noun] [verb] the [noun]
+3 2 0
+
+whenever [noun] [verb] [noun] [verb] the [adjective] [noun]
+3 2 1
+
+since [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+while [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+during the [noun] the [adjective] [noun] [verb] the [noun]
+3 1 1
+
+as [noun] [verb] the [adjective] [noun] [noun] [verb]
+3 2 1
+
+because [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+although [noun] [verb] the [noun] [noun] still [verb]
+3 2 0
+
+after [verb+ing] the [noun] [noun] [verb] the [noun]
+3 2 0
+
+before [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+when [noun] [verb] the [noun] [noun] [verb] the [noun]
+4 2 0
+
+if [noun] [verb] the [noun] [noun] will [verb]
+3 2 0
+
+unless [noun] [verb] the [noun] [noun] won’t [verb]
+3 2 0
+
+since [noun] [verb] the [noun] [noun] has [verb+ed] the [noun]
+4 2 0
+
+even though [noun] [verb] [noun] [verb] anyway
+2 2 0
+
+wherever [noun] [verb] the [noun] [verb] the [noun]
+3 2 0
+
+once [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+whether [noun] [verb] or not [noun] [verb] the [noun]
+3 2 0
+
+though [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+provided that [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+in case [noun] [verb] the [noun] [noun] [verb]
+3 2 0
+
+whenever [noun] [verb] [noun] [verb] the [noun]
+3 2 0
+
+by the time [noun] [verb] [noun] will have [verb+ed]
+2 2 0
+
+while [noun] [verb] [noun]
+2 1 0
+
+while [noun] [verb] the [noun]
+2 1 0
+
+while [noun] [verb] the [adjective] [noun]
+2 1 1
+
+while [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+while [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+while [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+while [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+while [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+while [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+while [adjective] [noun] [verb] the [noun]
+2 1 1
+
+while [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+while [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+while [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+while [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+while [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+while [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+while [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+while [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+while [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+while [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+while [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+while [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+while [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+while [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+while [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+during [noun] [verb] [noun]
+2 1 0
+
+during [noun] [verb] the [noun]
+2 1 0
+
+during [noun] [verb] the [adjective] [noun]
+2 1 1
+
+during [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+during [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+during [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+during [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+during [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+during [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+during [adjective] [noun] [verb] the [noun]
+2 1 1
+
+during [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+during [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+during [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+during [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+during [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+during [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+during [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+during [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+during [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+during [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+during [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+during [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+during [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+during [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+during [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+as [noun] [verb] [noun]
+2 1 0
+
+as [noun] [verb] the [noun]
+2 1 0
+
+as [noun] [verb] the [adjective] [noun]
+2 1 1
+
+as [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+as [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+as [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+as [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+as [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+as [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+as [adjective] [noun] [verb] the [noun]
+2 1 1
+
+as [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+as [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+as [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+as [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+as [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+as [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+as [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+as [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+as [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+as [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+as [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+as [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+as [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+as [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+as [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+because [noun] [verb] [noun]
+2 1 0
+
+because [noun] [verb] the [noun]
+2 1 0
+
+because [noun] [verb] the [adjective] [noun]
+2 1 1
+
+because [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+because [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+because [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+because [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+because [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+because [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+because [adjective] [noun] [verb] the [noun]
+2 1 1
+
+because [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+because [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+because [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+because [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+because [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+because [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+because [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+because [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+because [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+because [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+because [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+because [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+because [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+because [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+because [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+although [noun] [verb] [noun]
+2 1 0
+
+although [noun] [verb] the [noun]
+2 1 0
+
+although [noun] [verb] the [adjective] [noun]
+2 1 1
+
+although [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+although [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+although [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+although [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+although [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+although [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+although [adjective] [noun] [verb] the [noun]
+2 1 1
+
+although [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+although [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+although [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+although [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+although [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+although [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+although [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+although [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+although [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+although [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+although [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+although [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+although [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+although [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+although [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+after [noun] [verb] [noun]
+2 1 0
+
+after [noun] [verb] the [noun]
+2 1 0
+
+after [noun] [verb] the [adjective] [noun]
+2 1 1
+
+after [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+after [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+after [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+after [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+after [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+after [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+after [adjective] [noun] [verb] the [noun]
+2 1 1
+
+after [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+after [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+after [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+after [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+after [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+after [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+after [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+after [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+after [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+after [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+after [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+after [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+after [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+after [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+after [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+before [noun] [verb] [noun]
+2 1 0
+
+before [noun] [verb] the [noun]
+2 1 0
+
+before [noun] [verb] the [adjective] [noun]
+2 1 1
+
+before [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+before [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+before [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+before [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+before [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+before [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+before [adjective] [noun] [verb] the [noun]
+2 1 1
+
+before [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+before [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+before [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+before [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+before [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+before [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+before [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+before [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+before [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+before [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+before [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+before [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+before [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+before [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+before [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+when [noun] [verb] [noun]
+2 1 0
+
+when [noun] [verb] the [noun]
+2 1 0
+
+when [noun] [verb] the [adjective] [noun]
+2 1 1
+
+when [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+when [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+when [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+when [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+when [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+when [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+when [adjective] [noun] [verb] the [noun]
+2 1 1
+
+when [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+when [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+when [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+when [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+when [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+when [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+when [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+when [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+when [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+when [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+when [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+when [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+when [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+when [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+when [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+if [noun] [verb] [noun]
+2 1 0
+
+if [noun] [verb] the [noun]
+2 1 0
+
+if [noun] [verb] the [adjective] [noun]
+2 1 1
+
+if [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+if [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+if [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+if [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+if [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+if [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+if [adjective] [noun] [verb] the [noun]
+2 1 1
+
+if [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+if [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+if [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+if [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+if [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+if [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+if [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+if [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+if [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+if [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+if [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+if [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+if [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+if [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+if [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+unless [noun] [verb] [noun]
+2 1 0
+
+unless [noun] [verb] the [noun]
+2 1 0
+
+unless [noun] [verb] the [adjective] [noun]
+2 1 1
+
+unless [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+unless [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+unless [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+unless [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+unless [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+unless [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+unless [adjective] [noun] [verb] the [noun]
+2 1 1
+
+unless [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+unless [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+unless [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+unless [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+unless [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+unless [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+unless [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+unless [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+unless [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+unless [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+unless [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+unless [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+unless [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+unless [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+unless [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+since [noun] [verb] [noun]
+2 1 0
+
+since [noun] [verb] the [noun]
+2 1 0
+
+since [noun] [verb] the [adjective] [noun]
+2 1 1
+
+since [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+since [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+since [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+since [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+since [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+since [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+since [adjective] [noun] [verb] the [noun]
+2 1 1
+
+since [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+since [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+since [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+since [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+since [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+since [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+since [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+since [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+since [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+since [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+since [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+since [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+since [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+since [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+since [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+even though [noun] [verb] [noun]
+2 1 0
+
+even though [noun] [verb] the [noun]
+2 1 0
+
+even though [noun] [verb] the [adjective] [noun]
+2 1 1
+
+even though [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+even though [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+even though [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+even though [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+even though [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+even though [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+even though [adjective] [noun] [verb] the [noun]
+2 1 1
+
+even though [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+even though [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+even though [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+even though [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+even though [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+even though [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+even though [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+even though [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+even though [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+even though [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+even though [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+even though [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+even though [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+even though [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+even though [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+wherever [noun] [verb] [noun]
+2 1 0
+
+wherever [noun] [verb] the [noun]
+2 1 0
+
+wherever [noun] [verb] the [adjective] [noun]
+2 1 1
+
+wherever [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+wherever [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+wherever [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+wherever [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+wherever [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+wherever [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+wherever [adjective] [noun] [verb] the [noun]
+2 1 1
+
+wherever [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+wherever [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+wherever [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+wherever [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+wherever [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+wherever [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+wherever [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+wherever [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+wherever [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+wherever [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+wherever [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+wherever [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+wherever [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+wherever [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+wherever [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+once [noun] [verb] [noun]
+2 1 0
+
+once [noun] [verb] the [noun]
+2 1 0
+
+once [noun] [verb] the [adjective] [noun]
+2 1 1
+
+once [noun] [verb] [noun] and [verb] [noun]
+3 2 0
+
+once [noun] [verb] [noun] before [verb+ing] the [noun]
+3 2 0
+
+once [noun] [verb] [noun] after [verb+ing] the [noun]
+3 2 0
+
+once [noun] [verb] [noun] when [noun] [verb] the [noun]
+4 2 0
+
+once [noun] [verb] [noun] unless [noun] [verb]
+3 2 0
+
+once [noun] [verb] [noun] although [noun] [verb]
+3 2 0
+
+once [adjective] [noun] [verb] the [noun]
+2 1 1
+
+once [adjective] [noun] [verb] [noun] because [noun] [verb]
+3 2 1
+
+once [adjective] [noun] [verb] [noun] while [noun] [verb]
+3 2 1
+
+once [adjective] [noun] [verb] the [noun] after [verb+ing] [noun]
+3 2 1
+
+once [adjective] [noun] [verb] the [noun] before [noun] [verb]
+3 2 1
+
+once [noun] [verb] [adverb] [verb] the [noun]
+2 2 0
+
+once [noun] [verb] the [noun] with [adverb] [noun]
+3 1 0
+
+once [noun] [verb] [noun] so that [noun] [verb]
+3 2 0
+
+once [noun] [verb] [noun] to [verb] the [noun]
+3 2 0
+
+once [noun] [verb] that [noun] [verb] the [noun]
+3 2 0
+
+once [noun] [verb] [noun] after the [noun] [verb]
+3 2 0
+
+once [noun] [verb] [noun] because [noun] [verb] the [noun]
+4 2 0
+
+once [noun] [verb] [noun] unless [noun] [verb] [noun]
+4 2 0
+
+once [noun] [verb] [noun] while the [noun] [verb] [noun]
+4 2 0
+
+once [noun] [verb] the [noun] when the [noun] [verb] [noun]
+4 2 0
+
+once [noun] [verb] the [noun] as the [adjective] [noun] [verb]
+3 2 1
+
+[verb+ing] the [noun] [noun] [verb] the [noun]
+3 2 0
+
+[verb+ing] a [noun] [noun] [verb] the [noun]
+3 2 0
+
+[verb+ing] [noun]s [noun] [verb] a [noun]
+3 2 0
+
+[verb+ing] the [adjective] [noun] [noun] [verb]
+2 2 1
+
+[verb+ing] the [noun] the [adjective] [noun] [verb] the [noun]
+3 2 1
+
+[verb+ing] the [noun] [noun] [verb] with the [noun]
+3 2 0
+
+[verb+ing] the [noun] [noun] [adverb] [verb] the [noun]
+3 2 0
+
+[verb+ing] the [noun] [noun] [verb] the [adjective] [noun]
+3 2 1
+
+[verb+ing] [article] [adjective] [noun] [noun] [verb] [article] [noun]
+3 2 1
+
+[verb+ing] [noun] [noun] [verb] to the [noun]
+3 2 0
