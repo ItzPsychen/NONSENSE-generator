@@ -5,14 +5,16 @@ import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
 import com.google.cloud.language.v1.Token;
 
 import java.io.IOException;
-
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter any sentence in English");
+        String text = scan.nextLine();
+        scan.close();
 
-        String text = "The quick brown fox jumps over the lazy dog.";
-
-// Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
+        // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         try (com.google.cloud.language.v1.LanguageServiceClient language =
                      com.google.cloud.language.v1.LanguageServiceClient.create()) {
             com.google.cloud.language.v1.Document doc =
