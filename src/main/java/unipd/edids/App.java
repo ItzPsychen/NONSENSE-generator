@@ -31,12 +31,60 @@ public class App {
         List<Noun> nouns = new ArrayList<>();
         List<Verb> verbs = new ArrayList<>();
         List<Adjective> adjectives = new ArrayList<>();
+        List<Adverb> adverbs = new ArrayList<>();
 
         // fill the above lists and choose a new sentence structure
-        createLists(sentenceStructure, tokens, nouns, verbs, adjectives);
+        createLists(sentenceStructure, tokens, nouns, verbs, adjectives, adverbs);
+
+        // choosing a new Structure (replaced in "sentenceStructure")
         extractNewSentenceStructure(sentenceStructure);
 
+        // making the new sentence "randomly"
+        StringBuilder nonSense = new StringBuilder();
+        Random r = new Random();
+        int index = -1;
+        for (Token token : tokens) {
+            String word = token.getText().getContent();
+            switch (word) {
+                case "[noun]":
+                    index = r.nextInt(0, nouns.size());
+                    nonSense.append(nouns.get(index));
+                    nouns.remove(index);
+                    break;
+                case "[verb]":
+                case "[verb+ing]":
+                case "[verb+ed]":
+                    String currentForm = "";
+                    if (word.startsWith("[verb+")) currentForm = word.substring(word.indexOf('+'), word.length() - 1);
+                    while (true) {
+                        index = r.nextInt(0, verbs.size());
+                        if (!verbs.get(index).form().equals(currentForm)) continue;
+                        nonSense.append(verbs.get(index));
+                        verbs.remove(index);
+                        break;
+                    }
+                case "[adjective]":
+                    index = r.nextInt(0, adjectives.size());
+                    nonSense.append(adjectives.get(index));
+                    adjectives.remove(index);
+                    break;
+                case "[adverb]":
+                    index = r.nextInt(0, adverbs.size());
+                    nonSense.append(adverbs.get(index));
+                    adverbs.remove(index);
+                    break;
+                default:
+                    nonSense.append(word);
+                    break;
+            }
+            nonSense.append(" ");
+        }
+        nonSense.setLength(nonSense.length() - 1);
 
+        // CHECK FOR FINAL RESULT
+        // ...
+
+        System.out.println("\nFinal NONSENSE sentence:\n" + nonSense.toString() + "\n");
         scan.close();
     }
 
@@ -85,8 +133,8 @@ public class App {
         return response;
     }
 
-    public static void createLists(StringBuilder sentenceStructure, List<Token> tokens,
-                                   List<Noun> nouns, List<Verb> verbs, List<Adjective> adjectives) {
+    public static void createLists(StringBuilder sentenceStructure, List<Token> tokens, List<Noun> nouns,
+                                   List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs) {
         // check for every token (word written by user)
         for (Token token : tokens) {
             String word = token.getText().getContent();
@@ -107,6 +155,10 @@ public class App {
                 case "ADJ":
                     adjectives.add(new Adjective(word));
                     sentenceStructure.append("[adjective] ");
+                    break;
+                case "ADV":
+                    adverbs.add(new Adverb(word));
+                    sentenceStructure.append("[adverb] ");
                     break;
                 default:
                     sentenceStructure.append(word).append(" ");

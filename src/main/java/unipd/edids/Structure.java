@@ -7,9 +7,10 @@ import java.nio.file.Paths;
 
 public class Structure {
     // the structure list is created only once
-    private static List<Structure> structures = new ArrayList<>();
+    private static Set<Structure> structures;
     static {
         try {
+            structures = new HashSet<>();
             List<String> lines = Files.readAllLines(Paths.get("sentenceStructures.txt"));
             for (int i = 0; i < lines.size(); i = i + 3) {
                 String structure = lines.get(i);
@@ -33,6 +34,7 @@ public class Structure {
     private int nouns;
     private int verbs;
     private int adjectives;
+    private int adverbs;
 
     // public constructor of the class
     public Structure(String value, int[] counters) {
@@ -40,6 +42,7 @@ public class Structure {
         this.nouns = counters[0];
         this.verbs = counters[1];
         this.adjectives = counters[2];
+        this.adverbs = counters[3];
     }
 
     // public constructor with only String value
@@ -54,6 +57,7 @@ public class Structure {
         this.nouns = structure.getNouns();
         this.verbs = structure.getVerbs();
         this.adjectives = structure.getAdjectives();
+        this.adverbs = structure.getAdverbs();
     }
 
     // setter for the text value
@@ -70,22 +74,19 @@ public class Structure {
     int getNouns() { return this.nouns; }
     int getVerbs() { return this.verbs; }
     int getAdjectives() { return this.adjectives; }
+    int getAdverbs() { return this.adverbs; }
 
     // to set some information                  TO BE COMPLETED
     void setAttributes() {
         List<String> words = new ArrayList<>(Arrays.asList(this.text.split(" ")));
-        int nounCount = 0, verbCount = 0, adjCount = 0;
+        int nounCount = 0, verbCount = 0, adjCount = 0, advCount = 0;
 
         // loop through each word in the list
         for (String word : words) {
-            Noun noun = new Noun(word);
-            Verb verb = new Verb(word);
-            Adjective adj = new Adjective(word);
-
-            // increment the counters based on the type
-            if (noun.isInVocabulary()) nounCount++;
-            else if (verb.isInVocabulary()) verbCount++;
-            else if (adj.isInVocabulary()) adjCount++;
+            if (new Noun(word).isInVocabulary()) nounCount++;
+            else if (new Verb(word).isInVocabulary()) verbCount++;
+            else if (new Adjective(word).isInVocabulary()) adjCount++;
+            else if (new Adverb(word).isInVocabulary()) advCount++;
         }
     }
 
@@ -104,9 +105,8 @@ public class Structure {
     }
 
     public boolean compareCount(Structure toCompare) {
-        if (this.nouns != toCompare.getNouns()) return false;
-        if (this.verbs != toCompare.getVerbs()) return false;
-        return this.adjectives == toCompare.getAdjectives();
+        if (this.nouns != toCompare.getNouns() || this.verbs != toCompare.getVerbs()) return false;
+        return this.adjectives == toCompare.getAdjectives() && this.adverbs == toCompare.getAdverbs();
     }
 
     public boolean isStored() {
