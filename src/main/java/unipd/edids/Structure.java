@@ -42,6 +42,20 @@ public class Structure {
         this.adjectives = counters[2];
     }
 
+    // public constructor with only String value
+    public Structure(String value) {
+        this.text = value;
+        setAttributes();
+    }
+
+    // copy constructor
+    public Structure(Structure structure) {
+        this.text = structure.getText();
+        this.nouns = structure.getNouns();
+        this.verbs = structure.getVerbs();
+        this.adjectives = structure.getAdjectives();
+    }
+
     // setter for the text value
     String getText() {
         return this.text;
@@ -52,6 +66,10 @@ public class Structure {
         this.text = value;
         setAttributes();
     }
+
+    int getNouns() { return this.nouns; }
+    int getVerbs() { return this.verbs; }
+    int getAdjectives() { return this.adjectives; }
 
     // to set some information                  TO BE COMPLETED
     void setAttributes() {
@@ -71,7 +89,27 @@ public class Structure {
         }
     }
 
+    public Structure getNewRandom() {
+        List<Structure> validStructures = new ArrayList<>();
+        for (Structure current : structures) {
+            if (compareCount(current)) {
+                validStructures.add(current);
+            }
+        }
+
+        // randomly choose a new Structure
+        if (validStructures.isEmpty()) return null;
+        Random r = new Random();
+        return validStructures.get(r.nextInt(validStructures.size()));
+    }
+
+    public boolean compareCount(Structure toCompare) {
+        if (this.nouns != toCompare.getNouns()) return false;
+        if (this.verbs != toCompare.getVerbs()) return false;
+        return this.adjectives == toCompare.getAdjectives();
+    }
+
     public boolean isStored() {
-        return structures.contains(this.text);
+        return structures.contains(this);
     }
 }

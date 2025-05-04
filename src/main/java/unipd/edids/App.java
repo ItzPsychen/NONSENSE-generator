@@ -36,6 +36,7 @@ public class App {
         createLists(sentenceStructure, tokens, nouns, verbs, adjectives);
         extractNewSentenceStructure(sentenceStructure);
 
+
         scan.close();
     }
 
@@ -120,6 +121,9 @@ public class App {
     }
 
     public static void extractNewSentenceStructure(StringBuilder sentenceStructure) {
-
+        Structure current = new Structure(sentenceStructure.toString());
+        Structure newRandom = new Structure(current.getNewRandom());
+        sentenceStructure.delete(0, sentenceStructure.length());
+        sentenceStructure.append(newRandom.getText());
     }
 }
