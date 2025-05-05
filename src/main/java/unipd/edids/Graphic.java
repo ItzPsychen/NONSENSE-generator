@@ -5,10 +5,7 @@ import java.awt.Color;
 public class Graphic {
 
     public Graphic(){
-        JTextArea console = new JTextArea();
-        console.setEnabled(false);
-        console.setDisabledTextColor(Color.black);
-
+        
         JFrame frame = new JFrame("NONSENSE generator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -42,9 +39,14 @@ public class Graphic {
         textField3.setBounds(10, 160, 400, 30);
         frame.add(textField3);
 
+        //need part of advanced setting
+
         JButton button = new JButton("Generate Your own!");
         button.setBounds(10, 220, 400, 30);
         button.setBackground(Color.BLUE); 
+        button.setForeground(Color.WHITE);
         frame.add(button);
+        //button.addActionListener...
+        //
     }
 }
