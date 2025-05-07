@@ -10,7 +10,7 @@ public class Pronoun extends Word {
     private static Set<String> vocabulary;
     static {
         try {
-            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/nouns.txt")));
+            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/pronouns.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             vocabulary = new HashSet<>();

@@ -27,15 +27,16 @@ public class Generation {
         List<Verb> verbs = new ArrayList<>();
         List<Adjective> adjectives = new ArrayList<>();
         List<Adverb> adverbs = new ArrayList<>();
+        List<Pronoun> pronouns = new ArrayList<>();
 
         // fill the above lists and choose a new sentence structure
-        createLists(sentenceStructure, tokens, nouns, verbs, adjectives, adverbs);
+        createLists(sentenceStructure, tokens, nouns, verbs, adjectives, adverbs, pronouns);
 
         // choosing a new Structure (replaced in "sentenceStructure")
         String newRandom = extractNewSentenceStructure(sentenceStructure);
 
         // making the new sentence "randomly"
-        return buildNonSense(tokens, newRandom, nouns, verbs, adjectives, adverbs);
+        return buildNonSense(tokens, newRandom, nouns, verbs, adjectives, adverbs, pronouns);
     }
 
     private List<Token> getSentenceToken(String text) {
@@ -82,7 +83,7 @@ public class Generation {
     }
 
     private void createLists(StringBuilder sentenceStructure, List<Token> tokens, List<Noun> nouns,
-                                   List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs) {
+                                   List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs, List<Pronoun> pronouns) {
         // check for every token (word written by user)
         for (Token token : tokens) {
             String word = token.getText().getContent();
@@ -91,6 +92,9 @@ public class Generation {
             // looking for the Tag of the word
             switch (posTag) {
                 case "PRON":
+                    pronouns.add(new Pronoun(word));
+                    sentenceStructure.append("[pronoun] ");
+                    break;
                 case "NOUN":
                     nouns.add(new Noun(word));
                     sentenceStructure.append("[noun] ");
@@ -131,7 +135,7 @@ public class Generation {
     }
 
     private String buildNonSense(List<Token> tokens, String newRandom, List<Noun> nouns,
-                                     List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs) {
+                                 List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs, List<Pronoun> pronouns) {
         StringBuilder nonSense = new StringBuilder();
         Random r = new Random();
         int index = 0;
@@ -165,6 +169,10 @@ public class Generation {
                     nonSense.append(adverbs.get(index).getText());
                     adverbs.remove(index);
                     break;
+                case "[pronoun]":
+                    index = r.nextInt(0, pronouns.size());
+                    nonSense.append(pronouns.get(index).getText());
+                    pronouns.remove(index);
                 default:
                     nonSense.append(word);
                     break;
