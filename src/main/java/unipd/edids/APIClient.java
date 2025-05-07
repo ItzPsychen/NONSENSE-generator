@@ -93,7 +93,7 @@ public class APIClient {
     private static final String CREDENTIALS_FILE_PATH = "./src/main/resources/nonsense-generator-458709-f6e2fe62e727.json";
 
     // Costruttore privato per impedire l'istanziamento diretto
-    private APIClient() {}
+    public APIClient() {}
 
     // Metodo per creare o ottenere l'istanza del client
     public static synchronized LanguageServiceClient getInstance() {

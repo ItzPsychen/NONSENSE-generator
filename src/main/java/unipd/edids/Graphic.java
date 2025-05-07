@@ -75,19 +75,12 @@ public class Graphic {
         // event when button is pressed
         generateButton.addActionListener(e -> {
             inputUser = textFieldInput.getText().trim();
-            this.G.generate(inputUser);
+            String output = this.G.generate(inputUser);
 
             if (inputUser.isEmpty() || inputUser.equals("type here")) {
                 JOptionPane.showMessageDialog(frame, "Please enter a valid sentence.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // SIMULATED nonsense output
-                outputArea.setText("Your unipd.edids.Generation\n\n" +
-                        "Input: " + inputUser + "\n\n" +
-                        "1. " + inputUser + " danced with a toaster on the moon.\n" +
-                        "2. Suddenly, " + inputUser + " was elected president of marshmallow land.\n" +
-                        "3. With every sneeze, " + inputUser + " summoned flying turtles.\n" +
-                        "4. People started worshipping " + inputUser + " as the god of spaghetti.\n" +
-                        "5. On Tuesdays, " + inputUser + " only spoke in rubber duck quotes.");
+                outputArea.setText("Your unipd.edids.Generation\n\nInput: " + inputUser + "\n\nOutput: " + output);
             }
         });
 

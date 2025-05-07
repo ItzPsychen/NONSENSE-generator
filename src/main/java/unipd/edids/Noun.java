@@ -10,7 +10,7 @@ public class Noun extends Word {
     private static Set<String> vocabulary;
     static {
         try {
-            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("nouns.txt")));
+            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/nouns.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             vocabulary = new HashSet<>();
@@ -18,7 +18,6 @@ public class Noun extends Word {
     }
 
     // class attributes                         TO ADD SOME OTHERS (maybe)
-    private String text;
     private boolean plural;
     private boolean gender;
     private boolean countable;

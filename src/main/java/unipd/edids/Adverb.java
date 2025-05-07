@@ -10,7 +10,7 @@ public class Adverb extends Word {
     private static Set<String> vocabulary;
     static {
         try {
-            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("adverbs.txt")));
+            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/adverbs.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             vocabulary = new HashSet<>();
@@ -18,7 +18,6 @@ public class Adverb extends Word {
     }
 
     // class attributes                         TO ADD SOME OTHERS (maybe)
-    private String text;
 
     // public constructor of the class
     public Adverb(String value) {

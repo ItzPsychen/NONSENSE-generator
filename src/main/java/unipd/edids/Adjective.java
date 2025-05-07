@@ -10,7 +10,7 @@ public class Adjective extends Word {
     private static Set<String> vocabulary;
     static {
         try {
-            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("adjectives.txt")));
+            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/adjectives.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             vocabulary = new HashSet<>();
@@ -18,7 +18,6 @@ public class Adjective extends Word {
     }
 
     // class attributes                         TO ADD SOME OTHERS (maybe)
-    private String text;
 
     // public constructor of the class
     public Adjective(String value) {

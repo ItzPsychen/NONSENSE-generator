@@ -10,7 +10,7 @@ public class Verb extends Word {
     private static Set<String> vocabulary;
     static {
         try {
-            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("verbs.txt")));
+            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/verbs.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             vocabulary = new HashSet<>();
@@ -18,7 +18,6 @@ public class Verb extends Word {
     }
 
     // class attributes                         TO ADD SOME OTHERS (maybe)
-    private String text;
     private String verbForm;
     private String tense;
     private boolean irregular;

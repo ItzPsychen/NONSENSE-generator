@@ -13,7 +13,7 @@ public class App {
         Graphic G = new Graphic();
         System.out.println("Have fun :)\n");
 
-        String text = "This is an example sentence to analyze for syntax and moderation.";
+        String text = "This is a holy shit example sentence to analyze for syntax and moderation.";
 
         // Istanza dei servizi
         AnalyzeSyntaxService syntaxService = new AnalyzeSyntaxService();
