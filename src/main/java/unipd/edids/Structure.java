@@ -11,6 +11,7 @@ public class Structure {
     static {
         try {
             structures = new HashSet<>();
+
             List<String> lines = Files.readAllLines(Paths.get("sentenceStructures.txt"));
             for (int i = 0; i < lines.size(); i = i + 3) {
                 String structure = lines.get(i);
