@@ -10,9 +10,10 @@ import java.lang.*;
 
 public class App {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter any sentence in English");
-        String text = scan.nextLine();
+        System.out.println("\nThe window is opening...");
+        Graphic G = new Graphic();
+        System.out.println("Have fun :)\n");
+        String text = "";
 
         // declaration of the response
         AnalyzeSyntaxResponse response = analyzeSentence(text);
@@ -52,9 +53,6 @@ public class App {
 
         // CHECK FOR FINAL RESULT
         // ...
-
-        System.out.println("\nFinal NONSENSE sentence:\n" + nonSense.toString() + "\n");
-        scan.close();
     }
 
     public static AnalyzeSyntaxResponse analyzeSentence(String text) {
