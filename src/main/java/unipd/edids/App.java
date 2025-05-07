@@ -13,7 +13,7 @@ public class App {
             String text = "Federico loves coding in Java!";
 
             // Usa il metodo del Singleton per fare la richiesta
-            String result = APIClient.requestSentence(text);
+            String result = APIClient.requestSentence(text).toString();
 
             // Stampa il risultato
             System.out.println(result);

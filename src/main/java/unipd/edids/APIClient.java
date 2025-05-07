@@ -5,6 +5,7 @@ import com.google.cloud.language.v1.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class APIClient {
 
@@ -44,7 +45,7 @@ public class APIClient {
     }
 
     // Metodo che centralizza la richiesta e l'analisi
-    public static String requestSentence(String text) {
+    public static List<Token> requestSentence(String text) {
         LanguageServiceClient language = getInstance(); // Ottieni il client
 
         try {
@@ -63,20 +64,12 @@ public class APIClient {
             // Esegui l'analisi della sintassi
             AnalyzeSyntaxResponse response = language.analyzeSyntax(request);
 
-            // Costruzione di una rappresentazione leggibile dei risultati
-            StringBuilder sb = new StringBuilder();
-            for (Token token : response.getTokensList()) {
-                sb.append(String.format("Text: %s, Part of Speech: %s%n",
-                        token.getText().getContent(),
-                        token.getPartOfSpeech().getTag()));
-            }
 
-            // Ritorna i risultati come stringa
-            return sb.toString();
+            return response.getTokensList();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "Errore durante l'analisi della sintassi.";
+
         }
     }
 }
