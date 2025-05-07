@@ -28,6 +28,7 @@ public class Noun extends Word {
     }
 
     // to set some information                  TO BE COMPLETED
+    @Override
     protected void setAttributes() {
 
     }

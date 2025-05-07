@@ -94,9 +94,9 @@ public class Structure {
     public Structure getNewRandom() {
         List<Structure> validStructures = new ArrayList<>();
         for (Structure current : structures) {
-            if (compareCount(current)) {
+            // if (compareCount(current)) {
                 validStructures.add(current);
-            }
+            // }
         }
 
         // randomly choose a new Structure
