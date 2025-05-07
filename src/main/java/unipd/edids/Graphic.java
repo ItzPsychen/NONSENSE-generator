@@ -2,13 +2,16 @@ package unipd.edids;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.GeneralPath;
 
 public class Graphic {
 
     private String inputUser;
+    private Generation G;
 
     public Graphic(){
         this.inputUser = "";
+        this.G = new Generation();
 
         // creating the frame
         JFrame frame = new JFrame("NONSENSE generator");
@@ -56,7 +59,7 @@ public class Graphic {
         mainPanel.add(inputPanel, BorderLayout.WEST);
 
         // output panel (on the right)
-        JTextArea outputArea = new JTextArea("Your Generation\n\n(Here will appear the generated sentences)");
+        JTextArea outputArea = new JTextArea("Your unipd.edids.Generation\n\n(Here will appear the generated sentences)");
         outputArea.setEditable(false);
         outputArea.setFont(new Font("SansSerif", Font.PLAIN, 14));
         outputArea.setLineWrap(true);
@@ -72,12 +75,13 @@ public class Graphic {
         // event when button is pressed
         generateButton.addActionListener(e -> {
             inputUser = textFieldInput.getText().trim();
+            this.G.generate(inputUser);
 
             if (inputUser.isEmpty() || inputUser.equals("type here")) {
                 JOptionPane.showMessageDialog(frame, "Please enter a valid sentence.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 // SIMULATED nonsense output
-                outputArea.setText("Your Generation\n\n" +
+                outputArea.setText("Your unipd.edids.Generation\n\n" +
                         "Input: " + inputUser + "\n\n" +
                         "1. " + inputUser + " danced with a toaster on the moon.\n" +
                         "2. Suddenly, " + inputUser + " was elected president of marshmallow land.\n" +

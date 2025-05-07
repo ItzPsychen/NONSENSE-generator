@@ -61,7 +61,7 @@ public class Structure {
     }
 
     // setter for the text value
-    String getText() {
+    public String getText() {
         return this.text;
     }
 
