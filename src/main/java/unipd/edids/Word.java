@@ -1,9 +1,12 @@
 package unipd.edids;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Word {
     // shared attributes across all word types
     protected String text;
-
+    public static String input = "";
     // Constructor
     public Word(String value) {
         this.text = value;

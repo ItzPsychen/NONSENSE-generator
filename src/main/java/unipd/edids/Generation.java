@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class Generation {
     public String generate(String text) {
-        text = "This is a holy shit example sentence to analyze for syntax and moderation.";
+        //text = "This is a holy shit example sentence to analyze for syntax and moderation blindly.";
 
         /*
             1. Part of Speech (getPartOfSpeech().getTag())
@@ -20,7 +20,8 @@ public class Generation {
 
         // creating the original sentence structure
         StringBuilder sentenceStructure = new StringBuilder();
-        List<Token> tokens = getSentenceToken(text);
+
+        List<Token> tokens = getSentenceToken(Word.input);
 
         // list of words (by type)
         List<Noun> nouns = new ArrayList<>();
@@ -143,14 +144,14 @@ public class Generation {
         for (String word : words) {
             switch (word) {
                 case "[noun]":
-                    index = r.nextInt(0, nouns.size());
+                   /* index = r.nextInt(0, nouns.size());
                     nonSense.append(nouns.get(index).getText());
-                    nouns.remove(index);
+                    nouns.remove(index);*/
                     break;
                 case "[verb]":
                 case "[verb+ing]":
                 case "[verb+ed]":
-                    String currentForm = "";
+                    /*String currentForm = "";
                     if (word.startsWith("[verb+")) currentForm = word.substring(word.indexOf('+'), word.length() - 1);
                     while (true) {
                         index = r.nextInt(0, verbs.size());
@@ -158,21 +159,22 @@ public class Generation {
                         nonSense.append(verbs.get(index).getText());
                         verbs.remove(index);
                         break;
-                    }
+                    }*/
+                    break;
                 case "[adjective]":
-                    index = r.nextInt(0, adjectives.size());
+                    /*index = r.nextInt(0, adjectives.size());
                     nonSense.append(adjectives.get(index).getText());
-                    adjectives.remove(index);
+                    adjectives.remove(index);*/
                     break;
                 case "[adverb]":
-                    index = r.nextInt(0, adverbs.size());
+                    /*index = r.nextInt(0, adverbs.size());
                     nonSense.append(adverbs.get(index).getText());
-                    adverbs.remove(index);
+                    adverbs.remove(index);*/
                     break;
                 case "[pronoun]":
-                    index = r.nextInt(0, pronouns.size());
+                    /*index = r.nextInt(0, pronouns.size());
                     nonSense.append(pronouns.get(index).getText());
-                    pronouns.remove(index);
+                    pronouns.remove(index);*/
                 default:
                     nonSense.append(word);
                     break;

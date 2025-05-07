@@ -75,6 +75,7 @@ public class Graphic {
         // event when button is pressed
         generateButton.addActionListener(e -> {
             inputUser = textFieldInput.getText().trim();
+            Word.input = inputUser;
             String output = this.G.generate(inputUser);
 
             if (inputUser.isEmpty() || inputUser.equals("type here")) {
