@@ -1,8 +1,6 @@
 package unipd.edids;
 
-import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
-import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
-import com.google.cloud.language.v1.Token;
+import com.google.cloud.language.v1.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Generation {
-
     public void generate(String text) {
         AnalyzeSyntaxResponse response = analyzeSentence(text);
 
@@ -145,7 +142,7 @@ public class Generation {
     private void buildNonSense(List<Token> tokens, StringBuilder nonSense, List<Noun> nouns,
                                      List<Verb> verbs, List<Adjective> adjectives, List<Adverb> adverbs) {
         Random r = new Random();
-        int index = -1;
+        int index = 0;
         for (Token token : tokens) {
             String word = token.getText().getContent();
             switch (word) {
