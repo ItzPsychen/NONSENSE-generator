@@ -1,32 +1,88 @@
+//package unipd.edids;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//public abstract class Word {
+//    // shared attributes across all word types
+//    protected String text;
+//    public static String input = "";
+//    // Constructor
+//    public Word(String value) {
+//        this.text = value;
+//        setAttributes();
+//    }
+//
+//    // getter for text
+//    public String getText() {
+//        return this.text;
+//    }
+//
+//    // setter for text
+//    public void setText(String value) {
+//        this.text = value;
+//        setAttributes();
+//    }
+//
+//    // abstract method implemented by subclasses
+//    protected abstract void setAttributes();
+//
+//    // placeholder for vocabulary check
+//    public abstract boolean isInVocabulary();
+//}
 package unipd.edids;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 public abstract class Word {
-    // shared attributes across all word types
-    protected String text;
-    public static String input = "";
-    // Constructor
-    public Word(String value) {
-        this.text = value;
-        setAttributes();
+    protected List<String> words;
+
+    // Istanza statica per Singleton
+    private static Word instance;
+
+    // Costruttore protetto
+    protected Word() {
+        words = new ArrayList<>();
+        loadWords(getFilePath());
     }
 
-    // getter for text
-    public String getText() {
-        return this.text;
+    // Metodo astratto per definire il path del file
+    protected abstract String getFilePath();
+
+    // Metodo per ottenere l'istanza Singleton
+    public static Word getInstance() {
+        if (instance == null) {
+            synchronized (Word.class) {
+                if (instance == null) {
+                    System.out.println("Creando nuova istanza di Word...");
+                    instance = createInstance();
+                }
+            }
+        }
+        return instance;
     }
 
-    // setter for text
-    public void setText(String value) {
-        this.text = value;
-        setAttributes();
+    // Metodo che deve essere implementato dalle sottoclassi
+    protected static Word createInstance() {
+        return new Noun();  // Specifico per Noun, può essere diverso per altri tipi
     }
 
-    // abstract method implemented by subclasses
-    protected abstract void setAttributes();
+    // Caricamento delle parole dal file
+    private void loadWords(String filePath) {
+        try {
+            words = Files.readAllLines(Paths.get(filePath));
+        } catch (IOException e) {
+            System.out.println("Errore nel caricamento del file: " + filePath);
+            e.printStackTrace();
+        }
+    }
 
-    // placeholder for vocabulary check
-    public abstract boolean isInVocabulary();
+    // Restituisce una parola random dalla lista
+    public String getRandomWord() {
+        if (words.isEmpty()) return "undefined";
+        Random random = new Random();
+        return words.get(random.nextInt(words.size()));
+    }
 }
+

@@ -224,7 +224,7 @@ public class Generation {
     public String generate(String text) {
 //        text = "Because he organized his sources by theme, it was easier for his readers to follow";
 //        text = "This is a good example sentence to analyze for syntax and moderation.";
-        text = "This sentence is a good example";
+//        text = "This sentence is a good example";
 
         /*
             1. Part of Speech (getPartOfSpeech().getTag())
@@ -234,20 +234,9 @@ public class Generation {
          */
 
         List<Token> tokens = AnalyzeSyntaxService.analyzeSyntax(text);
-        if (tokens == null) {
-            logger.warn("Nessun token trovato per l'analisi del testo.");
-            return null;
-        }
-        for (Token token : tokens) {
-            String word = token.getText().getContent();
-            String posTag = token.getPartOfSpeech().getTag().name();
+        Sentence inputSentence = new Sentence(text);
+        inputSentence.generateSentence();
 
-            // 3. Loggare informazioni sui token
-            logger.info("Parola: {}, Parte del discorso: {}", word, posTag);
-
-
-        }
-        logger.info("Analisi completata con successo. Restituzione del risultato...");
         return null;
     }
 
