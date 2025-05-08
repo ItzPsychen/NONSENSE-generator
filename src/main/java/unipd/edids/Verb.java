@@ -47,13 +47,26 @@
 
 package unipd.edids;
 public class Verb extends Word {
+    private static Verb instance;
+
+    private Verb() {
+        super();
+    }
+
+    public static Verb getInstance() {
+        if (instance == null) {
+            synchronized (Verb.class) {
+                if (instance == null) {
+                    instance = new Verb();
+                }
+            }
+        }
+        return instance;
+    }
+
     @Override
     protected String getFilePath() {
         return "./src/main/resources/verbs.txt";
     }
-
-    // Implementazione Singleton per Verb
-    protected static Word createInstance() {
-        return new Verb();
-    }
 }
+

@@ -36,13 +36,25 @@
 package unipd.edids;
 
 public class Adjective extends Word {
+    private static Adjective instance;
+
+    private Adjective() {
+        super();
+    }
+
+    public static Adjective getInstance() {
+        if (instance == null) {
+            synchronized (Adjective.class) {
+                if (instance == null) {
+                    instance = new Adjective();
+                }
+            }
+        }
+        return instance;
+    }
+
     @Override
     protected String getFilePath() {
         return "./src/main/resources/adjectives.txt";
-    }
-
-    // Implementazione Singleton per Adjective
-    protected static Word createInstance() {
-        return new Adjective();
     }
 }

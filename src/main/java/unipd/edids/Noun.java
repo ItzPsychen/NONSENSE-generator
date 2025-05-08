@@ -40,13 +40,25 @@
 package unipd.edids;
 
 public class Noun extends Word {
+    private static Noun instance;
+
+    private Noun() {
+        super();
+    }
+
+    public static Noun getInstance() {
+        if (instance == null) {
+            synchronized (Noun.class) {
+                if (instance == null) {
+                    instance = new Noun();
+                }
+            }
+        }
+        return instance;
+    }
+
     @Override
     protected String getFilePath() {
         return "./src/main/resources/nouns.txt";
-    }
-
-    // Implementazione di createInstance per il Singleton
-    protected static Word createInstance() {
-        return new Noun();
     }
 }

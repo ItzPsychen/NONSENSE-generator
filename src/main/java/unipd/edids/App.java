@@ -16,7 +16,7 @@ public class App {
         Graphic G = new Graphic();
         logger.info("Have fun :)");
 
-        Form form = new Form();
+//        Form form = new Form();
 
 
     }

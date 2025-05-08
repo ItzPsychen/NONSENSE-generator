@@ -38,37 +38,16 @@ import java.util.*;
 public abstract class Word {
     protected List<String> words;
 
-    // Istanza statica per Singleton
-    private static Word instance;
-
     // Costruttore protetto
     protected Word() {
         words = new ArrayList<>();
         loadWords(getFilePath());
     }
 
-    // Metodo astratto per definire il path del file
+    // Metodo astratto per definire il path del file specifico
     protected abstract String getFilePath();
 
-    // Metodo per ottenere l'istanza Singleton
-    public static Word getInstance() {
-        if (instance == null) {
-            synchronized (Word.class) {
-                if (instance == null) {
-                    System.out.println("Creando nuova istanza di Word...");
-                    instance = createInstance();
-                }
-            }
-        }
-        return instance;
-    }
-
-    // Metodo che deve essere implementato dalle sottoclassi
-    protected static Word createInstance() {
-        return new Noun();  // Specifico per Noun, può essere diverso per altri tipi
-    }
-
-    // Caricamento delle parole dal file
+    // Caricamento delle parole dal file specificato
     private void loadWords(String filePath) {
         try {
             words = Files.readAllLines(Paths.get(filePath));
@@ -78,11 +57,10 @@ public abstract class Word {
         }
     }
 
-    // Restituisce una parola random dalla lista
+    // Restituisce una parola casuale dalla lista caricata
     public String getRandomWord() {
         if (words.isEmpty()) return "undefined";
         Random random = new Random();
         return words.get(random.nextInt(words.size()));
     }
 }
-
