@@ -92,6 +92,9 @@ public class Structure {
 
     public Structure getNewRandom() {
         List<Structure> validStructures = new ArrayList<>();
+        for (Structure structure : structures) {
+            System.out.println(structure);
+        }
         for (Structure current : structures) {
             // if (compareCount(current)) {
                 validStructures.add(current);
@@ -99,7 +102,10 @@ public class Structure {
         }
 
         // randomly choose a new Structure
-        if (validStructures.isEmpty()) return null;
+        if (validStructures.isEmpty()) {
+            System.out.println("BOMBA");
+        return null;
+        }
         Random r = new Random();
         return validStructures.get(r.nextInt(validStructures.size()));
     }

@@ -12,7 +12,7 @@ public class AnalyzeSyntaxService {
      * @param text il testo da analizzare.
      * @return una lista di tokens che rappresentano l'analisi della sintassi.
      */
-    public List<Token> analyzeSyntax(String text) {
+    public static List<Token> analyzeSyntax(String text) {
         LanguageServiceClient language = APIClient.getInstance(); // Ottieni il client singleton
 
         try {
@@ -38,4 +38,7 @@ public class AnalyzeSyntaxService {
             return null;
         }
     }
+
+
+
 }
