@@ -108,11 +108,11 @@ public class Sentence {
         while (StringUtils.countMatches(structure, "[noun]") - nouns.size() > 0){
             nouns.add(nounProvider.getRandomWord());
         }
-        while (StringUtils.countMatches(structure, "[verb]") - nouns.size() > 0){
-            nouns.add(nounProvider.getRandomWord());
+        while (StringUtils.countMatches(structure, "[verb]") - verbs.size() > 0){
+            verbs.add(verbProvider.getRandomWord());
         }
-        while (StringUtils.countMatches(structure, "[adjective]") - nouns.size() > 0){
-            nouns.add(nounProvider.getRandomWord());
+        while (StringUtils.countMatches(structure, "[adjective]") - adjectives.size() > 0){
+            adjectives.add(adjectiveProvider.getRandomWord());
         }
         logger.info("Necessary Nouns: {}, Available: {}",StringUtils.countMatches(structure, "[noun]"), nouns.size());
         logger.info(nouns.toString());
@@ -124,6 +124,7 @@ public class Sentence {
         Iterator<String> nounsIterator = nouns.iterator();
         Iterator<String> verbsIterator = verbs.iterator();
         Iterator<String> adjectiveIterator = adjectives.iterator();
+        logger.warn(verbs.toString());
         while (result.contains("[noun]"))
             result = result.replaceFirst("\\[noun\\]", nounsIterator.next());
         while (result.contains("[verb]"))
