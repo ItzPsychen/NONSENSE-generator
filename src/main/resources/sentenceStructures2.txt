@@ -1,0 +1,764 @@
+[noun] [verb] [noun]
+2 1 0 0 0
+
+[noun] [verb] the [noun]
+2 1 0 0 0
+
+[noun] [verb] the [adjective] [noun]
+2 1 1 0 0
+
+[noun] [verb] the [noun] in the [noun]
+3 1 0 0 0
+
+[pronoun] [verb] [adverb]
+0 1 0 1 1
+
+[adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+[pronoun] [verb] [adjective] [noun]
+1 1 1 0 1
+
+[noun] [verb] to [verb] the [noun]
+2 2 0 0 0
+
+[noun] [verb] that [pronoun] [verb]
+1 2 0 0 1
+
+[noun] [verb] because [noun] [verb]
+1 2 0 0 1
+
+[adjective] [noun] [verb] the [noun]
+2 1 1 0 0
+
+ [noun] [verb] while [pronoun] [verb]
+1 2 0 0 1
+
+the [adjective] [noun] [verb] the [adjective] [noun]
+2 1 2 0 0
+
+[noun] [verb] the [noun] in a [adjective] [noun]
+3 1 1 0 0
+
+[noun] [verb] [noun] and [verb] [noun]
+3 2 0 0 0
+
+[noun] [verb] the [noun] after [verb+ing] the [noun]
+3 2 0 0 0
+
+[noun] [verb] the [noun] who [verb] the [noun]
+3 2 0 0 0
+
+the [noun] that [verb] [pronoun] [verb] the [noun]
+2 2 0 0 1
+
+after [verb+ing] the [noun] the [noun] [verb]
+2 2 0 0 0
+
+[noun] [verb] [adverb]
+1 1 0 1 0
+
+[pronoun] [verb] [noun] [adverb]
+1 1 0 1 1
+
+[adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+[pronoun] [verb] [adjective] [noun] [adverb]
+1 1 1 1 1
+
+[noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+[pronoun] [verb] [noun] in the [noun]
+2 1 0 0 1
+
+[adjective] [noun] and [noun] [verb] [adverb]
+2 1 1 1 0
+
+[pronoun] [verb] [adjective] [noun] with [adjective] [noun]
+2 1 2 0 1
+
+[noun] [verb] [noun] [adverb] in the [noun]
+3 1 0 1 0
+
+[pronoun] [verb] [noun] and [verb] [noun]
+2 2 0 0 1
+
+[adjective] [noun] [verb] [adjective] [noun]
+2 1 2 0 0
+
+[noun] of [noun] [verb] [adverb]
+2 1 0 1 0
+
+[pronoun] [verb] [adjective] [noun] but [verb] [adverb]
+1 2 1 1 1
+
+[noun], [noun], and [noun] [verb] [adverb]
+3 1 0 1 0
+
+[pronoun] [verb] [noun] [adverb] at [noun]
+2 1 0 1 1
+
+[adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+[pronoun] [verb] [adjective] [noun] from [adjective] [noun]
+2 1 2 0 1
+
+[noun] [verb] [noun] and [noun] [adverb]
+3 1 0 1 0
+
+[pronoun] [adverb] [verb] [adjective] [noun]
+1 1 1 1 1
+
+[noun] [verb] [adjective] [noun] [adverb]
+2 1 1 1 0
+
+[noun] [verb] like [noun] [verb] the [adjective] [noun]
+3 2 1 0 0
+
+neither [noun] nor [noun] [verb] the [noun]
+3 1 0 0 0
+
+[noun] not only [verb] the [noun] but also [verb] the [noun]
+3 2 0 0 0
+
+[noun] [verb] the [noun] unless [pronoun] [verb]
+2 2 0 0 1
+
+the [noun] [verb] the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] the [adjective] [noun]
+2 1 2 0 0
+
+the [noun] [verb] in the [adjective] [noun]
+2 1 1 0 0
+
+the [noun] that [verb] the [noun] [verb] the [noun]
+3 2 0 0 0
+
+the [adjective] [noun] [verb] while the [pronoun] [verb]
+2 2 1 0 1
+
+the [noun] [verb] the [noun] because the [pronoun] [verb]
+2 2 0 0 1
+
+the [noun] [verb] the [noun] in a [noun] and [verb] the [noun]
+4 2 0 0 0
+
+[pronoun] [verb] [noun] [adverb] because [pronoun] [verb] [noun]
+3 2 0 1 2
+
+[adjective] [noun] [verb] [noun] when [adjective] [noun] [verb]
+3 2 2 0 0
+
+[noun] [verb] that [pronoun] [verb] [adjective] [noun]
+2 2 1 0 1
+
+[pronoun] [verb] [noun] [adverb] although [pronoun] [verb] [adjective] [noun]
+3 2 1 1 2
+
+the [noun] [verb] [adverb]
+1 1 0 1 0
+
+my [adjective] [noun] [verb] quickly
+1 1 1 1 0
+
+she [verb] a [adjective] [noun] yesterday
+1 1 1 0 1
+
+they [verb] [noun] and [noun] here
+2 1 0 0 1
+
+that [adjective] [noun] [verb] suddenly
+1 1 1 1 0
+
+we [verb] our [noun] [adverb] because she [verb]
+1 2 0 1 2
+
+his [noun] [verb] [adjective] [noun] carefully
+2 1 1 1 0
+
+I [verb] [noun] but you [verb] [noun] there
+2 2 0 0 2
+
+many [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+her [noun] and [noun] [verb] angrily
+2 1 0 1 0
+
+the [adjective] [noun] [verb] that [noun] [verb]
+2 2 1 0 0
+
+you [verb] [adjective] [noun] because I [verb]
+1 2 1 0 2
+
+some [noun] [verb] [adverb] after [noun] [verb]
+2 2 0 1 0
+
+our [adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+those [noun] [verb] [adverb] when [pronoun] [verb]
+1 2 0 1 1
+
+which [noun] [verb] [adjective] [noun] today
+2 1 1 0 0
+
+both [noun] and [noun] [verb] [adverb]
+2 1 0 1 0
+
+either [noun] or [noun] [verb] there
+2 1 0 0 0
+
+neither [noun] nor [noun] [verb] [adverb]
+2 1 0 1 0
+
+the [noun] that [verb] [adjective] [noun]
+2 1 1 0 0
+
+every [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+this [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+those [adjective] [noun] [verb] before [noun]
+2 1 1 0 0
+
+which [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+whose [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+more [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+most [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+few [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+all [noun] [verb] [adverb] after [noun]
+2 1 0 1 0
+
+no [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+any [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+each [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+enough [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+little [noun] [verb] [adverb]
+1 1 0 1 0
+
+much [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+many [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+several [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+such [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+what [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+their [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+your [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+our [noun] and [noun] [verb] [adverb]
+2 1 0 1 0
+
+its [adjective] [noun] [verb] [noun]
+2 1 1 0 0
+
+these [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+those [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+this [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+that [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+which [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+whose [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+what [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+whatever [noun] [verb] [adverb] because
+1 1 0 1 0
+
+whichever [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+whoever [verb] [noun] [adverb] today
+1 1 0 1 0
+
+whenever [pronoun] [verb] [noun] [adverb]
+1 1 0 1 1
+
+wherever [noun] [verb] [adjective] [noun]
+2 1 1 0 0
+
+however [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+the [noun] [verb] [adjective] [noun] [adverb]
+2 1 1 1 0
+
+a [adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+an [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+some [adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+any [adjective] [noun] [verb] [adverb] today
+1 1 1 1 0
+
+no [adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+every [noun] [verb] [adjective] [noun] [adverb]
+2 1 1 1 0
+
+each [noun] [verb] [noun] [adverb]
+2 1 0 1 0
+
+either [adjective] [noun] or [noun] [verb]
+2 1 1 0 0
+
+neither [noun] nor [noun] [verb] [adverb]
+2 1 0 1 0
+
+both [adjective] [noun] and [noun] [verb]
+2 1 1 0 0
+
+the [noun] and the [noun] [verb] [adverb]
+2 1 0 1 0
+
+my [noun] or your [noun] [verb] there
+2 1 0 0 0
+
+his [adjective] [noun] but her [noun] [verb]
+2 1 1 0 0
+
+our [noun], your [noun], and their [noun] [verb]
+3 1 0 0 0
+
+this [noun], that [noun], and these [noun] [verb]
+3 1 0 0 0
+
+those [noun] or some [noun] [verb] [adverb]
+2 1 0 1 0
+
+which [noun] and what [noun] [verb] [adverb]
+2 1 0 1 0
+
+whose [noun] but which [noun] [verb] there
+2 1 0 0 0
+
+whatever [noun] or whoever [verb] [noun]
+1 1 0 0 0
+
+whichever [noun] and whenever [pronoun] [verb]
+1 1 0 0 1
+
+however [adjective] [noun] [verb] [adverb]
+1 1 1 1 0
+
+the [noun] that [verb] [adjective] [noun] [adverb]
+2 1 1 1 0
+
+a [noun] which [verb] [adjective] [noun] [adverb]
+2 1 1 1 0
+
+an [adjective] [noun] who [verb] [noun] [adverb]
+2 1 1 1 0
+
+some [noun] whose [noun] [verb] [adverb]
+2 1 0 1 0
+
+any [noun] that [verb] [adjective] [noun]
+2 1 1 0 0
+
+no [noun] which [verb] [noun] [adverb]
+2 1 0 1 0
+
+every [noun] who [verb] [adjective] [noun]
+2 1 1 0 0
+
+each [noun] that [verb] [noun] [adverb]
+2 1 0 1 0
+
+either [noun] or [noun] [verb] [adjective] [noun]
+3 1 1 0 0
+
+neither [noun] nor [noun] [verb] [adverb]
+2 1 0 1 0
+
+both [noun] and [noun] [verb] [adjective] [noun]
+3 1 1 0 0
+
+the [noun], the [noun], and the [noun] [verb] [adverb]
+3 1 0 1 0
+
+my [noun], your [noun], but his [noun] [verb]
+3 1 0 0 0
+
+our [noun] or their [noun] [verb] [adjective] [noun]
+3 1 1 0 0
+
+this [noun] and that [noun] [verb] [adverb] today
+2 1 0 1 0
+
+these [noun] but those [noun] [verb] [adjective] [noun]
+3 1 1 0 0
+
+which [noun] or what [noun] [verb] [adverb]
+2 1 0 1 0
+
+whose [noun] and which [noun] [verb] [noun] [adverb]
+3 1 0 1 0
+
+whatever [noun] or whoever [verb] [adjective] [noun]
+2 1 1 0 0
+
+whichever [noun] and whenever [pronoun] [verb] [adverb]
+1 1 0 1 1
+
+however [adjective] [noun] [verb] [noun] [adverb]
+2 1 1 1 0
+
+the [adjective] sun [verb] brightly
+1 1 1 1 0
+
+her [noun] cat [verb] lazily on [noun] bed
+2 1 0 1 0
+
+the [noun] [verb] near the [noun]
+2 1 0 0 0
+
+the [noun] [verb] quickly
+1 1 0 1 0
+
+a [adjective] [noun] [verb] the [noun]
+2 1 1 0 0
+
+the [noun] and the [noun] [verb]
+2 1 0 0 0
+
+the [noun] [verb] a [adjective] [noun]
+2 1 1 0 0
+
+some [noun] [verb] behind a [noun]
+2 1 0 0 0
+
+many [noun] [verb] under the [noun]
+2 1 0 0 0
+
+the [noun] [verb] slowly
+1 1 0 1 0
+
+an [adjective] [noun] [verb] beside the [noun]
+2 1 1 0 0
+
+the [noun] [verb] the [noun] and the [noun]
+3 1 0 0 0
+
+which [noun] [verb] above a [noun]
+2 1 0 0 0
+
+few [noun] [verb] between the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] quietly
+1 1 1 1 0
+
+these [noun] [verb] against the [noun]
+2 1 0 0 0
+
+all [noun] [verb] through a [noun]
+2 1 0 0 0
+
+no [noun] [verb] beyond the [noun]
+2 1 0 0 0
+
+each [noun] [verb] toward the [noun]
+2 1 0 0 0
+
+this [adjective] [noun] [verb] carefully
+1 1 1 1 0
+
+those [noun] [verb] among the [noun]
+2 1 0 0 0
+
+any [noun] [verb] within a [noun]
+2 1 0 0 0
+
+the [noun] [verb] around the [noun]
+2 1 0 0 0
+
+the [noun] [verb] loudly
+1 1 0 1 0
+
+a [adjective] [noun] [verb] over the [noun]
+2 1 1 0 0
+
+the [noun] or the [noun] [verb]
+2 1 0 0 0
+
+the [noun] [verb] a [adjective] [noun] [adverb]
+2 1 1 1 0
+
+some [noun] [verb] across the [noun]
+2 1 0 0 0
+
+many [noun] [verb] past the [noun]
+2 1 0 0 0
+
+the [noun] [verb] gently
+1 1 0 1 0
+
+an [adjective] [noun] [verb] along the [noun]
+2 1 1 0 0
+
+the [noun] [verb] the [noun] but the [noun]
+3 1 0 0 0
+
+which [noun] [verb] about a [noun]
+2 1 0 0 0
+
+few [noun] [verb] during the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] perfectly
+1 1 1 1 0
+
+these [noun] [verb] without a [noun]
+2 1 0 0 0
+
+all [noun] [verb] into the [noun]
+2 1 0 0 0
+
+no [noun] [verb] except the [noun]
+2 1 0 0 0
+
+each [noun] [verb] until the [noun]
+2 1 0 0 0
+
+this [adjective] [noun] [verb] correctly
+1 1 1 1 0
+
+those [noun] [verb] with a [noun]
+2 1 0 0 0
+
+any [noun] [verb] from the [noun]
+2 1 0 0 0
+
+the [noun] [verb] before the [noun]
+2 1 0 0 0
+
+the [noun] [verb] beautifully
+1 1 0 1 0
+
+a [adjective] [noun] [verb] after the [noun]
+2 1 1 0 0
+
+the [noun] nor the [noun] [verb]
+2 1 0 0 0
+
+the [noun] [verb] a [adjective] [noun] [adverb]
+2 1 1 1 0
+
+some [noun] [verb] below the [noun]
+2 1 0 0 0
+
+many [noun] [verb] inside the [noun]
+2 1 0 0 0
+
+the [noun] [verb] angrily
+1 1 0 1 0
+
+an [adjective] [noun] [verb] outside the [noun]
+2 1 1 0 0
+
+the [noun] [verb] the [noun] yet the [noun]
+3 1 0 0 0
+
+which [noun] [verb] concerning a [noun]
+2 1 0 0 0
+
+few [noun] [verb] regarding the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] silently
+1 1 1 1 0
+
+these [noun] [verb] plus the [noun]
+2 1 0 0 0
+
+all [noun] [verb] minus a [noun]
+2 1 0 0 0
+
+no [noun] [verb] times the [noun]
+2 1 0 0 0
+
+each [noun] [verb] versus the [noun]
+2 1 0 0 0
+
+this [adjective] [noun] [verb] wisely
+1 1 1 1 0
+
+those [noun] [verb] per the [noun]
+2 1 0 0 0
+
+any [noun] [verb] via the [noun]
+2 1 0 0 0
+
+the [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+the [noun] [verb] eagerly
+1 1 0 1 0
+
+a [adjective] [noun] [verb] unlike the [noun]
+2 1 1 0 0
+
+the [noun] plus the [noun] [verb]
+2 1 0 0 0
+
+the [noun] [verb] a [adjective] [noun] [adverb]
+2 1 1 1 0
+
+some [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+many [noun] [verb] like the [noun]
+2 1 0 0 0
+
+the [noun] [verb] nervously
+1 1 0 1 0
+
+an [adjective] [noun] [verb] unlike the [noun]
+2 1 1 0 0
+
+the [noun] [verb] the [noun] like the [noun]
+3 1 0 0 0
+
+which [noun] [verb] unlike a [noun]
+2 1 0 0 0
+
+few [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] happily
+1 1 1 1 0
+
+these [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+all [noun] [verb] like a [noun]
+2 1 0 0 0
+
+no [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+each [noun] [verb] like the [noun]
+2 1 0 0 0
+
+this [adjective] [noun] [verb] sadly
+1 1 1 1 0
+
+those [noun] [verb] unlike a [noun]
+2 1 0 0 0
+
+any [noun] [verb] like the [noun]
+2 1 0 0 0
+
+the [noun] [verb] unlike a [noun]
+2 1 0 0 0
+
+the [noun] [verb] excitedly
+1 1 0 1 0
+
+a [adjective] [noun] [verb] like the [noun]
+2 1 1 0 0
+
+the [noun] like the [noun] [verb]
+2 1 0 0 0
+
+the [noun] [verb] a [adjective] [noun] [adverb]
+2 1 1 1 0
+
+some [noun] [verb] like the [noun]
+2 1 0 0 0
+
+many [noun] [verb] unlike a [noun]
+2 1 0 0 0
+
+the [noun] [verb] calmly
+1 1 0 1 0
+
+an [adjective] [noun] [verb] like the [noun]
+2 1 1 0 0
+
+the [noun] [verb] the [noun] unlike the [noun]
+3 1 0 0 0
+
+which [noun] [verb] like a [noun]
+2 1 0 0 0
+
+few [noun] [verb] like the [noun]
+2 1 0 0 0
+
+the [adjective] [noun] [verb] proudly
+1 1 1 1 0
+
+these [noun] [verb] like the [noun]
+2 1 0 0 0
+
+all [noun] [verb] unlike a [noun]
+2 1 0 0 0
+
+no [noun] [verb] like the [noun]
+2 1 0 0 0
+
+each [noun] [verb] unlike the [noun]
+2 1 0 0 0
+
+this [adjective] [noun] [verb] bravely
+1 1 1 1 0
+
+those [noun] [verb] like a [noun]
+2 1 0 0 0
+
+any [noun] [verb] unlike the [noun]
+2 1 0 0 0

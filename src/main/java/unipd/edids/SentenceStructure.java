@@ -134,7 +134,7 @@ public class SentenceStructure {
 
     private void loadStructures() {
         try {
-            structures = Files.readAllLines(Paths.get("./src/main/resources/sentenceStructures2.txt"));
+            structures = Files.readAllLines(Paths.get("./src/main/resources/sentenceStructures.txt"));
         } catch (IOException e) {
             System.out.println("Errore nel caricamento delle sentence structures.");
             e.printStackTrace();

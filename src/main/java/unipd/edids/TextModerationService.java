@@ -1,11 +1,10 @@
 package unipd.edids;
 
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.ModerateTextRequest;
-import com.google.cloud.language.v1.ModerateTextResponse;
+import com.google.cloud.language.v1.*;
 
-public class TextModerationService {
+import java.util.List;
+
+public class  TextModerationService {
 
     /**
      * Analizza il livello di tossicità e modera il testo fornito.
@@ -13,7 +12,7 @@ public class TextModerationService {
      * @param text il testo da moderare.
      * @return un oggetto `ModerateTextResponse` contenente i risultati della moderazione del testo.
      */
-    public static ModerateTextResponse moderateText(String text) {
+    public static List<ClassificationCategory> moderateText(String text) {
         LanguageServiceClient language = APIClient.getInstance(); // Ottieni il client singleton
 
         try {
@@ -28,8 +27,12 @@ public class TextModerationService {
                     .setDocument(doc)
                     .build();
 
+
+
             // Recupera la risposta dalla ModerateText API
-            return language.moderateText(request);
+            ModerateTextResponse response = language.moderateText(request);
+
+            return response.getModerationCategoriesList();
 
         } catch (Exception e) {
             e.printStackTrace();

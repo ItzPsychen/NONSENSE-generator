@@ -12,9 +12,11 @@ import java.util.List;
 
 public class Sentence {
     private static final Logger logger = LogManager.getLogger(Sentence.class);
+    private static final int MAX_RECURSION_DEPTH = 3;
     private Word nounProvider;
     private Word verbProvider;
     private Word adjectiveProvider;
+    SentenceStructure structureProvider;
 
 
     private StringBuilder sentence;                // frase originale o generata
@@ -34,6 +36,7 @@ public class Sentence {
         this.nounProvider = Noun.getInstance();
         this.verbProvider = Verb.getInstance();
         this.adjectiveProvider = Adjective.getInstance();
+        this.structureProvider = new SentenceStructure();
     }
 
     public Sentence(String text) {
@@ -49,14 +52,15 @@ public class Sentence {
         this.nounProvider = Noun.getInstance();
         this.verbProvider = Verb.getInstance();
         this.adjectiveProvider = Adjective.getInstance();
+        this.structureProvider = new SentenceStructure();
     }
 
-    public StringBuilder getSentence() {
-        return sentence;
+    public String getSentence() {
+        return sentence.toString();
     }
 
-    public StringBuilder getStructure() {
-        return structure;
+    public String getStructure() {
+        return structure.toString();
     }
 
     public List<String> getNouns() {
@@ -99,40 +103,75 @@ public class Sentence {
     }
 
     public String generateSentence() {
-        // qui selezioni random parole dalle liste (o da dizionario extra)
-        // e sostituisci in structure
-        SentenceStructure structureProvider = new SentenceStructure();
-        structure = new StringBuilder(structureProvider.getRandomStructure());
-        System.out.println(structure);
-        logger.info("Necessary Nouns: {}, Available: {}",StringUtils.countMatches(structure, "[noun]"), nouns.size());
-        while (StringUtils.countMatches(structure, "[noun]") - nouns.size() > 0){
+        // Step 1: Estrarre la struttura della frase
+        structure = new StringBuilder(resolveTemplate(0));
+        logger.info("Initial Sentence Structure: {}", structure);
+
+        // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
+        populateWordLists();
+
+        // Step 3: Shuffla le liste per diversificare l'output
+        shuffleWordLists();
+
+        // Step 4: Sostituire i placeholder nella struttura con parole effettive
+        sentence = new StringBuilder(replacePlaceholders());
+
+        logger.info("Final Sentence: {}", sentence);
+        return sentence.toString();
+    }
+
+
+    private String resolveTemplate(int depth) {
+        String temp = structureProvider.getRandomStructure();
+        if (depth > MAX_RECURSION_DEPTH) {
+            return "[noun]";
+        }
+        while (temp.contains("[sentence]")) {
+            temp = temp.replaceFirst("\\[sentence\\]", resolveTemplate(depth + 1));
+        }
+
+        return temp;
+
+    }
+
+    private void populateWordLists() {
+
+        while (StringUtils.countMatches(structure, "[noun]") - nouns.size() > 0) {
             nouns.add(nounProvider.getRandomWord());
         }
-        while (StringUtils.countMatches(structure, "[verb]") - verbs.size() > 0){
+        while (StringUtils.countMatches(structure, "[verb]") - verbs.size() > 0) {
             verbs.add(verbProvider.getRandomWord());
         }
-        while (StringUtils.countMatches(structure, "[adjective]") - adjectives.size() > 0){
+        while (StringUtils.countMatches(structure, "[adjective]") - adjectives.size() > 0) {
             adjectives.add(adjectiveProvider.getRandomWord());
         }
-        logger.info("Necessary Nouns: {}, Available: {}",StringUtils.countMatches(structure, "[noun]"), nouns.size());
-        logger.info(nouns.toString());
-        sentence = new StringBuilder(structure);
-        String result = structure.toString();
+        logger.info("Populated Word Lists - Nouns: {}, Verbs: {}, Adjectives: {}", nouns, verbs, adjectives);
+    }
+
+    private void shuffleWordLists() {
         Collections.shuffle(nouns);
         Collections.shuffle(verbs);
         Collections.shuffle(adjectives);
+        logger.info("Shuffled Word Lists - Nouns: {}, Verbs: {}, Adjectives: {}", nouns, verbs, adjectives);
+    }
+
+    private String replacePlaceholders() {
+        String result = structure.toString(); // Converte lo StringBuilder iniziale
         Iterator<String> nounsIterator = nouns.iterator();
         Iterator<String> verbsIterator = verbs.iterator();
         Iterator<String> adjectiveIterator = adjectives.iterator();
-        logger.warn(verbs.toString());
-        while (result.contains("[noun]"))
+
+        while (result.contains("[noun]") && nounsIterator.hasNext()) {
             result = result.replaceFirst("\\[noun\\]", nounsIterator.next());
-        while (result.contains("[verb]"))
+        }
+        while (result.contains("[verb]") && verbsIterator.hasNext()) {
             result = result.replaceFirst("\\[verb\\]", verbsIterator.next());
-        while (result.contains("[adjective]"))
+        }
+        while (result.contains("[adjective]") && adjectiveIterator.hasNext()) {
             result = result.replaceFirst("\\[adjective\\]", adjectiveIterator.next());
-        logger.info("Sentence: {}", result);
-        return null;
+        }
+        logger.info("Sentence after placeholders replacement: {}", result);
+        return result;
     }
 
 

@@ -235,7 +235,16 @@ public class Generation {
 
         List<Token> tokens = AnalyzeSyntaxService.analyzeSyntax(text);
         Sentence inputSentence = new Sentence(text);
-        inputSentence.generateSentence();
+        Sentence outputSentence = new Sentence();
+        outputSentence = inputSentence;
+        outputSentence.generateSentence();
+        System.out.println(outputSentence.getSentence());
+        List<ClassificationCategory> moderationCategories = TextModerationService.moderateText(outputSentence.getSentence());
+        for(ClassificationCategory category : moderationCategories) {
+            logger.info(category.getName() + " - " + Float.toString(category.getConfidence()));
+        }
+
+
 
         return null;
     }
