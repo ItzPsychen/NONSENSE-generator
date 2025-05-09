@@ -13,10 +13,10 @@ public class App {
 
         logger.info("The window is opening...");
         // Creo un'istanza di Graphic (il resto del codice relativo a Graphic rimane lo stesso)
-        Graphic G = new Graphic();
+        //Graphic G = new Graphic();
         logger.info("Have fun :)");
 
-//        Form form = new Form();
+       Form form = new Form();
 
 
     }
