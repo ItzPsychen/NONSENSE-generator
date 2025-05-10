@@ -55,6 +55,7 @@ public abstract class Word {
             System.out.println("Errore nel caricamento del file: " + filePath);
             e.printStackTrace();
         }
+
     }
 
     // Restituisce una parola casuale dalla lista caricata

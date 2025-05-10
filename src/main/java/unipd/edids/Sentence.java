@@ -55,12 +55,64 @@ public class Sentence {
         this.structureProvider = new SentenceStructure();
     }
 
-    public String getSentence() {
-        return sentence.toString();
+    public StringBuilder getSentence() {
+        return sentence;
     }
 
-    public String getStructure() {
-        return structure.toString();
+    public StringBuilder getStructure() {
+        return structure;
+    }
+
+    public Word getNounProvider() {
+        return nounProvider;
+    }
+
+    public void setNounProvider(Word nounProvider) {
+        this.nounProvider = nounProvider;
+    }
+
+    public Word getVerbProvider() {
+        return verbProvider;
+    }
+
+    public void setVerbProvider(Word verbProvider) {
+        this.verbProvider = verbProvider;
+    }
+
+    public Word getAdjectiveProvider() {
+        return adjectiveProvider;
+    }
+
+    public void setAdjectiveProvider(Word adjectiveProvider) {
+        this.adjectiveProvider = adjectiveProvider;
+    }
+
+    public SentenceStructure getStructureProvider() {
+        return structureProvider;
+    }
+
+    public void setStructureProvider(SentenceStructure structureProvider) {
+        this.structureProvider = structureProvider;
+    }
+
+    public void setSentence(StringBuilder sentence) {
+        this.sentence = sentence;
+    }
+
+    public void setStructure(StringBuilder structure) {
+        this.structure = structure;
+    }
+
+    public void setNouns(List<String> nouns) {
+        this.nouns = nouns;
+    }
+
+    public void setVerbs(List<String> verbs) {
+        this.verbs = verbs;
+    }
+
+    public void setAdjectives(List<String> adjectives) {
+        this.adjectives = adjectives;
     }
 
     public List<String> getNouns() {
