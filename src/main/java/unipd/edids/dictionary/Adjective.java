@@ -33,7 +33,9 @@
 //        return vocabulary.contains(this.text);
 //    }
 //}
-package unipd.edids.words;
+package unipd.edids.dictionary;
+
+import unipd.edids.ConfigManager;
 
 public class Adjective extends Word {
     private static Adjective instance;
@@ -55,6 +57,6 @@ public class Adjective extends Word {
 
     @Override
     protected String getFilePath() {
-        return "./src/main/resources/adjectives.txt";
+        return ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/adjectives.txt");
     }
 }

@@ -34,6 +34,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL", "info"));
+        System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile", "logs/app.log"));
+
         // Carica la vista dalla risorsa FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Form.fxml"));
         Parent root = loader.load();

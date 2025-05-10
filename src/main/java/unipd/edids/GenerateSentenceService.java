@@ -3,10 +3,10 @@ package unipd.edids;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import unipd.edids.words.Adjective;
-import unipd.edids.words.Noun;
-import unipd.edids.words.Verb;
-import unipd.edids.words.Word;
+import unipd.edids.dictionary.Adjective;
+import unipd.edids.dictionary.Noun;
+import unipd.edids.dictionary.Verb;
+import unipd.edids.dictionary.Word;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -5,12 +5,12 @@
 //import java.nio.file.Files;
 //import java.nio.file.Paths;
 //
-//public class Noun extends Word {
+//public class Verb extends Word {
 //    // the vocabulary is created only once
 //    private static Set<String> vocabulary;
 //    static {
 //        try {
-//            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/nouns.txt")));
+//            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/verbs.txt")));
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //            vocabulary = new HashSet<>();
@@ -18,12 +18,12 @@
 //    }
 //
 //    // class attributes                         TO ADD SOME OTHERS (maybe)
-//    private boolean plural;
-//    private boolean gender;
-//    private boolean countable;
+//    private String verbForm;
+//    private String tense;
+//    private boolean irregular;
 //
 //    // public constructor of the class
-//    public Noun(String value) {
+//    public Verb(String value) {
 //        super(value);
 //    }
 //
@@ -33,24 +33,34 @@
 //
 //    }
 //
+//    public String form() {
+//        if (this.text.endsWith("ing")) return "+ing";
+//        return (this.text.endsWith("ed") || this.irregular) ? "+ed" : "";
+//    }
+//
+//    @Override
 //    public boolean isInVocabulary() {
 //        return vocabulary.contains(this.text);
 //    }
 //}
-package unipd.edids.words;
 
-public class Noun extends Word {
-    private static Noun instance;
 
-    private Noun() {
+package unipd.edids.dictionary;
+
+import unipd.edids.ConfigManager;
+
+public class Verb extends Word {
+    private static Verb instance;
+
+    private Verb() {
         super();
     }
 
-    public static Noun getInstance() {
+    public static Verb getInstance() {
         if (instance == null) {
-            synchronized (Noun.class) {
+            synchronized (Verb.class) {
                 if (instance == null) {
-                    instance = new Noun();
+                    instance = new Verb();
                 }
             }
         }
@@ -59,6 +69,7 @@ public class Noun extends Word {
 
     @Override
     protected String getFilePath() {
-        return "./src/main/resources/nouns.txt";
+        return ConfigManager.getInstance().getProperty("verb.file","./src/main/resources/verbs.txt");
     }
 }
+
