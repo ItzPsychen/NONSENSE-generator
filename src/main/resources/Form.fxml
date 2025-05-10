@@ -68,14 +68,14 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <TextArea editable="false" layoutX="14.0" layoutY="152.0" prefHeight="335.0" prefWidth="428.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="152.0" />
-                  <CheckBox layoutX="167.0" layoutY="113.0" mnemonicParsing="false" text="Syntactic Tree" AnchorPane.leftAnchor="167.0" AnchorPane.topAnchor="113.0" />
+                  <TextArea fx:id="syntaxArea" editable="false" layoutX="14.0" layoutY="152.0" prefHeight="335.0" prefWidth="428.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="152.0" />
+                  <CheckBox fx:id="checkSyntax" layoutX="167.0" layoutY="113.0" mnemonicParsing="false" text="Syntactic Tree" AnchorPane.leftAnchor="167.0" AnchorPane.topAnchor="113.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TextArea layoutX="13.0" layoutY="78.0" prefHeight="410.0" prefWidth="423.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="78.0" />
-                  <Button layoutX="13.0" layoutY="14.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #007BFFFF;" text="Generate" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="25.0">
+                  <TextArea fx:id="generateArea" layoutX="13.0" layoutY="78.0" prefHeight="410.0" prefWidth="423.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="78.0" />
+                  <Button fx:id="generateButton" layoutX="13.0" layoutY="14.0" mnemonicParsing="false" onAction="#generateClick" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #007BFFFF;" text="Generate" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="25.0">
                      <font>
                         <Font size="18.0" />
                      </font>

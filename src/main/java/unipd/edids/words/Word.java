@@ -30,7 +30,7 @@
 //    // placeholder for vocabulary check
 //    public abstract boolean isInVocabulary();
 //}
-package unipd.edids;
+package unipd.edids.words;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;

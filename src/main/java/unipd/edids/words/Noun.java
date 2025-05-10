@@ -37,7 +37,7 @@
 //        return vocabulary.contains(this.text);
 //    }
 //}
-package unipd.edids;
+package unipd.edids.words;
 
 public class Noun extends Word {
     private static Noun instance;

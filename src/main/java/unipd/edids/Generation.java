@@ -207,15 +207,11 @@
 
 package unipd.edids;
 
-import com.google.cloud.language.v1.*;
-
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.words.Word;
 
 public class Generation {
     private static final Logger logger = LogManager.getLogger(Generation.class);

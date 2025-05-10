@@ -9,11 +9,6 @@ import java.util.List;
 public class AnalyzeSentenceService {
     private static final Logger logger = LogManager.getLogger(AnalyzeSentenceService.class);
 
-    private Sentence temp;
-
-    public AnalyzeSentenceService() {
-        temp = new Sentence();
-    }
 
 
     /**
@@ -23,12 +18,13 @@ public class AnalyzeSentenceService {
      * @return una lista di tokens che rappresentano l'analisi della sintassi.
      */
     public Sentence analyzeSyntax(String text) {
+        Sentence temp = new Sentence();
         List<Token> tokens = fetchSyntaxTokens(text);
         temp.setStructure(new StringBuilder());
         for (Token token : tokens) {
             String word = token.getText().getContent();
             String pos = String.valueOf(token.getPartOfSpeech().getTag());
-            logger.info("Parola: {}, Parte del discorso: {}", word, pos);
+            temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
             switch (pos) {
                 case "NOUN":
                     temp.getNouns().add(word);
