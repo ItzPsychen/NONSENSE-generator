@@ -4,7 +4,7 @@ import com.google.cloud.language.v1.*;
 
 import java.util.List;
 
-public class  TextModerationService {
+public class ModerationService {
 
     /**
      * Analizza il livello di tossicità e modera il testo fornito.

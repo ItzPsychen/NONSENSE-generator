@@ -37,7 +37,9 @@
 //        return vocabulary.contains(this.text);
 //    }
 //}
-package unipd.edids;
+package unipd.edids.entities;
+
+import unipd.edids.ConfigManager;
 
 public class Noun extends Word {
     private static Noun instance;
@@ -59,6 +61,7 @@ public class Noun extends Word {
 
     @Override
     protected String getFilePath() {
-        return "./src/main/resources/nouns.txt";
+        return ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/nouns.txt");
+
     }
 }

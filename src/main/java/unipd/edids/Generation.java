@@ -207,15 +207,11 @@
 
 package unipd.edids;
 
-import com.google.cloud.language.v1.*;
-
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.entities.Word;
 
 public class Generation {
     private static final Logger logger = LogManager.getLogger(Generation.class);
@@ -233,17 +229,21 @@ public class Generation {
             4. Dependency Tree (getDependencyEdge())
          */
 
-        List<Token> tokens = AnalyzeSyntaxService.analyzeSyntax(text);
-        Sentence inputSentence = new Sentence(text);
-        Sentence outputSentence = new Sentence();
-        outputSentence = inputSentence;
-        outputSentence.generateSentence();
-        System.out.println(outputSentence.getSentence());
-        List<ClassificationCategory> moderationCategories = TextModerationService.moderateText(outputSentence.getSentence());
-        for(ClassificationCategory category : moderationCategories) {
-            logger.info(category.getName() + " - " + Float.toString(category.getConfidence()));
-        }
-
+//        List<Token> tokens = AnalyzeSyntaxService.analyzeSyntax(text);
+//        Sentence inputSentence = new Sentence(text);
+//        Sentence outputSentence = new Sentence();
+//        outputSentence = inputSentence;
+//        outputSentence.generateSentence();
+//        System.out.println(outputSentence.getSentence());
+//        List<ClassificationCategory> moderationCategories = TextModerationService.moderateText(outputSentence.getSentence());
+//        for(ClassificationCategory category : moderationCategories) {
+//            logger.info(category.getName() + " - " + Float.toString(category.getConfidence()));
+//        }
+        System.out.println("=== Analisi della Sintassi ===");
+        AppManager appManager = new AppManager();
+        Sentence sentence = appManager.analyzeSentence(text);
+        System.out.println(sentence.getSentence() + "\n");
+        System.out.println(sentence.getStructure());
 
 
         return null;

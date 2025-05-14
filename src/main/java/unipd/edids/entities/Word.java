@@ -30,7 +30,7 @@
 //    // placeholder for vocabulary check
 //    public abstract boolean isInVocabulary();
 //}
-package unipd.edids;
+package unipd.edids.entities;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -55,6 +55,7 @@ public abstract class Word {
             System.out.println("Errore nel caricamento del file: " + filePath);
             e.printStackTrace();
         }
+
     }
 
     // Restituisce una parola casuale dalla lista caricata
