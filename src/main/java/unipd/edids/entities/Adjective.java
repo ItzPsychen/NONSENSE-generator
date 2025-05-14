@@ -33,7 +33,7 @@
 //        return vocabulary.contains(this.text);
 //    }
 //}
-package unipd.edids.dictionary;
+package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
 

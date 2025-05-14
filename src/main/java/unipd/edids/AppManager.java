@@ -3,7 +3,6 @@
 package unipd.edids;
 
 
-
 public class AppManager {
     private Sentence inputSentence;
     private Sentence outputSentence;

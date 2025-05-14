@@ -211,7 +211,7 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import unipd.edids.dictionary.Word;
+import unipd.edids.entities.Word;
 
 public class Generation {
     private static final Logger logger = LogManager.getLogger(Generation.class);
