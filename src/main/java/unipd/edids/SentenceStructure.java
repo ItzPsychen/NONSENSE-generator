@@ -127,15 +127,18 @@ import java.util.*;
 
 public class SentenceStructure {
     private List<String> structures;
+    private final Set<String> structSet;
 
     public SentenceStructure() {
         structures = new ArrayList<>();
+        structSet = new HashSet<>();
         loadStructures();
     }
 
     private void loadStructures() {
         try {
             structures = Files.readAllLines(Paths.get(ConfigManager.getInstance().getProperty("sentence.structures","./src/main/resources/sentenceStructures.txt")));
+            structSet.addAll(structures);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento delle sentence structures.");
             e.printStackTrace();
@@ -146,5 +149,11 @@ public class SentenceStructure {
         if (structures.isEmpty()) return "[NOUN] [VERB] [NOUN]";
         Random random = new Random();
         return structures.get(random.nextInt(structures.size()));
+    }
+
+    public void addNewStructure(String value) {
+        if (structSet.contains(value)) return;
+        structures.add(value);
+        structSet.add(value);
     }
 }

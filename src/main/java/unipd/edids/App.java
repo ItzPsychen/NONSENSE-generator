@@ -34,14 +34,14 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL", "info"));
         System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile", "logs/app.log"));
+        System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.nonsense", "logs/output/generated.txt"));
+        System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("details.nonsense", "logs/output/details.txt"));
 
         // Carica la vista dalla risorsa FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Form.fxml"));
         Parent root = loader.load();
-
 
         // Imposta le proprietà della finestra
         primaryStage.setTitle("NONSENSE Generator");

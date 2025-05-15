@@ -7,6 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class FormController {
 
     private AppManager appManager;
@@ -27,8 +30,19 @@ public class FormController {
     public void analyzeClick() {
         Sentence analyzeResult = appManager.analyzeSentence(inputText.getText());
         syntaxArea.setText(analyzeResult.getStructure().toString() +"\n");
+        String analysis = "";
         if (checkSyntax.isSelected()) {
-            syntaxArea.appendText(analyzeResult.getSyntaxTree().toString());
+            analysis = analyzeResult.getSyntaxTree().toString();
+            syntaxArea.appendText(analysis);
+        }
+
+        // Agginge al file ./logs/output/details.txt
+        String detailsPath = ConfigManager.getInstance().getProperty("DETAILS_NONSENSE", "./logs/output/details.txt");
+        try (FileWriter writer = new FileWriter(detailsPath, true)) {
+            writer.write(analyzeResult.getStructure().toString() + System.lineSeparator() + analysis + System.lineSeparator());
+            if (!analysis.isEmpty()) writer.write(System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -49,6 +63,14 @@ public class FormController {
 
             // Aggiunge entrambi al TextFlow
             generateArea.getChildren().addAll(structureTextFlow, new Text("\n\n"), sentenceText);
+
+            // Agginge al file ./logs/output/generated.txt
+            String generatedPath = ConfigManager.getInstance().getProperty("GENERATED_NONSENSE", "./logs/output/generated.txt");
+            try (FileWriter writer = new FileWriter(generatedPath, true)) {
+                writer.write(sentence + System.lineSeparator());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
