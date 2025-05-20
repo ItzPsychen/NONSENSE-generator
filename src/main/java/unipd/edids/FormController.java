@@ -10,9 +10,11 @@ import javafx.scene.text.TextFlow;
 public class FormController {
 
     private AppManager appManager;
+    private boolean save;
 
     public FormController() {
         appManager = new AppManager();
+        save = false;
     }
 
     @FXML
@@ -23,6 +25,8 @@ public class FormController {
     private CheckBox checkSyntax;
     @FXML
     private TextFlow generateArea;
+    @FXML
+    private CheckBox checkSaveSentence;
 
     public void analyzeClick() {
         Sentence analyzeResult = appManager.analyzeSentence(inputText.getText());
@@ -33,7 +37,9 @@ public class FormController {
     }
 
     public void generateClick() {
-        Sentence generateResult = appManager.generateSentence();
+        if (checkSaveSentence.isSelected()) save = true;
+        else save=false;
+        Sentence generateResult = appManager.generateSentence(save);
         if (generateResult != null) {
             // Pulisce il contenuto precedente nel TextFlow
             generateArea.getChildren().clear();

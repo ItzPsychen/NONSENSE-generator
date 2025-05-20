@@ -5,6 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.entities.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -51,6 +54,7 @@ public class GenerateSentenceService {
         temp.setSentence(new StringBuilder(replacePlaceholders()));
 
         logger.info("Final Sentence: {}", temp.getSentence());
+
         return temp;
     }
 
