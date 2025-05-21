@@ -20,7 +20,7 @@ public class AppManager {
 
     public Sentence analyzeSentence(String text, boolean save){
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
-        if (save) saveAnalysis(outputSentence, inputSentence.toString());
+        if (save) saveAnalysis(text, inputSentence.toString());
         return inputSentence;
     }
 
@@ -35,7 +35,7 @@ public class AppManager {
 
     // Agginge al file ./logs/output/generated.txt
     private void saveSentence(Sentence generated){
-        String generatedPath = ConfigManager.getInstance().getProperty("GENERATED_NONSENSE", "./logs/output/generated.txt");
+        String generatedPath = ConfigManager.getInstance().getProperty("generated.nonsense", "./logs/output/generated.txt");
         try (FileWriter writer = new FileWriter(generatedPath, true)) {
             writer.write(generated.getSentence() + System.lineSeparator());
         } catch (IOException e) {
@@ -44,10 +44,10 @@ public class AppManager {
     }
 
     // Agginge al file ./logs/output/details.txt
-    private void saveAnalysis(Sentence generated, String analysis){
-        String detailsPath = ConfigManager.getInstance().getProperty("DETAILS_NONSENSE", "./logs/output/details.txt");
+    private void saveAnalysis(String text, String analysis){
+        String detailsPath = ConfigManager.getInstance().getProperty("details.nonsense", "./logs/output/details.txt");
         try (FileWriter writer = new FileWriter(detailsPath, true)) {
-            writer.write(generated.getSentence() + System.lineSeparator() + analysis + System.lineSeparator());
+            writer.write(text + System.lineSeparator() + analysis + System.lineSeparator());
             if (!analysis.isEmpty()) writer.write(System.lineSeparator());
         } catch (IOException e) {
             e.printStackTrace();

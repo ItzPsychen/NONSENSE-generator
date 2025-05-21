@@ -76,7 +76,7 @@
                   </Label>
                   <TextArea fx:id="syntaxArea" editable="false" layoutX="14.0" layoutY="152.0" prefHeight="335.0" prefWidth="428.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="152.0" />
                   <CheckBox fx:id="checkSyntax" layoutX="167.0" layoutY="113.0" mnemonicParsing="false" text="Syntactic Tree" AnchorPane.leftAnchor="167.0" AnchorPane.topAnchor="113.0" />
-                  <CheckBox fx:id="checkSaveSentence" layoutX="268.0" layoutY="113.0" mnemonicParsing="false" text="Save Sentece" AnchorPane.leftAnchor="268.0" AnchorPane.topAnchor="113.0"/>
+                  <CheckBox fx:id="checkSaveSentence" layoutX="275.0" layoutY="113.0" mnemonicParsing="false" text="Save" AnchorPane.leftAnchor="285.0" AnchorPane.topAnchor="113.0"/>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
