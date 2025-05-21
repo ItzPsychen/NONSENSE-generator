@@ -20,7 +20,6 @@ public class ConfigManager {
         configFilePath = getEnv("CONFIG_FILE_PATH", "src/main/resources/config.properties");
         properties = new Properties();
         loadProperties();
-
     }
 
     public static ConfigManager getInstance() {
