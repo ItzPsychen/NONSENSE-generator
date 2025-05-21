@@ -20,6 +20,11 @@ public class AppManager {
 
     public Sentence analyzeSentence(String text, boolean save){
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
+        if (!inputSentence.isValid()) {
+            // stampa in output "Your Sentence contains ..."
+
+            return null;
+        }
         if (save) saveAnalysis(text, inputSentence.toString());
         return inputSentence;
     }
@@ -29,7 +34,13 @@ public class AppManager {
             return null;
         }
         outputSentence = generateSentenceService.generateSentence(inputSentence);
-        if (save) saveSentence(outputSentence);
+        analyzeSentenceService.setValidateAttributes(outputSentence);
+        if (!outputSentence.isValid()) {
+            // stampa in output "Your Sentence contains ..."
+
+            return null;
+        }
+        if (save && outputSentence != null) saveSentence(outputSentence);
         return outputSentence;
     }
 

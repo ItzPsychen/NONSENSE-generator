@@ -6,10 +6,16 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+import org.json.JSONObject;
+
 public class AnalyzeSentenceService {
     private static final Logger logger = LogManager.getLogger(AnalyzeSentenceService.class);
-
-
 
     /**
      * Esegue l'analisi della sintassi di un testo.
@@ -17,6 +23,7 @@ public class AnalyzeSentenceService {
      * @param text il testo da analizzare.
      * @return una lista di tokens che rappresentano l'analisi della sintassi.
      */
+
     public Sentence analyzeSyntax(String text) {
         Sentence temp = new Sentence();
         List<Token> tokens = fetchSyntaxTokens(text);
@@ -43,10 +50,14 @@ public class AnalyzeSentenceService {
             }
         }
         temp.setStructure(new StringBuilder(temp.getStructure().toString().trim()));
-        System.out.println(temp.getStructure());
 
+        // imposta la tossicita', profanita' ...
+        setValidateAttributes(temp);
+
+        System.out.println(temp.getStructure());
         return temp;
     }
+
     public List<Token> fetchSyntaxTokens(String text) {
         LanguageServiceClient language = APIClient.getInstance(); // Ottieni il client singleton
 
@@ -71,6 +82,57 @@ public class AnalyzeSentenceService {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void setValidateAttributes(Sentence temp) {
+        try {
+            // PERSPECTIVE_KEY here
+            String apiKey = "####################################################################" +
+                            "####################################################################" +
+                            "####################################################################" +
+                            "####################################################################";
+
+            URL url = new URL("https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=" + apiKey);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            JSONObject requestBody = new JSONObject()
+                    .put("comment", new JSONObject().put("text", temp.getSentence()))
+                    .put("languages", new org.json.JSONArray().put("en"))
+                    .put("requestedAttributes", new JSONObject()
+                            .put("TOXICITY", new JSONObject())
+                            .put("PROFANITY", new JSONObject())
+                            .put("INSULT", new JSONObject())
+                            .put("THREAT", new JSONObject())
+                            .put("IDENTITY_ATTACK", new JSONObject()));
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            try (Scanner scanner = new Scanner(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                StringBuilder response = new StringBuilder();
+                while (scanner.hasNextLine()) {
+                    response.append(scanner.nextLine());
+                }
+
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                JSONObject JSONattributes = jsonResponse.getJSONObject("attributeScores");
+
+                temp.setToxicity(JSONattributes.getJSONObject("TOXICITY").getJSONObject("summaryScore").getDouble("value"));
+                temp.setProfanity(JSONattributes.getJSONObject("PROFANITY").getJSONObject("summaryScore").getDouble("value"));
+                temp.setInsult(JSONattributes.getJSONObject("INSULT").getJSONObject("summaryScore").getDouble("value"));
+                temp.setThreat(JSONattributes.getJSONObject("THREAT").getJSONObject("summaryScore").getDouble("value"));
+                temp.setIdentityThreat(JSONattributes.getJSONObject("IDENTITY_THREAT").getJSONObject("summaryScore").getDouble("value"));
+            }
+
+        } catch (Exception e) {
+            logger.error("Errore durante il calcolo del punteggio di tossicità", e);
         }
     }
 }

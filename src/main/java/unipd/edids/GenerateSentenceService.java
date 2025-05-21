@@ -32,10 +32,8 @@ public class GenerateSentenceService {
 
 
     public Sentence generateSentence(Sentence inputSentence) {
-
         if (inputSentence == null) {
             return null;
-
         }
         temp.setNouns(new ArrayList<>(inputSentence.getNouns()));
         temp.setVerbs(new ArrayList<>(inputSentence.getVerbs()));
@@ -69,7 +67,6 @@ public class GenerateSentenceService {
         }
 
         return template;
-
     }
 
     private void populateWordLists() {
