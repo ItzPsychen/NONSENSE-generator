@@ -241,12 +241,10 @@ public class Generation {
 //        }
         System.out.println("=== Analisi della Sintassi ===");
         AppManager appManager = new AppManager();
-        Sentence sentence = appManager.analyzeSentence(text);
+        Sentence sentence = appManager.analyzeSentence(text, false);
         System.out.println(sentence.getSentence() + "\n");
         System.out.println(sentence.getStructure());
 
-
         return null;
     }
-
 }

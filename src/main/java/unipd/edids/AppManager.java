@@ -14,12 +14,13 @@ public class AppManager {
     private GenerateSentenceService generateSentenceService;
 
     public AppManager(){
-     analyzeSentenceService = new AnalyzeSentenceService();
-     generateSentenceService = new GenerateSentenceService();
-
+        analyzeSentenceService = new AnalyzeSentenceService();
+        generateSentenceService = new GenerateSentenceService();
     }
-    public Sentence analyzeSentence(String text){
+
+    public Sentence analyzeSentence(String text, boolean save){
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
+        if (save) saveAnalysis(outputSentence, inputSentence.toString());
         return inputSentence;
     }
 
@@ -28,19 +29,28 @@ public class AppManager {
             return null;
         }
         outputSentence = generateSentenceService.generateSentence(inputSentence);
-        if(save) saveSentence(outputSentence);
+        if (save) saveSentence(outputSentence);
         return outputSentence;
     }
-    private void saveSentence(Sentence outputSentence){
 
-        String nomeFile = "src/main/resources/output.txt";  // Nome del file
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeFile, true))) {
-            writer.write(outputSentence.getSentence().toString()+System.lineSeparator());
-            System.out.println("Testo salvato con successo in " + nomeFile);
+    // Agginge al file ./logs/output/generated.txt
+    private void saveSentence(Sentence generated){
+        String generatedPath = ConfigManager.getInstance().getProperty("GENERATED_NONSENSE", "./logs/output/generated.txt");
+        try (FileWriter writer = new FileWriter(generatedPath, true)) {
+            writer.write(generated.getSentence() + System.lineSeparator());
         } catch (IOException e) {
-            System.err.println("Errore durante la scrittura del file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    // Agginge al file ./logs/output/details.txt
+    private void saveAnalysis(Sentence generated, String analysis){
+        String detailsPath = ConfigManager.getInstance().getProperty("DETAILS_NONSENSE", "./logs/output/details.txt");
+        try (FileWriter writer = new FileWriter(detailsPath, true)) {
+            writer.write(generated.getSentence() + System.lineSeparator() + analysis + System.lineSeparator());
+            if (!analysis.isEmpty()) writer.write(System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

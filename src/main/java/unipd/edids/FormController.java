@@ -32,28 +32,17 @@ public class FormController {
     private CheckBox checkSaveSentence;
 
     public void analyzeClick() {
-        Sentence analyzeResult = appManager.analyzeSentence(inputText.getText());
+        Sentence analyzeResult = appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
         syntaxArea.setText(analyzeResult.getStructure().toString() +"\n");
         String analysis = "";
         if (checkSyntax.isSelected()) {
             analysis = analyzeResult.getSyntaxTree().toString();
             syntaxArea.appendText(analysis);
         }
-
-        // Agginge al file ./logs/output/details.txt
-        String detailsPath = ConfigManager.getInstance().getProperty("DETAILS_NONSENSE", "./logs/output/details.txt");
-        try (FileWriter writer = new FileWriter(detailsPath, true)) {
-            writer.write(analyzeResult.getStructure().toString() + System.lineSeparator() + analysis + System.lineSeparator());
-            if (!analysis.isEmpty()) writer.write(System.lineSeparator());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void generateClick() {
-        if (checkSaveSentence.isSelected()) save = true;
-        else save=false;
-        Sentence generateResult = appManager.generateSentence(save);
+        Sentence generateResult = appManager.generateSentence(checkSaveSentence.isSelected());
         if (generateResult != null) {
             // Pulisce il contenuto precedente nel TextFlow
             generateArea.getChildren().clear();
@@ -69,14 +58,6 @@ public class FormController {
 
             // Aggiunge entrambi al TextFlow
             generateArea.getChildren().addAll(structureTextFlow, new Text("\n\n"), sentenceText);
-
-            // Agginge al file ./logs/output/generated.txt
-            String generatedPath = ConfigManager.getInstance().getProperty("GENERATED_NONSENSE", "./logs/output/generated.txt");
-            try (FileWriter writer = new FileWriter(generatedPath, true)) {
-                writer.write(sentence + System.lineSeparator());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
