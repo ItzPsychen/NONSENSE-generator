@@ -95,6 +95,9 @@ public class AnalyzeSentenceService {
     }
 
     public void setValidateAttributes(Sentence temp) {
+
+        // return;
+
         try {
             // PERSPECTIVE_KEY here
             String apiKey = "####################################################################" +

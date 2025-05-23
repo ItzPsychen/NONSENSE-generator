@@ -7,7 +7,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import edu.stanford.nlp.trees.Tree;
 
+import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -37,9 +39,32 @@ public class FormController {
         syntaxArea.setText(analyzeResult.getStructure().toString() +"\n");
         String analysis = "";
         if (checkSyntax.isSelected()) {
-            analysis = analyzeResult.getSyntaxTree().pennString();
+            analysis = prettyTree(analyzeResult.getSyntaxTree());
             syntaxArea.appendText(analysis);
         }
+    }
+
+    private String prettyTree(Tree tree) {
+        return prettyTreeHelper(tree, "", true);
+    }
+
+    private String prettyTreeHelper(Tree tree, String prefix, boolean isLast) {
+        StringBuilder builder = new StringBuilder();
+
+        // Add the prefix and the current node's value
+        builder.append(prefix);
+        builder.append(isLast ? "└── " : "├── ");
+        builder.append(tree.value()).append("\n");
+
+        // Prepare prefix for children
+        Tree[] children = tree.children();
+        for (int i = 0; i < children.length; i++) {
+            boolean last = (i == children.length - 1);
+            String newPrefix = prefix + (isLast ? "    " : "│   ");
+            builder.append(prettyTreeHelper(children[i], newPrefix, last));
+        }
+
+        return builder.toString();
     }
 
     public void generateClick() {
