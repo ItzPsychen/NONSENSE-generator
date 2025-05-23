@@ -9,18 +9,23 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import edu.stanford.nlp.trees.Tree;
 
-import java.util.*;
-import java.io.FileWriter;
+import java.nio.file.Paths;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class FormController {
-
     private AppManager appManager;
     private boolean save;
 
+    private Map<String, String> treeTags;
+
     public FormController() {
-        appManager = new AppManager();
-        save = false;
+        this.appManager = new AppManager();
+        this.save = false;
+        this.treeTags = loadSyntaxTags(getFilePathTags());
     }
 
     @FXML
@@ -55,7 +60,7 @@ public class FormController {
     }
 
     private String prettyTree(Tree tree) {
-        return prettyTreeHelper(tree, "", true);
+        return "\nTREE\n" + prettyTreeHelper(tree.children()[0], "", true);
     }
 
     private String prettyTreeHelper(Tree tree, String prefix, boolean isLast) {
@@ -64,7 +69,7 @@ public class FormController {
         // Add the prefix and the current node's value
         builder.append(prefix);
         builder.append(isLast ? "└── " : "├── ");
-        builder.append(tree.value()).append("\n");
+        builder.append(treeTags.getOrDefault(tree.value(), tree.value())).append("\n");
 
         // Prepare prefix for children
         Tree[] children = tree.children();
@@ -128,5 +133,26 @@ public class FormController {
 
         // Per mostrare il dialogo e aspettare che l'utente lo chiuda
         alert.showAndWait();
+    }
+
+    private Map<String, String> loadSyntaxTags(String filePath) {
+        Properties properties = new Properties();
+        try (FileInputStream fis = new FileInputStream(Paths.get(filePath).toFile())) {
+            properties.load(fis); // Load the .properties file
+            // Convert Properties to Map<String, String>
+            return properties.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            e -> e.getKey().toString(),
+                            e -> e.getValue().toString()
+                    ));
+        } catch (IOException e) {
+            System.err.println("Error loading properties file: " + filePath);
+            e.printStackTrace();
+            return Map.of(); // Return empty Map if error occurs
+        }
+    }
+
+    private String getFilePathTags() {
+        return ConfigManager.getInstance().getProperty("syntax_tags.properties","./src/main/resources/syntax_tags.properties");
     }
 }

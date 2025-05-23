@@ -14,7 +14,6 @@ public class ConfigManager {
     private Properties properties;
     private String configFilePath;
 
-
     private ConfigManager() {
         dotenv = Dotenv.load();
         configFilePath = getEnv("CONFIG_FILE_PATH", "src/main/resources/config.properties");
@@ -49,7 +48,6 @@ public class ConfigManager {
         }
         return value;
     }
-
 
     public String getProperty(String key, String defaultValue) {
         String value = properties.getProperty(key);

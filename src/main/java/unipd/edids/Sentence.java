@@ -37,10 +37,7 @@ public class Sentence {
         this.adjectives = new ArrayList<>();
     }
 
-    public Tree getSyntaxTree() {
-        return syntaxTree;
-    }
-
+    public Tree getSyntaxTree() { return syntaxTree; }
     public void setSyntaxTree(Tree syntaxTree) {
         this.syntaxTree = syntaxTree;
     }
