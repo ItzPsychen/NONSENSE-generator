@@ -37,7 +37,7 @@ public class FormController {
         syntaxArea.setText(analyzeResult.getStructure().toString() +"\n");
         String analysis = "";
         if (checkSyntax.isSelected()) {
-            analysis = analyzeResult.getSyntaxTree().toString();
+            analysis = analyzeResult.getSyntaxTree().pennString();
             syntaxArea.appendText(analysis);
         }
     }

@@ -1,5 +1,7 @@
 package unipd.edids;
 
+import edu.stanford.nlp.trees.SimpleTree;
+import edu.stanford.nlp.trees.Tree;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +13,7 @@ public class Sentence {
 
     private StringBuilder sentence;                 // frase originale o generata
     private StringBuilder structure;                // frase con i placeholder tipo "The [NOUN] [VERB]..."
-    private StringBuilder syntaxTree;
+    private Tree syntaxTree;
 
     private double toxicity;
     private double profanity;
@@ -28,18 +30,18 @@ public class Sentence {
     public Sentence() {
         this.sentence = new StringBuilder();
         this.structure = new StringBuilder();
-        this.syntaxTree = new StringBuilder();
+        this.syntaxTree = new SimpleTree();
         this.toxicity = 0.0;
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
     }
 
-    public StringBuilder getSyntaxTree() {
+    public Tree getSyntaxTree() {
         return syntaxTree;
     }
 
-    public void setSyntaxTree(StringBuilder syntaxTree) {
+    public void setSyntaxTree(Tree syntaxTree) {
         this.syntaxTree = syntaxTree;
     }
 

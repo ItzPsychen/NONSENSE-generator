@@ -1,6 +1,11 @@
 package unipd.edids;
 
 import com.google.cloud.language.v1.*;
+import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.CoreSentence;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.trees.SimpleTree;
+import edu.stanford.nlp.trees.Tree;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +16,7 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.Scanner;
 import org.json.JSONObject;
 
@@ -25,13 +31,14 @@ public class AnalyzeSentenceService {
      */
 
     public Sentence analyzeSyntax(String text) {
+
         Sentence temp = new Sentence();
         List<Token> tokens = fetchSyntaxTokens(text);
         temp.setStructure(new StringBuilder());
         for (Token token : tokens) {
             String word = token.getText().getContent();
             String pos = String.valueOf(token.getPartOfSpeech().getTag());
-            temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
+//            temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
             switch (pos) {
                 case "NOUN":
                     temp.getNouns().add(word);
@@ -51,8 +58,10 @@ public class AnalyzeSentenceService {
         }
         temp.setStructure(new StringBuilder(temp.getStructure().toString().trim()));
 
+        temp.setSyntaxTree(getSyntaxTree(text));
+
         // imposta la tossicita', profanita' ...
-        setValidateAttributes(temp);
+//        setValidateAttributes(temp);
 
         System.out.println(temp.getStructure());
         return temp;
@@ -135,4 +144,60 @@ public class AnalyzeSentenceService {
             logger.error("Errore durante il calcolo del punteggio di tossicità", e);
         }
     }
+
+
+    private StanfordCoreNLP pipeline;
+
+    public AnalyzeSentenceService() {
+        // Configura le proprietà per la pipeline NLP
+        Properties props = new Properties();
+        // Aggiungi gli annotatori necessari per il parsing
+        // "tokenize" per dividere la frase in parole
+        // "ssplit" per dividere il testo in frasi
+        // "pos" per il Part-of-Speech tagging
+        // "parse" per il parsing sintattico (genera il syntax tree)
+        props.setProperty("annotators", "tokenize,ssplit,pos,parse");
+
+        // Inizializza la pipeline di StanfordCoreNLP
+        // Questo carica i modelli, può richiedere un po' di tempo la prima volta
+        pipeline = new StanfordCoreNLP(props);
+    }
+
+    /**
+     * Genera e ritorna l'albero sintattico per la prima frase di un testo.
+     *
+     * @param text La frase o il testo in inglese da analizzare.
+     * @return L'oggetto Tree che rappresenta l'albero sintattico, o null se non ci sono frasi.
+     */
+    public Tree getSyntaxTree(String text) {
+        // Crea un CoreDocument dall'input text
+        CoreDocument document = pipeline.processToCoreDocument(text);
+
+        // Stanford CoreNLP può processare documenti con più frasi.
+        // Qui prendiamo solo la prima frase per semplicità.
+        if (!document.sentences().isEmpty()) {
+            CoreSentence sentence = document.sentences().get(0);
+            return sentence.constituencyParse(); // Questo è l'albero sintattico
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * Metodo di esempio per visualizzare l'albero.
+     *
+     * @param tree L'albero sintattico da stampare.
+     */
+    public void printTree(Tree tree) {
+        if (tree != null) {
+            tree.pennPrint(); // Stampa l'albero in formato Penn Treebank
+        } else {
+            System.out.println("Nessun albero da stampare.");
+        }
+    }
+
+
+
+
 }
