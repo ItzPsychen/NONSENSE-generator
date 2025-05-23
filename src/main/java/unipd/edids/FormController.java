@@ -1,6 +1,7 @@
 package unipd.edids;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -82,5 +83,15 @@ public class FormController {
         }
 
         return textFlow;
+    }
+
+    public void showErrorDialog(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+
+        // Per mostrare il dialogo e aspettare che l'utente lo chiuda
+        alert.showAndWait();
     }
 }
