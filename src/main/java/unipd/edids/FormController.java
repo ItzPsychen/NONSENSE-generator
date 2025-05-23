@@ -40,6 +40,16 @@ public class FormController {
             analysis = analyzeResult.getSyntaxTree().pennString();
             syntaxArea.appendText(analysis);
         }
+        syntaxArea.appendText(String.valueOf(analyzeResult.getToxicity()));
+        syntaxArea.appendText("\n");
+        syntaxArea.appendText(String.valueOf(analyzeResult.getProfanity()));
+        syntaxArea.appendText("\n");
+        syntaxArea.appendText(String.valueOf(analyzeResult.getInsult()));
+        syntaxArea.appendText("\n");
+        syntaxArea.appendText(String.valueOf(analyzeResult.getThreat()));
+        syntaxArea.appendText("\n");
+        syntaxArea.appendText(String.valueOf(analyzeResult.getIdentityThreat()));
+        syntaxArea.appendText("\n");
     }
 
     public void generateClick() {

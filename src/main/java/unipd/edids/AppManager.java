@@ -3,7 +3,6 @@
 package unipd.edids;
 
 
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -12,10 +11,12 @@ public class AppManager {
     private Sentence outputSentence;
     private AnalyzeSentenceService analyzeSentenceService;
     private GenerateSentenceService generateSentenceService;
+    private ModerationSentenceService moderationSentenceService;
 
     public AppManager(){
         analyzeSentenceService = new AnalyzeSentenceService();
         generateSentenceService = new GenerateSentenceService();
+        moderationSentenceService = new ModerationSentenceService();
     }
 
     public Sentence analyzeSentence(String text, boolean save){
@@ -25,7 +26,10 @@ public class AppManager {
 
             return null;
         }
+        System.out.println("BOMBA " + inputSentence.getSentence().toString());
         if (save) saveAnalysis(text, inputSentence.toString());
+        moderationSentenceService.moderateText(inputSentence);
+
         return inputSentence;
     }
 

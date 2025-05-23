@@ -4,7 +4,6 @@ import com.google.cloud.language.v1.*;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.trees.SimpleTree;
 import edu.stanford.nlp.trees.Tree;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +32,7 @@ public class AnalyzeSentenceService {
     public Sentence analyzeSyntax(String text) {
 
         Sentence temp = new Sentence();
+        temp.setSentence(new StringBuilder(text));
         List<Token> tokens = fetchSyntaxTokens(text);
         temp.setStructure(new StringBuilder());
         for (Token token : tokens) {
@@ -61,7 +61,7 @@ public class AnalyzeSentenceService {
         temp.setSyntaxTree(getSyntaxTree(text));
 
         // imposta la tossicita', profanita' ...
-//        setValidateAttributes(temp);
+        setValidateAttributes(temp);
 
         System.out.println(temp.getStructure());
         return temp;
