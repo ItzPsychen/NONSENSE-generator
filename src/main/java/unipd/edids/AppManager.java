@@ -1,7 +1,6 @@
-//Facade
+// Facade
 
 package unipd.edids;
-
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,18 +11,25 @@ public class AppManager {
     private AnalyzeSentenceService analyzeSentenceService;
     private GenerateSentenceService generateSentenceService;
     private ModerationSentenceService moderationSentenceService;
+    private boolean modified;
 
     public AppManager(){
         analyzeSentenceService = new AnalyzeSentenceService();
         generateSentenceService = new GenerateSentenceService();
         moderationSentenceService = new ModerationSentenceService();
+        modified = true;
     }
 
     public Sentence analyzeSentence(String text){
+        if (!this.isModified()) return new Sentence("#notmodified");
+        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
+        if (!text.matches(".*[a-zA-Z]+.*")) return new Sentence("#chars");
+
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
-        if (!inputSentence.isValid()) return null;
-        System.out.println("BOMBA " + inputSentence.getSentence().toString());
         moderationSentenceService.moderateText(inputSentence);
+        if (!inputSentence.isValid()) return new Sentence("#invalid");;
+
+        System.out.println("BOMBA " + inputSentence.getSentence().toString());
         return inputSentence;
     }
 
@@ -33,7 +39,7 @@ public class AppManager {
         }
         outputSentence = generateSentenceService.generateSentence(inputSentence);
         // analyzeSentenceService.setValidateAttributes(outputSentence);
-        if (!outputSentence.isValid()) return null;
+        if (outputSentence == null || !outputSentence.isValid()) return null;
         if (save && outputSentence != null) saveSentence(outputSentence);
         return outputSentence;
     }
@@ -58,4 +64,7 @@ public class AppManager {
             e.printStackTrace();
         }
     }
+
+    public boolean isModified() { return this.modified; }
+    public void setModified(boolean value) { this.modified = value; }
 }

@@ -1,6 +1,0 @@
-This sentence is a good example of words
-unipd.edids.Sentence@71cda95d
-
-This sentence is a good example
-unipd.edids.Sentence@4822be0
-

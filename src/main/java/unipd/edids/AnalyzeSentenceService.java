@@ -37,7 +37,7 @@ public class AnalyzeSentenceService {
         for (Token token : tokens) {
             String word = token.getText().getContent();
             String pos = String.valueOf(token.getPartOfSpeech().getTag());
-//            temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
+            // temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
             switch (pos) {
                 case "NOUN":
                     temp.getNouns().add(word);
@@ -56,11 +56,7 @@ public class AnalyzeSentenceService {
             }
         }
         temp.setStructure(new StringBuilder(temp.getStructure().toString().trim()));
-
         temp.setSyntaxTree(getSyntaxTree(text));
-
-        // imposta la tossicita', profanita' ...
-        // setValidateAttributes(temp);
 
         System.out.println(temp.getStructure());
         return temp;
@@ -147,7 +143,6 @@ public class AnalyzeSentenceService {
         }
     }
 
-
     private StanfordCoreNLP pipeline;
 
     public AnalyzeSentenceService() {
@@ -198,8 +193,4 @@ public class AnalyzeSentenceService {
             System.out.println("Nessun albero da stampare.");
         }
     }
-
-
-
-
 }

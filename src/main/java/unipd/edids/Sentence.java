@@ -37,6 +37,10 @@ public class Sentence {
         this.adjectives = new ArrayList<>();
     }
 
+    public Sentence(String text) {
+        this.sentence = new StringBuilder(text);
+    }
+
     public Tree getSyntaxTree() { return syntaxTree; }
     public void setSyntaxTree(Tree syntaxTree) {
         this.syntaxTree = syntaxTree;
@@ -63,9 +67,7 @@ public class Sentence {
         this.adjectives = adjectives;
     }
 
-    public List<String> getNouns() {
-        return nouns;
-    }
+    public List<String> getNouns() { return nouns; }
     public List<String> getVerbs() {
         return verbs;
     }

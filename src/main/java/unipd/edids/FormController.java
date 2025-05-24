@@ -42,6 +42,13 @@ public class FormController {
     private Button settingsButton;
 
     @FXML
+    public void initialize() {
+        inputText.textProperty().addListener((observable, oldValue, newValue) -> {
+            appManager.setModified(true);
+        });
+    }
+
+    @FXML
     public void analyzeClick() {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 
@@ -51,25 +58,16 @@ public class FormController {
             protected Sentence call() throws Exception {
                 // Simulate processing time (remove in production)
                 Thread.sleep(500);
-                return appManager.analyzeSentence(inputText.getText());
+                System.out.println(inputText.getText());
+                Sentence result = appManager.analyzeSentence(inputText.getText());
+                if (result.getSentence().toString().charAt(0) == '#') throw new Exception(result.getSentence().toString());
+                return result;
             }
         };
 
         // Completion handler
         analyzeTask.setOnSucceeded(event -> {
             Sentence analyzeResult = analyzeTask.getValue();
-
-            // isValid() -> not null
-            if (analyzeResult == null) {
-                Text warningText = new Text("❌ WARNING\n");
-                Text errorText = new Text("The sentence uses improper words.");
-                warningText.setStyle("-fx-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
-                errorText.setStyle("-fx-fill: red; -fx-font-size: 12px;");
-
-                syntaxArea.getChildren().add(warningText);
-                syntaxArea.getChildren().add(errorText);
-                return;
-            }
 
             // Remove the previous content
             syntaxArea.getChildren().clear();
@@ -113,8 +111,20 @@ public class FormController {
         // Set error handler
         analyzeTask.setOnFailed(event -> {
             progressBar.setProgress(0);
-            showErrorDialog("Analysis Error", "An error occurred during analysis",
-                    analyzeTask.getException().getMessage());
+
+            String errorMessage = getErrorMessage(analyzeTask.getException().getMessage());
+            if (errorMessage == null) return;
+
+            Text warningText = new Text("❌ WARNING\n");
+            Text errorText = new Text(errorMessage);
+            warningText.setStyle("-fx-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
+            errorText.setStyle("-fx-fill: red; -fx-font-size: 12px;");
+
+            syntaxArea.getChildren().clear();
+            syntaxArea.getChildren().add(warningText);
+            syntaxArea.getChildren().add(errorText);
+
+            showErrorDialog("Analysis Error", "An error occurred during analysis", errorMessage);
         });
 
         // Start the task in a new thread
@@ -155,7 +165,9 @@ public class FormController {
             protected Sentence call() throws Exception {
                 // Simulate processing time (remove in production)
                 Thread.sleep(500);
-                return appManager.generateSentence(checkSaveSentence.isSelected());
+                Sentence result = appManager.generateSentence(checkSaveSentence.isSelected());
+                if (result == null) throw new Exception("Please, analyze your sentence before generating.");
+                return result;
             }
         };
 
@@ -204,11 +216,6 @@ public class FormController {
 
         // Start the task in a new thread
         new Thread(generateTask).start();
-    }
-
-    @FXML
-    private void openSettings() {
-        // TODO
     }
 
     // Metodo helper per formattare la struttura
@@ -263,5 +270,20 @@ public class FormController {
 
     private String getFilePathTags() {
         return ConfigManager.getInstance().getProperty("syntax_tags.properties","./src/main/resources/properties/syntax_tags.properties");
+    }
+
+    private String getErrorMessage(String message) {
+        switch (message) {
+            case "#notmodified": return null;
+            case "#length": return "The sentence is too short.";
+            case "#chars": return "The sentence must contain words.";
+            case "#invalid": return "The sentence uses improper words.";
+        }
+        return null;
+    }
+
+    @FXML
+    private void openSettings() {
+        // TODO
     }
 }

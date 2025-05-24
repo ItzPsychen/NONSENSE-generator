@@ -30,9 +30,20 @@ public class GenerateSentenceService {
         this.structureProvider = new SentenceStructure();
     }
 
-
     public Sentence generateSentence(Sentence inputSentence) {
-        if (inputSentence == null) {
+        System.out.println("[generateSentence] " + inputSentence.getSentence().toString());
+        if (inputSentence.getSentence().toString() == null || inputSentence.getSentence().toString().trim().isEmpty() ||
+                !inputSentence.getSentence().toString().matches(".[a-zA-Z]+.")) {
+
+            // TODO
+            // scrivere una frase con termini poco adatti
+            // fare l'analisi
+            // scrivere una frase adatta
+            // fare l'analisi
+            // fare la generazione
+            // ERRORE: entra qui per nessuna ragione
+
+            System.out.println(" -> null");
             return null;
         }
         temp.setNouns(new ArrayList<>(inputSentence.getNouns()));
@@ -57,7 +68,6 @@ public class GenerateSentenceService {
 
         return temp;
     }
-
 
     private String resolveTemplate(int depth) {
         String template = structureProvider.getRandomStructure();
