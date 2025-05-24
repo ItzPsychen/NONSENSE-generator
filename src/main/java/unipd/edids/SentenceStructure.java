@@ -137,7 +137,7 @@ public class SentenceStructure {
 
     private void loadStructures() {
         try {
-            structures = Files.readAllLines(Paths.get(ConfigManager.getInstance().getProperty("sentence.structures","./src/main/resources/sentenceStructures.txt")));
+            structures = Files.readAllLines(Paths.get(ConfigManager.getInstance().getProperty("sentence.structures","./src/main/resources/structures/sentenceStructures.txt")));
             structSet.addAll(structures);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento delle sentence structures.");

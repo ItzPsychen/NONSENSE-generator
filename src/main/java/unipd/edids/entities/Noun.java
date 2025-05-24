@@ -61,6 +61,6 @@ public class Noun extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/nouns.txt");
+        return ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/words/nouns.txt");
     }
 }

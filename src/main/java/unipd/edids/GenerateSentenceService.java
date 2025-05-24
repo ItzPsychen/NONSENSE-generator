@@ -39,9 +39,11 @@ public class GenerateSentenceService {
         temp.setVerbs(new ArrayList<>(inputSentence.getVerbs()));
         temp.setAdjectives(new ArrayList<>(inputSentence.getAdjectives()));
         System.out.println(temp.getNouns());
+
         // Step 1: Estrarre la struttura della frase
         temp.setStructure(new StringBuilder(resolveTemplate(0)));
         logger.info("Initial Sentence Structure: {}", temp.getStructure());
+
         // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
         populateWordLists();
 
@@ -70,7 +72,6 @@ public class GenerateSentenceService {
     }
 
     private void populateWordLists() {
-
         while (StringUtils.countMatches(temp.getStructure(), "[noun]") - temp.getNouns().size() > 0) {
             temp.getNouns().add(nounProvider.getRandomWord());
         }

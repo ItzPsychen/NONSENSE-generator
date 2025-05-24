@@ -17,11 +17,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.FormController">
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.FormController">
 
    <!-- Top bar -->
    <top>
-      <AnchorPane prefHeight="92.0" prefWidth="910.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="92.0" prefWidth="930.0" BorderPane.alignment="CENTER">
          <children>
             <MenuBar prefHeight="27.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <menus>
@@ -47,6 +50,15 @@
                   <Font name="System Bold" size="32.0" />
                </font>
             </Label>
+            <Button fx:id="settingsButton" stylesheets="@style/settings.css" layoutX="860.0" layoutY="38.0" mnemonicParsing="false" onAction="#openSettings" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="38.0">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </AnchorPane>
    </top>
@@ -55,14 +67,16 @@
    <bottom>
       <AnchorPane prefHeight="36.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <children>
-            <ProgressBar fx:id="progressBar" layoutX="696.0" layoutY="8.0" prefWidth="200.0" progress="0.0" />
+            <ProgressBar fx:id="progressBar" layoutY="8.0" prefWidth="300.0" prefHeight="8.0" progress="0.0" maxWidth="400.0"
+                         minWidth="400.0" AnchorPane.leftAnchor="265.0" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="14.0"
+                         stylesheets="@style/progress.css" />
          </children></AnchorPane>
    </bottom>
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
+             <children>
                   <Button fx:id="analyzeButton" layoutX="16.0" layoutY="105.0" mnemonicParsing="false" onAction="#analyzeClick" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #007BFFFF;" text="Analyze" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="105.0">
                      <font>
                         <Font size="18.0" />
@@ -74,7 +88,12 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="syntaxArea" editable="false" layoutX="14.0" layoutY="152.0" prefHeight="335.0" prefWidth="428.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="152.0" />
+                  <ScrollPane layoutX="14.0" layoutY="13.0" prefHeight="337.0" prefWidth="430.0"
+                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="156.0" >
+                     <content>
+                        <TextFlow fx:id="syntaxArea" prefHeight="335.0" prefWidth="428.0" />
+                     </content>
+                  </ScrollPane>
                   <CheckBox fx:id="checkSyntax" layoutX="167.0" layoutY="113.0" mnemonicParsing="false" text="Syntactic Tree" AnchorPane.leftAnchor="167.0" AnchorPane.topAnchor="113.0" />
                   <CheckBox fx:id="checkSaveSentence" layoutX="275.0" layoutY="113.0" mnemonicParsing="false" text="Save" AnchorPane.leftAnchor="285.0" AnchorPane.topAnchor="113.0"/>
                </children>
@@ -87,7 +106,8 @@
                      </font>
                   </Button>
                   <Accordion layoutX="59.0" layoutY="30.0" />
-                  <ScrollPane layoutX="14.0" layoutY="78.0" prefHeight="418.0" prefWidth="427.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="78.0">
+                  <ScrollPane layoutX="14.0" layoutY="78.0" prefHeight="418.0" prefWidth="427.0"
+                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="78.0">
                      <content>
                         <TextFlow fx:id="generateArea" prefHeight="416.0" prefWidth="425.0" />
                      </content>

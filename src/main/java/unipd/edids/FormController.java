@@ -1,10 +1,8 @@
 package unipd.edids;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import edu.stanford.nlp.trees.Tree;
@@ -31,32 +29,96 @@ public class FormController {
     @FXML
     private TextField inputText;
     @FXML
-    private TextArea syntaxArea;
+    private TextFlow syntaxArea;
     @FXML
     private CheckBox checkSyntax;
     @FXML
     private TextFlow generateArea;
     @FXML
     private CheckBox checkSaveSentence;
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private Button settingsButton;
 
+    @FXML
     public void analyzeClick() {
-        Sentence analyzeResult = appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
-        syntaxArea.setText(analyzeResult.getStructure().toString() +"\n");
-        String analysis = "";
-        if (checkSyntax.isSelected()) {
-            analysis = prettyTree(analyzeResult.getSyntaxTree());
-            syntaxArea.appendText(analysis);
-        }
-        syntaxArea.appendText(String.valueOf(analyzeResult.getToxicity()));
-        syntaxArea.appendText("\n");
-        syntaxArea.appendText(String.valueOf(analyzeResult.getProfanity()));
-        syntaxArea.appendText("\n");
-        syntaxArea.appendText(String.valueOf(analyzeResult.getInsult()));
-        syntaxArea.appendText("\n");
-        syntaxArea.appendText(String.valueOf(analyzeResult.getThreat()));
-        syntaxArea.appendText("\n");
-        syntaxArea.appendText(String.valueOf(analyzeResult.getIdentityThreat()));
-        syntaxArea.appendText("\n");
+        progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+
+        // background task
+        Task<Sentence> analyzeTask = new Task<Sentence>() {
+            @Override
+            protected Sentence call() throws Exception {
+                // Simulate processing time (remove in production)
+                Thread.sleep(500);
+                return appManager.analyzeSentence(inputText.getText());
+            }
+        };
+
+        // Completion handler
+        analyzeTask.setOnSucceeded(event -> {
+            Sentence analyzeResult = analyzeTask.getValue();
+
+            // isValid() -> not null
+            if (analyzeResult == null) {
+                Text warningText = new Text("❌ WARNING\n");
+                Text errorText = new Text("The sentence uses improper words.");
+                warningText.setStyle("-fx-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
+                errorText.setStyle("-fx-fill: red; -fx-font-size: 12px;");
+
+                syntaxArea.getChildren().add(warningText);
+                syntaxArea.getChildren().add(errorText);
+                return;
+            }
+
+            // Remove the previous content
+            syntaxArea.getChildren().clear();
+
+            // Display text (styled)
+            Text structureText = new Text(analyzeResult.getStructure().toString() + "\n");
+            structureText.setStyle("-fx-font-size: 16px");
+
+            syntaxArea.getChildren().add(structureText);
+
+            // Syntax tree
+            if (checkSyntax.isSelected()) {
+                String analysis = prettyTree(analyzeResult.getSyntaxTree());
+                Text analysisText = new Text(analysis + "\n");
+                analysisText.setStyle("-fx-font-family: monospace;");
+                syntaxArea.getChildren().add(analysisText);
+            }
+
+            // Analysis scores
+            syntaxArea.getChildren().addAll(
+                    new Text("\nToxicity\t\t\t" + analyzeResult.getToxicity() + "\n"),
+                    new Text("Profanity\t\t\t" + analyzeResult.getProfanity() + "\n"),
+                    new Text("Insult\t\t\t\t" + analyzeResult.getInsult() + "\n"),
+                    new Text("Threat\t\t\t\t" + analyzeResult.getThreat() + "\n"),
+                    new Text("Identity Threat\t\t" + analyzeResult.getIdentityThreat() + "\n")
+            );
+
+            // Complete progress
+            progressBar.setProgress(1);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                        }
+                    },
+                    1000
+            );
+        });
+
+        // Set error handler
+        analyzeTask.setOnFailed(event -> {
+            progressBar.setProgress(0);
+            showErrorDialog("Analysis Error", "An error occurred during analysis",
+                    analyzeTask.getException().getMessage());
+        });
+
+        // Start the task in a new thread
+        new Thread(analyzeTask).start();
     }
 
     private String prettyTree(Tree tree) {
@@ -82,24 +144,71 @@ public class FormController {
         return builder.toString();
     }
 
+    @FXML
     public void generateClick() {
-        Sentence generateResult = appManager.generateSentence(checkSaveSentence.isSelected());
-        if (generateResult != null) {
-            // Pulisce il contenuto precedente nel TextFlow
+        // Start progress (indeterminate mode)
+        progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+
+        // Create a background task
+        Task<Sentence> generateTask = new Task<Sentence>() {
+            @Override
+            protected Sentence call() throws Exception {
+                // Simulate processing time (remove in production)
+                Thread.sleep(500);
+                return appManager.generateSentence(checkSaveSentence.isSelected());
+            }
+        };
+
+        // Set completion handler
+        generateTask.setOnSucceeded(event -> {
+            Sentence generateResult = generateTask.getValue();
+
+            // Retry if null (recursive call)
+            if (generateResult == null) {
+                generateClick();
+                return;
+            }
+
+            // Clear previous content
             generateArea.getChildren().clear();
 
-            // Formatta la struttura della frase: font più piccolo e categorie grammaticali in grassetto
+            // Display results
             String structure = generateResult.getStructure().toString();
             TextFlow structureTextFlow = formatStructure(structure);
 
-            // Formatta la frase: font più grande e tutto sottolineato
             String sentence = generateResult.getSentence().toString();
             Text sentenceText = new Text(sentence);
             sentenceText.setStyle("-fx-font-size: 20px; -fx-underline: true;");
 
-            // Aggiunge entrambi al TextFlow
             generateArea.getChildren().addAll(structureTextFlow, new Text("\n\n"), sentenceText);
-        }
+
+            // Complete progress
+            progressBar.setProgress(1);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                        }
+                    },
+                    1000
+            );
+        });
+
+        // Set error handler
+        generateTask.setOnFailed(event -> {
+            progressBar.setProgress(0);
+            showErrorDialog("Generation Error", "An error occurred during generation",
+                    generateTask.getException().getMessage());
+        });
+
+        // Start the task in a new thread
+        new Thread(generateTask).start();
+    }
+
+    @FXML
+    private void openSettings() {
+        // TODO
     }
 
     // Metodo helper per formattare la struttura
@@ -153,6 +262,6 @@ public class FormController {
     }
 
     private String getFilePathTags() {
-        return ConfigManager.getInstance().getProperty("syntax_tags.properties","./src/main/resources/syntax_tags.properties");
+        return ConfigManager.getInstance().getProperty("syntax_tags.properties","./src/main/resources/properties/syntax_tags.properties");
     }
 }

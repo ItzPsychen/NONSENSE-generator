@@ -16,7 +16,7 @@ public class ConfigManager {
 
     private ConfigManager() {
         dotenv = Dotenv.load();
-        configFilePath = getEnv("CONFIG_FILE_PATH", "src/main/resources/config.properties");
+        configFilePath = getEnv("CONFIG_FILE_PATH", "src/main/resources/properties/config.properties");
         properties = new Properties();
         loadProperties();
     }

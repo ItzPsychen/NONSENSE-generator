@@ -1,7 +1,6 @@
 package unipd.edids;
 
 import com.google.cloud.language.v1.*;
-
 import java.util.List;
 
 public class ModerationSentenceService {
@@ -26,14 +25,15 @@ public class ModerationSentenceService {
             // Recupera la risposta dalla ModerateText API
             ModerateTextResponse response = language.moderateText(request);
 
-//TODO scegliere categorie da mettere a posto
+            // TODO scegliere categorie da mettere a posto
+            // Toxic - Profanity - Insult - Threat - Identity Threat
+
             sentence.setToxicity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Toxic"));
             sentence.setProfanity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Profanity"));
             sentence.setInsult(getModerationConfidenceByName(response.getModerationCategoriesList(), "Insult"));
-            sentence.setThreat(getModerationConfidenceByName(response.getModerationCategoriesList(), "Threat"));
+            // sentence.setThreat(getModerationConfidenceByName(response.getModerationCategoriesList(), "Threat"));
             sentence.setIdentityThreat(response.getModerationCategories(5).getConfidence());
             response.getModerationCategoriesList().forEach(category -> System.out.println("Category: " + category.getName() + ", Confidence: " + category.getConfidence()));
-
 
             return response.getModerationCategoriesList();
 

@@ -1,0 +1,16 @@
+/* Target by fx:id */
+#settingsButton {
+    -fx-background-radius: 15px;
+    -fx-padding: 3px;
+    -fx-background-color: transparent;
+}
+
+/* Hover effect */
+#settingsButton:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+/* Pressed effect */
+#settingsButton:pressed {
+    -fx-background-color: #c0c0c0;
+}

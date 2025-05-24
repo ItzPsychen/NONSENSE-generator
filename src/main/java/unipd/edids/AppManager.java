@@ -19,17 +19,11 @@ public class AppManager {
         moderationSentenceService = new ModerationSentenceService();
     }
 
-    public Sentence analyzeSentence(String text, boolean save){
+    public Sentence analyzeSentence(String text){
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
-        if (!inputSentence.isValid()) {
-            // stampa in output "Your Sentence contains ..."
-
-            return null;
-        }
+        if (!inputSentence.isValid()) return null;
         System.out.println("BOMBA " + inputSentence.getSentence().toString());
-        if (save) saveAnalysis(text, inputSentence.toString());
         moderationSentenceService.moderateText(inputSentence);
-
         return inputSentence;
     }
 
@@ -38,12 +32,8 @@ public class AppManager {
             return null;
         }
         outputSentence = generateSentenceService.generateSentence(inputSentence);
-        analyzeSentenceService.setValidateAttributes(outputSentence);
-        if (!outputSentence.isValid()) {
-            // stampa in output "Your Sentence contains ..."
-
-            return null;
-        }
+        // analyzeSentenceService.setValidateAttributes(outputSentence);
+        if (!outputSentence.isValid()) return null;
         if (save && outputSentence != null) saveSentence(outputSentence);
         return outputSentence;
     }

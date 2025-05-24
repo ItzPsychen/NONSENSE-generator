@@ -30,7 +30,6 @@ public class AnalyzeSentenceService {
      */
 
     public Sentence analyzeSyntax(String text) {
-
         Sentence temp = new Sentence();
         temp.setSentence(new StringBuilder(text));
         List<Token> tokens = fetchSyntaxTokens(text);
@@ -61,7 +60,7 @@ public class AnalyzeSentenceService {
         temp.setSyntaxTree(getSyntaxTree(text));
 
         // imposta la tossicita', profanita' ...
-        setValidateAttributes(temp);
+        // setValidateAttributes(temp);
 
         System.out.println(temp.getStructure());
         return temp;

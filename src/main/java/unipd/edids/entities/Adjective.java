@@ -57,6 +57,6 @@ public class Adjective extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/adjectives.txt");
+        return ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/words/adjectives.txt");
     }
 }

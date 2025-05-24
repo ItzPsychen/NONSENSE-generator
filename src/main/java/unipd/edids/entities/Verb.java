@@ -69,7 +69,7 @@ public class Verb extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("verb.file","./src/main/resources/verbs.txt");
+        return ConfigManager.getInstance().getProperty("verb.file","./src/main/resources/words/verbs.txt");
     }
 }
 
