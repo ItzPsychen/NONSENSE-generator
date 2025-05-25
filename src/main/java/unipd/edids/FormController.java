@@ -1,10 +1,17 @@
 package unipd.edids;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import edu.stanford.nlp.trees.Tree;
 
 import java.nio.file.Paths;
@@ -15,8 +22,14 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class FormController {
+    public BorderPane rootPane;
     private AppManager appManager;
     private boolean save;
+
+    private boolean darkThemeEnabled = false;
+    private String textColor = "black";
+    private TextFlow lastStructureFlow;
+    private Text lastGeneratedSentenceText;
 
     private Map<String, String> treeTags;
 
@@ -28,6 +41,14 @@ public class FormController {
 
     @FXML
     private TextField inputText;
+
+    @FXML
+    public void initialize() {
+        inputText.textProperty().addListener((observable, oldValue, newValue) -> {
+            appManager.setModified(true);
+        });
+    }
+
     @FXML
     private TextFlow syntaxArea;
     @FXML
@@ -41,11 +62,31 @@ public class FormController {
     @FXML
     private Button settingsButton;
 
+    // Close everything
     @FXML
-    public void initialize() {
-        inputText.textProperty().addListener((observable, oldValue, newValue) -> {
-            appManager.setModified(true);
-        });
+    private void handleClose() {
+        Platform.exit();
+    }
+
+    // Delete input (and optionally output)
+    @FXML
+    private void handleDelete() {
+        inputText.clear();
+        syntaxArea.getChildren().clear();
+        generateArea.getChildren().clear();
+        appManager.clearAll();
+    }
+
+    // Show About info
+    @FXML
+    private void handleAbout() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About");
+        alert.setHeaderText("NONSENSE Generator");
+        alert.setContentText("Created by team NoIdeaName\n\n" +
+                "Casarotto Milo\nDonnagemma Davide\nHu Stefania\nManiglio Federico\n\n" +
+                "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
+        alert.showAndWait();
     }
 
     @FXML
@@ -74,7 +115,8 @@ public class FormController {
 
             // Display text (styled)
             Text structureText = new Text(analyzeResult.getStructure().toString() + "\n");
-            structureText.setStyle("-fx-font-size: 16px");
+            structureText.setFont(Font.font(16));
+            structureText.setFill(Color.web(textColor));
 
             syntaxArea.getChildren().add(structureText);
 
@@ -82,18 +124,22 @@ public class FormController {
             if (checkSyntax.isSelected()) {
                 String analysis = prettyTree(analyzeResult.getSyntaxTree());
                 Text analysisText = new Text(analysis + "\n");
-                analysisText.setStyle("-fx-font-family: monospace;");
+                analysisText.setFont(Font.font("monospace", 12));
+                analysisText.setFill(Color.web(textColor));
+
                 syntaxArea.getChildren().add(analysisText);
             }
 
             // Analysis scores
-            syntaxArea.getChildren().addAll(
-                    new Text("\nToxicity\t\t\t" + analyzeResult.getToxicity() + "\n"),
-                    new Text("Profanity\t\t\t" + analyzeResult.getProfanity() + "\n"),
-                    new Text("Insult\t\t\t\t" + analyzeResult.getInsult() + "\n"),
-                    new Text("Threat\t\t\t\t" + analyzeResult.getThreat() + "\n"),
-                    new Text("Identity Threat\t\t" + analyzeResult.getIdentityThreat() + "\n")
-            );
+            Text scoreAnalysis = new Text();
+            scoreAnalysis.setText("\nToxicity\t\t\t\t" + analyzeResult.getToxicity() +
+                    "\nProfanity\t\t\t\t" + analyzeResult.getProfanity() +
+                    "\nInsult\t\t\t\t" + analyzeResult.getInsult() +
+                    "\nThreat\t\t\t\t" + analyzeResult.getThreat() +
+                    "\nIdentity Threat\t\t" + analyzeResult.getIdentityThreat() + "\n");
+            scoreAnalysis.setFont(Font.font("monospace", 12));
+            scoreAnalysis.setFill(Color.web(textColor));
+            syntaxArea.getChildren().add(scoreAnalysis);
 
             // Complete progress
             progressBar.setProgress(1);
@@ -186,13 +232,16 @@ public class FormController {
 
             // Display results
             String structure = generateResult.getStructure().toString();
-            TextFlow structureTextFlow = formatStructure(structure);
 
             String sentence = generateResult.getSentence().toString();
-            Text sentenceText = new Text(sentence);
-            sentenceText.setStyle("-fx-font-size: 20px; -fx-underline: true;");
+            lastStructureFlow = formatStructure(structure);
+            lastGeneratedSentenceText = new Text(sentence);
+            lastGeneratedSentenceText.setFont(Font.font(20));
+            lastGeneratedSentenceText.setUnderline(true);
+            lastGeneratedSentenceText.setFill(Color.web(textColor));
 
-            generateArea.getChildren().addAll(structureTextFlow, new Text("\n\n"), sentenceText);
+            generateArea.getChildren().addAll(lastStructureFlow, new Text("\n\n"), lastGeneratedSentenceText);
+
 
             // Complete progress
             progressBar.setProgress(1);
@@ -221,25 +270,26 @@ public class FormController {
     // Metodo helper per formattare la struttura
     private TextFlow formatStructure(String structure) {
         TextFlow textFlow = new TextFlow();
-        String[] tokens = structure.split(" "); // Dividiamo la struttura in sezioni basate sugli spazi
+        String[] tokens = structure.split(" ");
 
         for (String token : tokens) {
             Text text;
-            // Verifica delle categorie grammaticali e applica lo stile
+
             if (token.equals("[noun]") || token.equals("[verb]") || token.equals("[adjective]")) {
-                text = new Text(token + " "); // Lascia lo spazio dopo la parola
-                text.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+                text = new Text(token + " ");
+                text.setFont(Font.font(null, FontWeight.BOLD, 14));
             } else {
                 text = new Text(token + " ");
-                text.setStyle("-fx-font-size: 14px;");
+                text.setFont(Font.font(14));
             }
 
-            // Aggiunge ogni parte al TextFlow
+            text.setFill(javafx.scene.paint.Color.web(textColor));
             textFlow.getChildren().add(text);
         }
 
         return textFlow;
     }
+
 
     public void showErrorDialog(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -283,7 +333,32 @@ public class FormController {
     }
 
     @FXML
-    private void openSettings() {
-        // TODO
+    private ToggleButton themeToggle; // New toggle
+
+    @FXML
+    private void handleSettings() {
+        darkThemeEnabled = themeToggle.isSelected();
+        String newColor = darkThemeEnabled ? "white" : "black";
+
+        if (darkThemeEnabled) {
+            rootPane.getStylesheets().add(getClass().getResource("/style/dark-theme.css").toExternalForm());
+        } else {
+            rootPane.getStylesheets().clear();
+        }
+
+        updateTextFlowColors(syntaxArea, newColor);
+        updateTextFlowColors(generateArea, newColor);
+        this.textColor = newColor;
+
+        if (lastStructureFlow != null) updateTextFlowColors(lastStructureFlow, textColor);
+        if (lastGeneratedSentenceText != null) lastGeneratedSentenceText.setFill(Color.web(textColor));
+    }
+
+    private void updateTextFlowColors(TextFlow textFlow, String color) {
+        for (javafx.scene.Node node : textFlow.getChildren()) {
+            if (node instanceof Text) {
+                ((Text) node).setFill(javafx.scene.paint.Color.web(color));
+            }
+        }
     }
 }

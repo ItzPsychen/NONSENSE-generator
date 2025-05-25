@@ -33,7 +33,7 @@ public class GenerateSentenceService {
     public Sentence generateSentence(Sentence inputSentence) {
         System.out.println("[generateSentence] " + inputSentence.getSentence().toString());
         if (inputSentence.getSentence().toString() == null || inputSentence.getSentence().toString().trim().isEmpty() ||
-                !inputSentence.getSentence().toString().matches(".[a-zA-Z]+.")) {
+                !inputSentence.getSentence().toString().matches(".*[a-zA-Z]+.*")) {
 
             // TODO
             // scrivere una frase con termini poco adatti
@@ -64,6 +64,7 @@ public class GenerateSentenceService {
         // Step 4: Sostituire i placeholder nella struttura con parole effettive
         temp.setSentence(new StringBuilder(replacePlaceholders()));
 
+        temp.getSentence().setCharAt(0, Character.toUpperCase(temp.getSentence().charAt(0)));
         logger.info("Final Sentence: {}", temp.getSentence());
 
         return temp;

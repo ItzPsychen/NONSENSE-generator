@@ -20,7 +20,8 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.FormController">
+<?import javafx.scene.control.ToggleButton?>
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.FormController">
 
    <!-- Top bar -->
    <top>
@@ -30,17 +31,17 @@
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem mnemonicParsing="false" text="Close" onAction="#handleClose" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Edit">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem mnemonicParsing="false" text="Delete" onAction="#handleDelete" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="About" onAction="#handleAbout" />
                      </items>
                   </Menu>
                </menus>
@@ -50,15 +51,6 @@
                   <Font name="System Bold" size="32.0" />
                </font>
             </Label>
-            <Button fx:id="settingsButton" stylesheets="@style/settings.css" layoutX="860.0" layoutY="38.0" mnemonicParsing="false" onAction="#openSettings" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="38.0">
-               <graphic>
-                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons/settings.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
          </children>
       </AnchorPane>
    </top>
@@ -70,7 +62,8 @@
             <ProgressBar fx:id="progressBar" layoutY="8.0" prefWidth="300.0" prefHeight="8.0" progress="0.0" maxWidth="400.0"
                          minWidth="400.0" AnchorPane.leftAnchor="265.0" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="14.0"
                          stylesheets="@style/progress.css" />
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
    </bottom>
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -112,10 +105,9 @@
                         <TextFlow fx:id="generateArea" prefHeight="416.0" prefWidth="425.0" />
                      </content>
                   </ScrollPane>
-               </children>
-            </AnchorPane>
+               </children><ToggleButton fx:id="themeToggle" text="🌙 Dark Mode" onAction="#handleSettings" prefHeight="28.0" prefWidth="133.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0" />
+          </AnchorPane>
         </items>
       </SplitPane>
    </center>
-
 </BorderPane>

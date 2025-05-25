@@ -1,0 +1,58 @@
+.root {
+    -fx-base: #222;
+    -fx-background: #222;
+    -fx-control-inner-background: #333;
+    -fx-accent: #0096C9;
+    -fx-text-fill: white; /* Default text color */
+}
+
+/* General text */
+.label, .text, .text-area, .text-field, .text-flow, .text-input, .text-area .text {
+    -fx-text-fill: white !important;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #444;
+    -fx-text-fill: white !important;
+}
+
+.button:hover {
+    -fx-background-color: #666;
+}
+
+/* ProgressBar */
+.progress-bar {
+    -fx-accent: #0096C9;
+}
+
+/* MenuBar */
+.menu-bar {
+    -fx-background-color: #333;
+}
+
+.menu, .menu-item {
+    -fx-text-fill: white !important;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background: #222;
+    -fx-text-fill: white !important;
+}
+
+/* TextFlow content */
+.text-flow {
+    -fx-text-fill: white !important;
+}
+
+/* Tooltips (if any) */
+.tooltip {
+    -fx-text-fill: white !important;
+    -fx-background-color: #444;
+}
+
+#syntaxArea, #generateArea {
+    -fx-fill: white;
+    -fx-text-fill: white;
+}

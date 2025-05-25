@@ -67,4 +67,9 @@ public class AppManager {
 
     public boolean isModified() { return this.modified; }
     public void setModified(boolean value) { this.modified = value; }
+
+    public void clearAll() {
+        this.inputSentence = null;
+        this.outputSentence = null;
+    }
 }
