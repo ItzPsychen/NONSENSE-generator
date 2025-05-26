@@ -28,12 +28,15 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/image.png")));
+
         System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL", "info"));
         System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile", "logs/app.log"));
         System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.nonsense", "logs/output/generated.txt"));

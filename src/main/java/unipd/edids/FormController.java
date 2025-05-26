@@ -171,6 +171,7 @@ public class FormController {
             syntaxArea.getChildren().add(errorText);
 
             showErrorDialog("Analysis Error", "An error occurred during analysis", errorMessage);
+            appManager.clearAll();
         });
 
         // Start the task in a new thread
