@@ -1,5 +1,9 @@
 package unipd.edids;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -13,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import edu.stanford.nlp.trees.Tree;
+import javafx.util.Duration;
 
 import java.nio.file.Paths;
 import java.io.FileInputStream;
@@ -59,8 +64,17 @@ public class FormController {
     private CheckBox checkSaveSentence;
     @FXML
     private ProgressBar progressBar;
+
     @FXML
-    private Button settingsButton;
+    private ProgressBar toxicityBar;
+    @FXML
+    private ProgressBar profanityBar;
+    @FXML
+    private ProgressBar insultBar;
+    @FXML
+    private ProgressBar threatBar;
+    @FXML
+    private ProgressBar identityThreatBar;
 
     // Close everything
     @FXML
@@ -140,6 +154,12 @@ public class FormController {
             scoreAnalysis.setFont(Font.font("monospace", 12));
             scoreAnalysis.setFill(Color.web(textColor));
             syntaxArea.getChildren().add(scoreAnalysis);
+
+            animateProgressBar(toxicityBar, analyzeResult.getToxicity());
+            animateProgressBar(profanityBar, analyzeResult.getProfanity());
+            animateProgressBar(insultBar, analyzeResult.getInsult());
+            animateProgressBar(threatBar, analyzeResult.getThreat());
+            animateProgressBar(identityThreatBar, analyzeResult.getIdentityThreat());
 
             // Complete progress
             progressBar.setProgress(1);
@@ -361,5 +381,23 @@ public class FormController {
                 ((Text) node).setFill(javafx.scene.paint.Color.web(color));
             }
         }
+    }
+
+    private String getColorForValue(double value) {
+        int red = (int) (255 * value);
+        int green = (int) (255 * (1 - value));
+        return String.format("-fx-accent: rgb(%d, %d, 0);", red, green);
+    }
+
+    private void animateProgressBar(ProgressBar bar, double targetValue) {
+        double transformed = Math.pow(targetValue, 0.5);
+
+        KeyValue kv = new KeyValue(bar.progressProperty(), transformed, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
+        Timeline timeline = new Timeline(kf);
+        timeline.play();
+
+        // Cambia anche colore dinamicamente
+        bar.setStyle(getColorForValue(targetValue));
     }
 }

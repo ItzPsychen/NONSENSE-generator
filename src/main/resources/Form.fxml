@@ -91,22 +91,40 @@
                   <CheckBox fx:id="checkSaveSentence" layoutX="275.0" layoutY="113.0" mnemonicParsing="false" text="Save" AnchorPane.leftAnchor="285.0" AnchorPane.topAnchor="113.0"/>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Button fx:id="generateButton" layoutX="13.0" layoutY="14.0" mnemonicParsing="false" onAction="#generateClick" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #007BFFFF;" text="Generate" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="25.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Accordion layoutX="59.0" layoutY="30.0" />
-                  <ScrollPane layoutX="14.0" layoutY="78.0" prefHeight="418.0" prefWidth="427.0"
-                              AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="78.0">
-                     <content>
-                        <TextFlow fx:id="generateArea" prefHeight="416.0" prefWidth="425.0" />
-                     </content>
-                  </ScrollPane>
-               </children><ToggleButton fx:id="themeToggle" text="🌙 Dark Mode" onAction="#handleSettings" prefHeight="28.0" prefWidth="133.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0" />
-          </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                <children>
+                    <Button fx:id="generateButton" layoutX="13.0" layoutY="14.0" mnemonicParsing="false" onAction="#generateClick" prefHeight="28.0" prefWidth="133.0" style="-fx-background-color: #007BFFFF;" text="Generate" textFill="WHITE" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="25.0">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+
+                    <ToggleButton fx:id="themeToggle" text="🌙 Dark Mode" onAction="#handleSettings" prefHeight="28.0" prefWidth="133.0" layoutX="270.0" layoutY="25.0" />
+
+                    <Label layoutX="14.0" layoutY="330.0" text="Toxicity Levels:" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="155.0" />
+
+                    <!-- 5 Progress Bars -->
+                    <ProgressBar fx:id="toxicityBar" prefWidth="300.0" progress="0.0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="130.0" />
+                    <ProgressBar fx:id="profanityBar" prefWidth="300.0" progress="0.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="130.0" />
+                    <ProgressBar fx:id="insultBar" prefWidth="300.0" progress="0.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="130.0" />
+                    <ProgressBar fx:id="threatBar" prefWidth="300.0" progress="0.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="130.0" />
+                    <ProgressBar fx:id="identityThreatBar" prefWidth="300.0" progress="0.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="130.0" />
+
+                    <Label text="Toxicity" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="130.0" AnchorPane.rightAnchor="20" />
+                    <Label text="Profanity" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="20" />
+                    <Label text="Insult" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="20" />
+                    <Label text="Threat" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="20" />
+                    <Label text="Identity Threat" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20" />
+
+                    <!-- Testo generato sotto le barre -->
+                    <ScrollPane layoutX="14.0" layoutY="100.0" minHeight="236.0" prefWidth="427.0"
+                                AnchorPane.topAnchor="75.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.bottomAnchor="192.0">
+                        <content>
+                            <TextFlow fx:id="generateArea" minHeight="230.0" prefWidth="425.0" AnchorPane.bottomAnchor="190.0" />
+                        </content>
+                    </ScrollPane>
+                </children>
+            </AnchorPane>
         </items>
       </SplitPane>
    </center>

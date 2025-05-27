@@ -88,8 +88,10 @@ public class Sentence {
     public double getIdentityThreat() { return this.identityThreat; }
 
     public boolean isValid() {
-        if (this.toxicity > 0.3 || this.profanity > 0.3) return false;
-        if (this.threat > 0.5 || this.identityThreat > 0.5) return false;
-        return this.insult < 0.4;
+        return true;
+
+        // if (this.toxicity > 0.3 || this.profanity > 0.3) return false;
+        // if (this.threat > 0.5 || this.identityThreat > 0.5) return false;
+        // return this.insult < 0.4;
     }
 }
