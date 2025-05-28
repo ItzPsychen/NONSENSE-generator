@@ -17,19 +17,13 @@ import java.util.Iterator;
 public class GenerateSentenceService implements ConfigObserver {
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
     private static final int MAX_RECURSION_DEPTH = 3;
-    private Word nounProvider;
-    private Word verbProvider;
-    private Word adjectiveProvider;
-    SentenceStructure structureProvider;
+
+
 
     private Sentence temp;
 
     public GenerateSentenceService() {
         temp = new Sentence();
-        this.nounProvider = Noun.getInstance();
-        this.verbProvider = Verb.getInstance();
-        this.adjectiveProvider = Adjective.getInstance();
-        this.structureProvider = new SentenceStructure();
     }
 
     public Sentence generateSentence(Sentence inputSentence) {
@@ -73,7 +67,7 @@ public class GenerateSentenceService implements ConfigObserver {
     }
 
     private String resolveTemplate(int depth) {
-        String template = structureProvider.getRandomStructure();
+        String template = SentenceStructure.getInstance().getRandomStructure();
         if (depth > MAX_RECURSION_DEPTH) {
             return "[noun]";
         }
@@ -86,13 +80,13 @@ public class GenerateSentenceService implements ConfigObserver {
 
     private void populateWordLists() {
         while (StringUtils.countMatches(temp.getStructure(), "[noun]") - temp.getNouns().size() > 0) {
-            temp.getNouns().add(nounProvider.getRandomWord());
+            temp.getNouns().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
         }
         while (StringUtils.countMatches(temp.getStructure(), "[verb]") - temp.getVerbs().size() > 0) {
-            temp.getVerbs().add(verbProvider.getRandomWord());
+            temp.getVerbs().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
         }
         while (StringUtils.countMatches(temp.getStructure(), "[adjective]") - temp.getAdjectives().size() > 0) {
-            temp.getAdjectives().add(adjectiveProvider.getRandomWord());
+            temp.getAdjectives().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
         }
         logger.info("Populated Word Lists - Nouns: {}, Verbs: {}, Adjectives: {}", temp.getNouns(), temp.getVerbs(), temp.getAdjectives());
     }
