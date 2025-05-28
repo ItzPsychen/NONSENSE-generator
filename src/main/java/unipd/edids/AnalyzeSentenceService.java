@@ -17,7 +17,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Scanner;
+
 import org.json.JSONObject;
+
+//Fix chiamare API bene
 
 public class AnalyzeSentenceService {
     private static final Logger logger = LogManager.getLogger(AnalyzeSentenceService.class);
@@ -30,118 +33,38 @@ public class AnalyzeSentenceService {
      */
 
     public Sentence analyzeSyntax(String text) {
-        Sentence temp = new Sentence();
-        temp.setSentence(new StringBuilder(text));
-        List<Token> tokens = fetchSyntaxTokens(text);
-        temp.setStructure(new StringBuilder());
+        Sentence analyzedSentence = new Sentence(text);
+        List<Token> tokens =  new APIClient<AnalyzeSyntaxResponse>()
+                .setSentenceToAPI(text)
+                .setAPIType(APIClient.RequestType.SYNTAX)
+                .execute().getTokensList();
         for (Token token : tokens) {
             String word = token.getText().getContent();
             String pos = String.valueOf(token.getPartOfSpeech().getTag());
-            // temp.getSyntaxTree().append("Lemma: ").append(word).append(", Part of speach: ").append(pos).append("\n");
             switch (pos) {
                 case "NOUN":
-                    temp.getNouns().add(word);
-                    temp.getStructure().append("[noun] ");
+                    analyzedSentence.getNouns().add(word);
+                    analyzedSentence.getStructure().append("[noun] ");
                     break;
                 case "VERB":
-                    temp.getVerbs().add(word);
-                    temp.getStructure().append("[verb] ");
+                    analyzedSentence.getVerbs().add(word);
+                    analyzedSentence.getStructure().append("[verb] ");
                     break;
                 case "ADJ":
-                    temp.getAdjectives().add(word);
-                    temp.getStructure().append("[adjective] ");
+                    analyzedSentence.getAdjectives().add(word);
+                    analyzedSentence.getStructure().append("[adjective] ");
                     break;
                 default:
-                    temp.getStructure().append(word).append(" ");
+                    analyzedSentence.getStructure().append(word).append(" ");
             }
         }
-        temp.setStructure(new StringBuilder(temp.getStructure().toString().trim()));
-        temp.setSyntaxTree(getSyntaxTree(text));
+        analyzedSentence.setStructure(new StringBuilder(analyzedSentence.getStructure().toString().trim()));
+        analyzedSentence.setSyntaxTree(getSyntaxTree(text));
 
-        System.out.println(temp.getStructure());
-        return temp;
+        System.out.println(analyzedSentence.getStructure());
+        return analyzedSentence;
     }
 
-    public List<Token> fetchSyntaxTokens(String text) {
-        LanguageServiceClient language = APIClient.getInstance(); // Ottieni il client singleton
-
-        try {
-            // Creazione del documento da analizzare
-            Document doc = Document.newBuilder()
-                    .setContent(text)
-                    .setType(Document.Type.PLAIN_TEXT)
-                    .build();
-
-            // Creazione della richiesta per l'analisi della sintassi
-            AnalyzeSyntaxRequest request = AnalyzeSyntaxRequest.newBuilder()
-                    .setDocument(doc)
-                    .setEncodingType(EncodingType.UTF16) // Specifica la codifica del testo
-                    .build();
-
-            // Esegui l'analisi
-            AnalyzeSyntaxResponse response = language.analyzeSyntax(request);
-
-            // Restituisci i token analizzati
-            return response.getTokensList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void setValidateAttributes(Sentence temp) {
-
-        // return;
-
-        try {
-            // PERSPECTIVE_KEY here
-            String apiKey = "####################################################################" +
-                            "####################################################################" +
-                            "####################################################################" +
-                            "####################################################################";
-
-            URL url = new URL("https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=" + apiKey);
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-
-            JSONObject requestBody = new JSONObject()
-                    .put("comment", new JSONObject().put("text", temp.getSentence()))
-                    .put("languages", new org.json.JSONArray().put("en"))
-                    .put("requestedAttributes", new JSONObject()
-                            .put("TOXICITY", new JSONObject())
-                            .put("PROFANITY", new JSONObject())
-                            .put("INSULT", new JSONObject())
-                            .put("THREAT", new JSONObject())
-                            .put("IDENTITY_ATTACK", new JSONObject()));
-
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            try (Scanner scanner = new Scanner(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                while (scanner.hasNextLine()) {
-                    response.append(scanner.nextLine());
-                }
-
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                JSONObject JSONattributes = jsonResponse.getJSONObject("attributeScores");
-
-                temp.setToxicity(JSONattributes.getJSONObject("TOXICITY").getJSONObject("summaryScore").getDouble("value"));
-                temp.setProfanity(JSONattributes.getJSONObject("PROFANITY").getJSONObject("summaryScore").getDouble("value"));
-                temp.setInsult(JSONattributes.getJSONObject("INSULT").getJSONObject("summaryScore").getDouble("value"));
-                temp.setThreat(JSONattributes.getJSONObject("THREAT").getJSONObject("summaryScore").getDouble("value"));
-                temp.setIdentityThreat(JSONattributes.getJSONObject("IDENTITY_THREAT").getJSONObject("summaryScore").getDouble("value"));
-            }
-
-        } catch (Exception e) {
-            logger.error("Errore durante il calcolo del punteggio di tossicità", e);
-        }
-    }
 
     private StanfordCoreNLP pipeline;
 

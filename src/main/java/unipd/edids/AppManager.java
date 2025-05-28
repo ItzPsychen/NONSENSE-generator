@@ -5,6 +5,10 @@ package unipd.edids;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
+//FIX il facade chiama il service layer, non ha logica di business
+// inoltre ha come istanza ConfigManager, LoggerManager e FileManager
+
 public class AppManager {
     private Sentence inputSentence;
     private Sentence outputSentence;
@@ -21,15 +25,16 @@ public class AppManager {
     }
 
     public Sentence analyzeSentence(String text){
-        if (!this.isModified()) return new Sentence("#notmodified");
-        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
-        if (!text.matches(".*[a-zA-Z]+.*")) return new Sentence("#chars");
+        if(text.equals("eccezione"))throw new RuntimeException("Not yet implemented");
+        ///////TODO lanciare eccezioni
+//        if (!this.isModified()) return new Sentence("#notmodified");
+//        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
+//        if (!text.matches(".*[a-zA-Z]+.*")) return new Sentence("#chars");
 
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
-        moderationSentenceService.moderateText(inputSentence);
+//        moderationSentenceService.moderateText(inputSentence);
         if (!inputSentence.isValid()) return new Sentence("#invalid");;
 
-        System.out.println("BOMBA " + inputSentence.getSentence().toString());
         return inputSentence;
     }
 
@@ -71,5 +76,14 @@ public class AppManager {
     public void clearAll() {
         this.inputSentence = null;
         this.outputSentence = null;
+    }
+
+
+    public Sentence getInputSentence() {
+        return inputSentence;
+    }
+
+    public Sentence getOutputSentence() {
+        return outputSentence;
     }
 }

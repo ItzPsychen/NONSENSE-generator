@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+//Fix usare una factory con singleton, usare una strategy per l'estrazione delle strutture
+
 public class GenerateSentenceService {
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
     private static final int MAX_RECURSION_DEPTH = 3;

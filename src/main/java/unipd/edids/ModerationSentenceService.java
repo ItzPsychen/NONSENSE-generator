@@ -1,7 +1,10 @@
 package unipd.edids;
 
 import com.google.cloud.language.v1.*;
+
 import java.util.List;
+
+//fix forse serve un adapter? chiamare API bene
 
 public class ModerationSentenceService {
 
@@ -11,19 +14,14 @@ public class ModerationSentenceService {
      * @return un oggetto `ModerateTextResponse` contenente i risultati della moderazione del testo.
      */
     public static List<ClassificationCategory> moderateText(Sentence sentence) {
-        LanguageServiceClient language = APIClient.getInstance(); // Ottieni il client singleton
 
-        System.out.println("Sentence: " + sentence.getSentence().toString());
         try {
-            // Crea il documento da moderare
-            Document doc = Document.newBuilder().setContent(sentence.getSentence().toString()).setType(Document.Type.PLAIN_TEXT).build();
 
-            // Crea la richiesta di moderazione
-            ModerateTextRequest request = ModerateTextRequest.newBuilder().setDocument(doc).build();
+            ModerateTextResponse response = new APIClient<ModerateTextResponse>()
+                    .setAPIType(APIClient.RequestType.MODERATION)
+                    .setSentenceToAPI(sentence.getSentence().toString())
+                    .execute();
 
-
-            // Recupera la risposta dalla ModerateText API
-            ModerateTextResponse response = language.moderateText(request);
 
             // TODO scegliere categorie da mettere a posto
             // Toxic - Profanity - Insult - Threat - Identity Threat

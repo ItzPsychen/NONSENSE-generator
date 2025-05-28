@@ -31,17 +31,17 @@
                <menus>
                   <Menu mnemonicParsing="false" text="File">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Close" onAction="#handleClose" />
+                        <MenuItem mnemonicParsing="false" text="Close" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Edit">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" onAction="#handleDelete" />
+                        <MenuItem mnemonicParsing="false" text="Delete" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Help">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" onAction="#handleAbout" />
+                        <MenuItem mnemonicParsing="false" text="About" />
                      </items>
                   </Menu>
                </menus>
@@ -99,7 +99,7 @@
                         </font>
                     </Button>
 
-                    <ToggleButton fx:id="themeToggle" text="🌙 Dark Mode" onAction="#handleSettings" prefHeight="28.0" prefWidth="133.0" layoutX="270.0" layoutY="25.0" />
+                    <ToggleButton fx:id="themeToggle" text="🌙 Dark Mode" prefHeight="28.0" prefWidth="133.0" layoutX="270.0" layoutY="25.0" />
 
                     <Label layoutX="14.0" layoutY="330.0" text="Toxicity Levels:" style="-fx-font-weight: bold;" AnchorPane.bottomAnchor="155.0" />
 

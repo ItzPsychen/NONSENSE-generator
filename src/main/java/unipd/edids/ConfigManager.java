@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.Properties;
 
+//fix path relativi anche a jpackage!
+
+
 public class ConfigManager {
     private static final Logger logger = LogManager.getLogger(ConfigManager.class);
     private static ConfigManager instance;

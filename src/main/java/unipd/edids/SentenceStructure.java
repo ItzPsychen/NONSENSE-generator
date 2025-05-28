@@ -125,6 +125,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+//Fix strategy
+
 public class SentenceStructure {
     private List<String> structures;
     private final Set<String> structSet;

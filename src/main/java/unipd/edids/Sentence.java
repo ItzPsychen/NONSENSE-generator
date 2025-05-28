@@ -8,6 +8,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+//Fix moderation
+
+
 public class Sentence {
     private static final Logger logger = LogManager.getLogger(Sentence.class);
 
@@ -37,8 +40,17 @@ public class Sentence {
         this.adjectives = new ArrayList<>();
     }
 
+
+
+
     public Sentence(String text) {
         this.sentence = new StringBuilder(text);
+        this.structure = new StringBuilder();
+        this.syntaxTree = new SimpleTree();
+        this.toxicity = 0.0;
+        this.nouns = new ArrayList<>();
+        this.verbs = new ArrayList<>();
+        this.adjectives = new ArrayList<>();
     }
 
     public Tree getSyntaxTree() { return syntaxTree; }
