@@ -40,12 +40,16 @@
 package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
+import unipd.edids.ConfigObserver;
 
-public class Noun extends Word {
+public class Noun extends Word implements ConfigObserver {
     private static Noun instance;
 
     private Noun() {
-        super();
+        super(ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/words/nouns.txt"));
+
+        // Registra questo oggetto come osservatore delle modifiche di configurazione
+        ConfigManager.getInstance().addObserver(this);
     }
 
     public static Noun getInstance() {
@@ -61,6 +65,14 @@ public class Noun extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/words/nouns.txt");
+        return this.filePath;
+    }
+
+    @Override
+    public void onConfigChange(String key, String value) {
+        if ("noun.file".equals(key)) {
+            this.filePath = value;
+            loadWords(this.filePath);
+        }
     }
 }

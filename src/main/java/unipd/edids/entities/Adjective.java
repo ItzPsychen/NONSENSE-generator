@@ -36,12 +36,15 @@
 package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
+import unipd.edids.ConfigObserver;
 
-public class Adjective extends Word {
+public class Adjective extends Word implements ConfigObserver {
     private static Adjective instance;
 
     private Adjective() {
-        super();
+        super(ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/words/adjectives.txt"));
+        // Registra questo oggetto come osservatore delle modifiche di configurazione
+        ConfigManager.getInstance().addObserver(this);
     }
 
     public static Adjective getInstance() {
@@ -57,6 +60,14 @@ public class Adjective extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/words/adjectives.txt");
+        return this.filePath;
+    }
+
+    @Override
+    public void onConfigChange(String key, String value) {
+        if ("adjective.file".equals(key)) {
+            this.filePath = value;
+            loadWords(this.filePath);
+        }
     }
 }

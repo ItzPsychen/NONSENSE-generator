@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="settingsPane" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.SettingsController">
+
+    <!-- Top bar -->
+    <top>
+        <AnchorPane prefHeight="60.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="20.0" layoutY="14.0" text="Settings">
+                    <font>
+                        <Font name="System Bold" size="26.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </top>
+
+    <!-- Bottom bar -->
+    <bottom>
+        <AnchorPane prefHeight="38.0" prefWidth="700.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="cancelButton" layoutX="480.0" layoutY="9.0" prefWidth="100.0" text="Cancel" AnchorPane.rightAnchor="120.0" onAction="#closeSettings"/>
+                <Button fx:id="applyButton" layoutX="590.0" layoutY="9.0" prefWidth="100.0" text="Apply" AnchorPane.rightAnchor="10.0" onAction="#applySettings"/>
+            </children>
+        </AnchorPane>
+    </bottom>
+
+    <!-- Center content -->
+    <center>
+        <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER">
+            <content>
+                <VBox spacing="10.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+
+                    <!-- File paths -->
+                    <Label style="-fx-font-weight: bold;" text="File Paths" />
+
+                    <Label text="Noun file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="nounFileField" promptText="Noun file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectNounFile" text="..." />
+                    </HBox>
+
+                    <Label text="Verb file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="verbFileField" promptText="Verb file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectVerbFile" text="..." />
+                    </HBox>
+
+                    <Label text="Adjective file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="adjectiveFileField" promptText="Adjective file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectAdjectiveFile" text="..." />
+                    </HBox>
+
+                    <Label text="Sentence structures file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="sentenceStructuresFileField" promptText="Sentence structures file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectSentenceStructuresFile" text="..." />
+                    </HBox>
+
+                    <Label text="Syntax tags properties file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="syntaxTagsFileField" promptText="Syntax tags properties file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectSyntaxTagsFile" text="..." />
+                    </HBox>
+
+                    <Label text="Log file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="outputLogFileField" promptText="Log file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectOutputLogFile" text="..." />
+                    </HBox>
+
+                    <Label text="Generated nonsense output file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="generatedNonsenseFileField" promptText="Generated nonsense output file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectGeneratedNonsenseFile" text="..." />
+                    </HBox>
+
+                    <Label text="Details nonsense output file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="detailsNonsenseFileField" promptText="Details nonsense output file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectDetailsNonsenseFile" text="..." />
+                    </HBox>
+
+                    <!-- Number settings -->
+                    <Label style="-fx-font-weight: bold;" text="Numerical Settings" />
+
+                    <Label text="Max recursion level:"/>
+                    <TextField fx:id="maxRecursionLevelField" promptText="Max recursion level (e.g. 3)" />
+
+                    <Label text="Max sentence length:"/>
+                    <TextField fx:id="maxSentenceLengthField" promptText="Max sentence length (e.g. 120)" />
+
+                    <!-- Boolean setting -->
+                    <CheckBox fx:id="allowRecursiveSentencesCheck" text="Allow recursive sentences" onAction="#recursionSelection"/>
+
+                    <!-- Theme -->
+                    <Label style="-fx-font-weight: bold;" text="Theme" />
+                    <ComboBox fx:id="themeComboBox">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="light" />
+                                <String fx:value="dark" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

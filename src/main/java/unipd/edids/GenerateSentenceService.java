@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 //Fix usare una factory con singleton, usare una strategy per l'estrazione delle strutture
 
-public class GenerateSentenceService {
+public class GenerateSentenceService implements ConfigObserver {
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
     private static final int MAX_RECURSION_DEPTH = 3;
     private Word nounProvider;
@@ -121,5 +121,10 @@ public class GenerateSentenceService {
         }
         logger.info("Sentence after placeholders replacement: {}", result);
         return result;
+    }
+
+    @Override
+    public void onConfigChange(String key, String value) {
+
     }
 }

@@ -1,4 +1,5 @@
 package unipd.edids;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -413,15 +414,35 @@ import javafx.event.ActionEvent;
 //    }
 //}
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class FormController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(FormController.class);
+
+    private static String currentTheme = "light"; // Tema di default
+    private TextFlow lastSyntaxFlow; // Campo che salva il contenuto del syntaxArea
+    private TextFlow lastGenerateFlow; // Campo che salva il contenuto del generateArea
+    @FXML
+    private BorderPane rootPane;
 
     @FXML
     private TextField inputText;
@@ -438,6 +459,33 @@ public class FormController {
         this.appManager = appManager;
     }
 
+    public void initialize() {
+        ConfigManager configManager = ConfigManager.getInstance();
+
+        // Recupera il tema configurato
+        String theme = configManager.getProperty("ui.theme", "light");
+
+        // Applica il tema attuale
+        updateTheme(theme);
+    }
+
+    public void updateTheme(String theme) {
+        Platform.runLater(() -> {
+            currentTheme = theme;
+            // Cambia il foglio di stile
+            if (currentTheme.equals("dark")) {
+                rootPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
+            } else {
+                rootPane.getStylesheets().clear();
+            }
+            // Aggiorna i colori nei TextFlow
+            updateTextFlowColors(syntaxArea);
+            updateTextFlowColors(generateArea);
+            if (lastSyntaxFlow != null) updateTextFlowColors(lastSyntaxFlow);
+            if (lastGenerateFlow != null) updateTextFlowColors(lastGenerateFlow);
+        });
+
+    }
 
     public void analyzeClick() {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
@@ -446,7 +494,7 @@ public class FormController {
         // Crea il task da eseguire in background
         Task<Sentence> analyzeTask = new Task<>() {
             @Override
-            protected Sentence call()  {
+            protected Sentence call() {
                 // Simula tempo di elaborazione (500ms per test)
                 logger.info("Analyze task started");
                 // Chiamata all'analisi da AppManager
@@ -461,8 +509,14 @@ public class FormController {
     private void handleAnalyzeSuccess(Sentence sentence) {
         Platform.runLater(() -> {
             logger.info("Analyze task finished: {}", sentence.getStructure().toString());
+
+            // Crea e salva il nuovo TextFlow
+            lastSyntaxFlow = formatStructure(sentence.getStructure().toString() + " \n");
+
+            // Aggiorna il contenuto del syntaxArea
             syntaxArea.getChildren().clear();
-            syntaxArea.getChildren().add(new Text(sentence.getStructure().toString()));
+            syntaxArea.getChildren().add(lastSyntaxFlow);
+
             progressBar.setProgress(1);
         });
     }
@@ -475,7 +529,7 @@ public class FormController {
         // Crea il task da eseguire in background
         Task<Sentence> analyzeTask = new Task<>() {
             @Override
-            protected Sentence call()  {
+            protected Sentence call() {
                 logger.info("Generation task started");
                 // Chiamata all'analisi da AppManager
                 return appManager.generateSentence(false);
@@ -489,11 +543,86 @@ public class FormController {
     private void handleGenerateSuccess(Sentence sentence) {
         Platform.runLater(() -> {
             logger.info("Generate task finished: {}", sentence.getSentence());
+
+            // Crea e salva il nuovo TextFlow
+            lastGenerateFlow = formatStructure(sentence.getStructure().toString());
+
+            // Aggiorna il contenuto del generateArea
             generateArea.getChildren().clear();
-            generateArea.getChildren().add(new Text(sentence.getStructure().toString()));
+            generateArea.getChildren().add(lastGenerateFlow);
+            generateArea.getChildren().add(new Text("\n\n"));
             generateArea.getChildren().add(new Text(sentence.getSentence().toString()));
+
             progressBar.setProgress(1);
         });
     }
 
+    private TextFlow formatStructure(String structure) {
+        TextFlow textFlow = new TextFlow();
+        String[] tokens = structure.split("(?<=\\s|[.,;:])|(?=[.,;:|\\s])");
+
+        for (String token : tokens) {
+            Text text;
+            if (token.equals("[noun]") || token.equals("[verb]") || token.equals("[adjective]")) {
+                text = new Text(token.trim() + " ");
+                text.setFont(Font.font(null, FontWeight.BOLD, 16));
+            } else {
+                text = new Text(token + " ");
+                text.setFont(Font.font(14));
+            }
+            textFlow.getChildren().add(text);
+        }
+        updateTextFlowColors(textFlow);
+        return textFlow;
+    }
+
+    public void openSettings() {
+        logger.info("Open settings button clicked");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Settings.fxml"));
+            Parent settingsRoot = loader.load();
+
+            // Ottieni istanza del controller associato
+            SettingsController controller = loader.getController();
+
+            // Crea la finestra dello Stage
+            Stage settingsStage = new Stage();
+            settingsStage.setTitle("Settings");
+            settingsStage.setScene(new Scene(settingsRoot));
+
+            // Passa lo Stage al controller
+            controller.setStage(settingsStage);
+
+            // Mostra la finestra
+            settingsStage.showAndWait();
+            // Dopo la chiusura delle impostazioni, aggiorna il tema
+            String newTheme = ConfigManager.getInstance().getProperty("ui.theme", "light");
+            updateTheme(newTheme); // Aggiorna il tema selezionato
+        } catch (IOException e) {
+
+            // Puoi mostrare un alert per segnalare l'errore all'utente
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unable to open Settings");
+            alert.setContentText("An error occurred while loading the Settings window.");
+            alert.showAndWait();
+        }
+    }
+
+    private void updateTextFlowColors(TextFlow textFlow) {
+        String textColor = currentTheme.equals("dark") ? "white" : "black";
+//        for (javafx.scene.Node node : textFlow.getChildren()) {
+//            if (node instanceof Text) {
+//                ((Text) node).setFill(javafx.scene.paint.Color.web(textColor)); // Applica il colore in base al tema
+//            }
+//        }
+
+
+        for (Node node : textFlow.getChildren()) {
+            if (node instanceof Text textNode) {
+                textNode.setFill(Color.web(textColor)); // Cambia colore a rosso
+            }
+        }
+
+    }
 }

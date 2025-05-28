@@ -37,18 +37,21 @@ import java.util.*;
 
 public abstract class Word {
     protected List<String> words;
+    protected String filePath; // Spostato qui
 
     // Costruttore protetto
-    protected Word() {
+    protected Word(String filePath) {
+        this.filePath = filePath;
+        System.out.println(this.filePath);
         words = new ArrayList<>();
-        loadWords(getFilePath());
+        loadWords(filePath); // Carica le parole direttamente
     }
 
     // Metodo astratto per definire il path del file specifico
     protected abstract String getFilePath();
 
     // Caricamento delle parole dal file specificato
-    private void loadWords(String filePath) {
+    protected void loadWords(String filePath) {
         try {
             words = Files.readAllLines(Paths.get(filePath));
         } catch (IOException e) {

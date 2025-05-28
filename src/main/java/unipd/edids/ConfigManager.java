@@ -5,6 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 //fix path relativi anche a jpackage!
@@ -13,6 +15,7 @@ import java.util.Properties;
 public class ConfigManager {
     private static final Logger logger = LogManager.getLogger(ConfigManager.class);
     private static ConfigManager instance;
+    private final List<ConfigObserver> observers = new ArrayList<>();
     private Dotenv dotenv;
     private Properties properties;
     private String configFilePath;
@@ -42,6 +45,15 @@ public class ConfigManager {
             e.printStackTrace();
         }
     }
+    public void addObserver(ConfigObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(String key, String value) {
+        for (ConfigObserver observer : observers) {
+            observer.onConfigChange(key, value);
+        }
+    }
 
     public String getEnv(String key, String defaultValue) {
         String value = dotenv.get(key);
@@ -61,12 +73,23 @@ public class ConfigManager {
         return value;
     }
 
-    public void setConfig(String key, String value) {
-        properties.setProperty(key, value);
-        try (OutputStream output = new FileOutputStream(configFilePath)) {
-            properties.store(output, null);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setProperty(String key, String value) {
+        String oldValue = properties.getProperty(key); // Controlla il valore precedente
+        properties.setProperty(key, value); // Aggiorna il valore in memoria
+
+        // Notifica gli osservatori solo se il valore è cambiato
+        if (!value.equals(oldValue)) {
+            notifyObservers(key, value);
         }
     }
+
+    public void saveProperties() {
+        try (OutputStream output = new FileOutputStream(configFilePath)) {
+            properties.store(output, null); // Salva tutte le modifiche in memoria nel file
+            logger.info("Configuration saved to {}", configFilePath);
+        } catch (IOException e) {
+            logger.error("Failed to save properties to file", e);
+        }
+    }
+
 }

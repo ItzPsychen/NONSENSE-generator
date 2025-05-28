@@ -48,12 +48,16 @@
 package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
+import unipd.edids.ConfigObserver;
 
-public class Verb extends Word {
+public class Verb extends Word implements ConfigObserver {
     private static Verb instance;
 
     private Verb() {
-        super();
+        super(ConfigManager.getInstance().getProperty("verb.file", "./src/main/resources/words/verbs.txt"));
+
+        // Registra questo oggetto come osservatore delle modifiche di configurazione
+        ConfigManager.getInstance().addObserver(this);
     }
 
     public static Verb getInstance() {
@@ -69,7 +73,16 @@ public class Verb extends Word {
 
     @Override
     protected String getFilePath() {
-        return ConfigManager.getInstance().getProperty("verb.file","./src/main/resources/words/verbs.txt");
+        // Restituisce il percorso corrente del file dei sostantivi
+        return this.filePath;
+    }
+
+    @Override
+    public void onConfigChange(String key, String value) {
+        if ("verb.file".equals(key)) {
+            this.filePath = value;
+            loadWords(this.filePath);
+        }
     }
 }
 
