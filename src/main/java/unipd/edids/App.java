@@ -29,8 +29,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
+
+import static unipd.edids.TaskManager.showErrorDialog;
 
 public class App extends Application {
 
@@ -40,7 +43,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        logger.error("ciao");
+        logger.info("Starting the application");
 
         //Fix primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon_image.png")));
         //TODO instanziare il facade e passarlo tramite dependency injection al Controller
@@ -55,17 +58,51 @@ public class App extends Application {
         System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.nonsense", "logs/output/generated.txt"));
         System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("details.nonsense", "logs/output/details.txt"));
 
+        logger.info("Starting the application");
+
+        // Verifica se l'API key è configurata
+        ConfigManager configManager = ConfigManager.getInstance();
+        String apiKeyFile = configManager.getProperty("api.key.file", null);
+
+        if (apiKeyFile == null || apiKeyFile.isEmpty()) {
+            logger.warn("API Key file not configured. Opening settings window.");
+
+            // Apri la finestra delle impostazioni in modalità modale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Settings.fxml"));
+            Parent settingsRoot = loader.load();
+
+            SettingsController settingsController = loader.getController();
+            Stage settingsStage = new Stage();
+            settingsStage.setTitle("Settings");
+            settingsStage.setScene(new Scene(settingsRoot));
+            settingsStage.initModality(Modality.APPLICATION_MODAL); // Finestra modale
+            settingsController.setStage(settingsStage); // Passa lo stage al controller
+            settingsStage.showAndWait();
+
+            // Dopo la chiusura della finestra, verifica di nuovo l'API key
+            apiKeyFile = configManager.getProperty("api.key.file", null);
+            if (apiKeyFile == null || apiKeyFile.isEmpty()) {
+                logger.error("API Key configuration is mandatory. The application will not start.");
+                showErrorDialog("Missing Configuration", "API Key configuration file is mandatory. Please configure it in settings.");
+                return; // Torna senza terminare bruscamente il processo
+            }
+        }
+
+        // Inizializzazione dell'app principale
+        logger.info("API Key file detected. Continuing application initialization.");
+
         AppManager appManager = new AppManager();
-        // Carica la vista dalla risorsa FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Form.fxml"));
         Parent root = loader.load();
 
         FormController controller = loader.getController();
         controller.setFacade(appManager);
 
-        // Imposta le proprietà della finestra
+        // Imposta le proprietà della finestra principale
         primaryStage.setTitle("NONSENSE Generator");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMinHeight(700);
+        primaryStage.setMinWidth(1200);
         primaryStage.show();
     }
 

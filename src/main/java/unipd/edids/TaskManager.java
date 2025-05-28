@@ -22,8 +22,6 @@ public class TaskManager {
 
             // Log dell'errore (per debugging)
             logger.error(ex);
-            System.err.println("Task failed: " + errorMessage);
-
             // Mostra un messaggio di errore nell'UI
             Platform.runLater(() -> showErrorDialog(errorClass, errorMessage));
         });
@@ -33,7 +31,7 @@ public class TaskManager {
     }
 
     // Helper per mostrare la finestra di dialogo dell'errore
-    private static void showErrorDialog(String errorClass, String errorMessage) {
+    static void showErrorDialog(String errorClass, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("WATCH OUT!");
         alert.setHeaderText(errorClass);

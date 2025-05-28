@@ -588,10 +588,17 @@ public class FormController {
             // Crea la finestra dello Stage
             Stage settingsStage = new Stage();
             settingsStage.setTitle("Settings");
-            settingsStage.setScene(new Scene(settingsRoot));
 
+// Imposta la scena con il root (settingsRoot) e dimensioni iniziali
+            Scene scene = new Scene(settingsRoot); // <-- Dimensioni nella scena
+            settingsStage.setScene(scene);
+
+// Opzionale: Blocca dimensioni minime/massime (se necessario)
+            settingsStage.setMinWidth(800);
+            settingsStage.setMinHeight(600);
             // Passa lo Stage al controller
             controller.setStage(settingsStage);
+
 
             // Mostra la finestra
             settingsStage.showAndWait();
@@ -611,12 +618,6 @@ public class FormController {
 
     private void updateTextFlowColors(TextFlow textFlow) {
         String textColor = currentTheme.equals("dark") ? "white" : "black";
-//        for (javafx.scene.Node node : textFlow.getChildren()) {
-//            if (node instanceof Text) {
-//                ((Text) node).setFill(javafx.scene.paint.Color.web(textColor)); // Applica il colore in base al tema
-//            }
-//        }
-
 
         for (Node node : textFlow.getChildren()) {
             if (node instanceof Text textNode) {

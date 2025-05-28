@@ -11,8 +11,8 @@ import java.io.File;
 
 public class SettingsController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(SettingsController.class);
-
-
+    @FXML
+    private TextField apiKeyFileField;
     @FXML
     private TextField nounFileField;
     @FXML
@@ -48,6 +48,11 @@ public class SettingsController {
     }
 
     // Selettori file
+    @FXML
+    private void selectApiKeyFile() {
+        selectFileForField(apiKeyFileField, "Select API Key File");
+    }
+
     @FXML
     private void selectNounFile() {
         selectFileForField(nounFileField, "Select Noun File");
@@ -108,6 +113,7 @@ public class SettingsController {
         ConfigManager configManager = ConfigManager.getInstance();
 
         // Imposta i campi di testo
+        apiKeyFileField.setText(configManager.getProperty("api.key.file", ""));
         nounFileField.setText(configManager.getProperty("noun.file", ""));
         verbFileField.setText(configManager.getProperty("verb.file", ""));
         adjectiveFileField.setText(configManager.getProperty("adjective.file", ""));
@@ -141,6 +147,7 @@ public class SettingsController {
         ConfigManager configManager = ConfigManager.getInstance();
 
         // Update ConfigManager with values from text fields
+        configManager.setProperty("api.key.file", apiKeyFileField.getText());
         configManager.setProperty("noun.file", nounFileField.getText());
         configManager.setProperty("verb.file", verbFileField.getText());
         configManager.setProperty("adjective.file", adjectiveFileField.getText());

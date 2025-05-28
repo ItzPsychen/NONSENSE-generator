@@ -1,66 +1,40 @@
-package unipd.edids;//package unipd.edids;
-//
-//import com.google.auth.oauth2.ServiceAccountCredentials;
-//import com.google.cloud.language.v1.LanguageServiceClient;
-//import com.google.cloud.language.v1.LanguageServiceSettings;
-//
-//import java.io.FileInputStream;
-//import java.io.IOException;
-//
+package unipd.edids;
 
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.*;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.InetAddress;
 
-/// /Fix chiamate chiuse quando? no chiave hardcoded! metterla nell'env
-//
-//
-//public class APIClient {
-//
-//    // Singola istanza del client
-//    private static LanguageServiceClient instance;
-//
-//    // Percorso del file di credenziali
-//    private static final String CREDENTIALS_FILE_PATH = "./src/main/resources/nonsense-generator-458709-f6e2fe62e727.json";
-//
-//    // Costruttore privato per impedire l'istanziamento diretto
-//    public APIClient() {}
-//
-//    // Metodo per creare od ottenere l'istanza del client
-//    public static synchronized LanguageServiceClient getInstance() {
-//        if (instance == null) {
-//            try {
-//                instance = LanguageServiceClient.create(
-//                        LanguageServiceSettings.newBuilder()
-//                                .setCredentialsProvider(
-//                                        () -> ServiceAccountCredentials.fromStream(new FileInputStream(CREDENTIALS_FILE_PATH))
-//                                )
-//                                .build()
-//                );
-//            } catch (IOException e) {
-//                throw new RuntimeException("Errore nella creazione del LanguageServiceClient", e);
-//            }
-//        }
-//        return instance;
-//    }
-//
-//    // Metodo per chiudere il client
-//    public static synchronized void closeClient() {
-//        if (instance != null) {
-//            instance.close();
-//            instance = null; // Ripristina l'istanza
-//        }
-//    }
-//}
+public class APIClient<T> implements ConfigObserver {
 
-public class APIClient<T> {
+    private static final Logger logger = LoggerManager.getInstance().getLogger(APIClient.class);
 
     private String text;
     private RequestType type;
-    private static final String CREDENTIALS_FILE_PATH = "./src/main/resources/nonsense-generator-458709-f6e2fe62e727.json";
+
+    // Il path della API key sarà dinamico
+    private static String credentialsFilePath = "./src/main/resources/nonsense-generator-458709-f6e2fe62e727.json";
+
+    // Singola istanza del client
+    private static LanguageServiceClient instance;
 
     public enum RequestType {MODERATION, SYNTAX}
+
+    @Override
+    public void onConfigChange(String key, String value) {
+        if ("api.key.file".equals(key)) {
+            synchronized (APIClient.class) {
+                // Aggiorno il path del file delle credenziali
+                credentialsFilePath = value;
+
+                // Chiudo il client esistente per forzare la ricreazione
+                closeClient();
+            }
+        }
+    }
 
     public APIClient<T> setSentenceToAPI(String text) {
         this.text = text;
@@ -72,16 +46,15 @@ public class APIClient<T> {
         return this;
     }
 
-//    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public T execute() {
-        try (LanguageServiceClient client = LanguageServiceClient.create(
-                LanguageServiceSettings.newBuilder()
-                        .setCredentialsProvider(() ->
-                                ServiceAccountCredentials.fromStream(new FileInputStream(CREDENTIALS_FILE_PATH))).build())) {
-            Document doc = Document.newBuilder()
-                    .setContent(text)
-                    .setType(Document.Type.PLAIN_TEXT)
-                    .build();
+        isServiceAvailable();
+        LanguageServiceClient client = getInstance();
+        Document doc = Document.newBuilder()
+                .setContent(text)
+                .setType(Document.Type.PLAIN_TEXT)
+                .build();
+
 
             return switch (type) {
                 case MODERATION -> (T) client.moderateText(
@@ -93,10 +66,56 @@ public class APIClient<T> {
                                 .setEncodingType(EncodingType.UTF16)
                                 .build()
                 );
-                default -> throw new IllegalStateException("Tipo di richiesta non supportato");
             };
+
+    }
+
+    // Metodo per ottenere un'istanza singleton del client
+    private static synchronized LanguageServiceClient getInstance() {
+        if (instance == null) {
+            try {
+                // Recupera dinamicamente il path dal ConfigManager
+                credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file", "");
+                if (credentialsFilePath == null || credentialsFilePath.isBlank()) {
+                    throw new IllegalStateException("The path to the API key is not configured! Please configure it via File > Settings.");
+                }
+
+                // Crea l'istanza del client utilizzando il path
+                instance = LanguageServiceClient.create(
+                        LanguageServiceSettings.newBuilder()
+                                .setCredentialsProvider(
+                                        () -> ServiceAccountCredentials.fromStream(new FileInputStream(credentialsFilePath))
+                                )
+                                .build()
+                );
+            } catch (java.net.UnknownHostException e) {
+                // Gestione specifica per problemi di rete/DNS
+                throw new RuntimeException("Unable to resolve the API service's hostname. Please check your internet connection. This could be a temporary DNS issue. Original error: " + e.getMessage(), e);
+            } catch (IOException e) {
+                throw new RuntimeException("Error creating the LanguageServiceClient:\n" + e.getMessage(), e);
+            } catch (Exception e) {
+                // Log e nuova eccezione in caso di errore di connessione (es. DNS)
+                throw new RuntimeException("Generic error occurred while creating the client or connecting to the service:\n" + e.getMessage(), e);
+            }
+        }
+        return instance;
+    }
+
+    // Metodo per chiudere l'istanza del client
+    public static synchronized void closeClient() {
+        if (instance != null) {
+            instance.close();
+            instance = null;
+        }
+    }
+
+
+    public boolean isServiceAvailable() {
+        try {
+            InetAddress.getByName("language.googleapis.com");
+            return true;
         } catch (Exception e) {
-            throw new RuntimeException("Errore durante l'esecuzione dell'API", e);
+            throw new RuntimeException("Service Unavailable: Unable to resolve the hostname for the API. Please check your internet connection or DNS settings.", e);
         }
     }
 }

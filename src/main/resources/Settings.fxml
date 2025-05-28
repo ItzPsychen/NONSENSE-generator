@@ -52,6 +52,12 @@
                     <!-- File paths -->
                     <Label style="-fx-font-weight: bold;" text="File Paths" />
 
+                    <Label text="API KEY file:"/>
+                    <HBox spacing="5.0">
+                        <TextField fx:id="apiKeyFileField" promptText="API key file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectApiKeyFile" text="..." />
+                    </HBox>
+
                     <Label text="Noun file:"/>
                     <HBox spacing="5.0">
                         <TextField fx:id="nounFileField" promptText="Noun file path" HBox.hgrow="ALWAYS" />
