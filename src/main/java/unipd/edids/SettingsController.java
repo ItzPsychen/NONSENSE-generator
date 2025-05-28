@@ -3,14 +3,19 @@ package unipd.edids;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.Objects;
 
 public class SettingsController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(SettingsController.class);
+    @FXML
+    private BorderPane settingsPane;
+
     @FXML
     private TextField apiKeyFileField;
     @FXML
@@ -111,6 +116,11 @@ public class SettingsController {
     @FXML
     public void initialize() {
         ConfigManager configManager = ConfigManager.getInstance();
+        if (configManager.getProperty("ui.theme", "light").equals("dark")) {
+            settingsPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
+        } else {
+            settingsPane.getStylesheets().clear();
+        }
 
         // Imposta i campi di testo
         apiKeyFileField.setText(configManager.getProperty("api.key.file", ""));
