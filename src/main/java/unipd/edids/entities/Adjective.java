@@ -43,7 +43,7 @@ public class Adjective extends Word implements ConfigObserver {
     private static Adjective instance;
 
     private Adjective() {
-        super(ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/words/adjectives.txt"));
+        super(ConfigManager.getInstance().getProperty("adjective.file"));
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
         FileManager.addObserver(this);

@@ -59,16 +59,16 @@ public class App extends Application {
         //TODO inizializzare Logger e altri manager
 
         //TODO are those necessary?
-        System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL", "info"));
-        System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile", "logs/app.log"));
-        System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.save.file", "logs/output/generated.txt"));
-        System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("analyzed.save.file", "logs/output/details.txt"));
+        System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL"));
+        System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile"));
+        System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.save.file"));
+        System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("analyzed.save.file"));
 
         logger.info("Starting the application");
 
         // Verifica se l'API key è configurata
         ConfigManager configManager = ConfigManager.getInstance();
-        String apiKeyFile = configManager.getProperty("api.key.file", null);
+        String apiKeyFile = configManager.getProperty("api.key.file");
 
         if (apiKeyFile == null || apiKeyFile.isEmpty()) {
             logger.warn("API Key file not configured. Opening settings window.");
@@ -86,7 +86,7 @@ public class App extends Application {
             settingsStage.showAndWait();
 
             // Dopo la chiusura della finestra, verifica di nuovo l'API key
-            apiKeyFile = configManager.getProperty("api.key.file", null);
+            apiKeyFile = configManager.getProperty("api.key.file");
             if (apiKeyFile == null || apiKeyFile.isEmpty()) {
                 logger.error("API Key configuration is mandatory. The application will not start.");
                 showErrorDialog("Missing Configuration", "API Key configuration file is mandatory. Please configure it in settings.");
@@ -106,7 +106,7 @@ public class App extends Application {
         controller.setPrimaryStage(primaryStage);
 
         // Imposta le proprietà della finestra principale
-        primaryStage.getIcons().add(new Image(configManager.getProperty("icon.main", null)));
+        primaryStage.getIcons().add(new Image(configManager.getProperty("icon.main")));
         primaryStage.setTitle("NONSENSE Generator");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(800);

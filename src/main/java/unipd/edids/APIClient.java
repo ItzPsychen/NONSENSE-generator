@@ -75,7 +75,7 @@ public class APIClient<T> implements ConfigObserver {
         if (instance == null) {
             try {
                 // Recupera dinamicamente il path dal ConfigManager
-                credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file", "");
+                credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file");
                 if (credentialsFilePath == null || credentialsFilePath.isBlank()) {
                     throw new IllegalStateException("The path to the API key is not configured! Please configure it via File > Settings.");
                 }

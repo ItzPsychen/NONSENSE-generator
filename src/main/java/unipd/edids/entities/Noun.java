@@ -48,7 +48,7 @@ public class Noun extends Word implements ConfigObserver {
     private static Noun instance;
 
     private Noun() {
-        super(ConfigManager.getInstance().getProperty("noun.file","./src/main/resources/words/nouns.txt"));
+        super(ConfigManager.getInstance().getProperty("noun.file"));
 
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);

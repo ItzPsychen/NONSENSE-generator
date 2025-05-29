@@ -115,33 +115,33 @@ public class SettingsController {
     @FXML
     public void initialize() {
         ConfigManager configManager = ConfigManager.getInstance();
-        if (configManager.getProperty("ui.theme", "light").equals("dark")) {
+        if (configManager.getProperty("ui.theme").equals("dark")) {
             settingsPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
         } else {
             settingsPane.getStylesheets().clear();
         }
 
         // Imposta i campi di testo
-        apiKeyFileField.setText(configManager.getProperty("api.key.file", ""));
-        nounFileField.setText(configManager.getProperty("noun.file", ""));
-        verbFileField.setText(configManager.getProperty("verb.file", ""));
-        adjectiveFileField.setText(configManager.getProperty("adjective.file", ""));
-        sentenceStructuresFileField.setText(configManager.getProperty("sentence.structures", ""));
-        syntaxTagsFileField.setText(configManager.getProperty("syntax_tags.properties", ""));
-        outputLogFileField.setText(configManager.getProperty("output.logfile", ""));
-        generatedNonsenseFileField.setText(configManager.getProperty("generated.save.file", ""));
-        detailsNonsenseFileField.setText(configManager.getProperty("analyzed.save.file", ""));
+        apiKeyFileField.setText(configManager.getProperty("api.key.file"));
+        nounFileField.setText(configManager.getProperty("noun.file"));
+        verbFileField.setText(configManager.getProperty("verb.file"));
+        adjectiveFileField.setText(configManager.getProperty("adjective.file"));
+        sentenceStructuresFileField.setText(configManager.getProperty("sentence.structures"));
+        syntaxTagsFileField.setText(configManager.getProperty("syntax_tags.properties"));
+        outputLogFileField.setText(configManager.getProperty("output.logfile"));
+        generatedNonsenseFileField.setText(configManager.getProperty("generated.save.file"));
+        detailsNonsenseFileField.setText(configManager.getProperty("analyzed.save.file"));
 
         // Imposta i campi numerici
-        maxRecursionLevelField.setText(configManager.getProperty("max.recursion.level", "3"));
-        maxSentenceLengthField.setText(configManager.getProperty("max.sentence.length", "150"));
+        maxRecursionLevelField.setText(configManager.getProperty("max.recursion.level"));
+        maxSentenceLengthField.setText(configManager.getProperty("max.sentence.length"));
 
         // Imposta il valore del CheckBox
-        allowRecursiveSentencesCheck.setSelected(Boolean.parseBoolean(configManager.getProperty("allow.recursive.sentences", "false")));
+        allowRecursiveSentencesCheck.setSelected(Boolean.parseBoolean(configManager.getProperty("allow.recursive.sentences")));
         maxRecursionLevelField.disableProperty().setValue(!allowRecursiveSentencesCheck.isSelected());
 
         // Imposta la ComboBox con i temi (aggiungi i temi disponibili)
-        themeComboBox.setValue(configManager.getProperty("ui.theme", "light")); // Imposta il tema default
+        themeComboBox.setValue(configManager.getProperty("ui.theme")); // Imposta il tema default
 
         logger.info("Settings initialized with default values from configuration.");
     }
@@ -176,7 +176,7 @@ public class SettingsController {
         // Save changes to ConfigManager
         configManager.saveProperties();
 
-        logger.info(configManager.getProperty("verb.file", ""));
+        logger.info(configManager.getProperty("verb.file"));
         logger.info("Settings applied");
         stage.close();
     }

@@ -60,7 +60,7 @@ public class Verb extends Word implements ConfigObserver {
     private TenseStrategy tenseStrategy;
 
     private Verb() {
-        super(ConfigManager.getInstance().getProperty("verb.file", "./src/main/resources/words/verbs.txt"));
+        super(ConfigManager.getInstance().getProperty("verb.file"));
 
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);

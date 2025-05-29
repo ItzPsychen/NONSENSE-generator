@@ -62,8 +62,8 @@ public class GenerateSentenceService implements ConfigObserver {
         // Step 1: Estrarre la struttura della frase
         logger.warn(structureSentenceStrategy.getClass().getSimpleName());
         temp.setStructure(structureSentenceStrategy.generateSentence());
-        if(ConfigManager.getInstance().getProperty("allow.recursive.sentences", "false").equals("true")){
-            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(),0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level", "3")))));
+        if(ConfigManager.getInstance().getProperty("allow.recursive.sentences").equals("true")){
+            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(),0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level")))));
         } else if ( temp.getStructure().toString().contains("[sentence]")) {
             temp.setStructure(new StringBuilder(temp.getStructure().toString().replaceAll("\\[sentence\\]", "[noun]")));
         }

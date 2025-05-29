@@ -22,7 +22,7 @@ public class ConfigManager {
 
     private ConfigManager() {
         dotenv = Dotenv.load();
-        configFilePath = getEnv("CONFIG_FILE_PATH", "src/main/resources/properties/config.properties");
+configFilePath = getEnv("CONFIG_FILE_PATH");
         properties = new Properties();
         loadProperties();
     }
@@ -55,23 +55,23 @@ public class ConfigManager {
         }
     }
 
-    public String getEnv(String key, String defaultValue) {
-        String value = dotenv.get(key);
-        if (value == null) {
-            logger.warn("Configuration key {} not found. Using default: {}", key, defaultValue);
-            return defaultValue;
-        }
-        return value;
+public String getEnv(String key) {
+    String value = dotenv.get(key);
+    if (value == null) {
+        logger.error("Configuration key {} not found.", key);
+        throw new IllegalArgumentException("Environment variable " + key + " is not defined.");
     }
+    return value;
+}
 
-    public String getProperty(String key, String defaultValue) {
-        String value = properties.getProperty(key);
-        if (value == null) {
-            logger.warn("Property key {} not found. Using default: {}", key, defaultValue);
-            return defaultValue;
-        }
-        return value;
+public String getProperty(String key) {
+    String value = properties.getProperty(key);
+    if (value == null) {
+        logger.error("Property key {} not found.", key);
+        throw new IllegalArgumentException("Property " + key + " is not defined.");
     }
+    return value;
+}
 
     public void setProperty(String key, String value) {
         String oldValue = properties.getProperty(key); // Controlla il valore precedente

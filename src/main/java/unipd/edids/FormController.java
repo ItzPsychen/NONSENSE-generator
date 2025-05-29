@@ -527,7 +527,7 @@ private java.util.Timer progressTimer;
                 "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
 
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about", null)));
+        alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about")));
         alert.showAndWait();
     }
 
@@ -545,7 +545,7 @@ private java.util.Timer progressTimer;
         ConfigManager configManager = ConfigManager.getInstance();
 
         // Recupera il tema configurato
-        String theme = configManager.getProperty("ui.theme", "light");
+        String theme = configManager.getProperty("ui.theme");
         // Applica il tema attuale
         updateTheme(theme);
 
@@ -816,7 +816,7 @@ private java.util.Timer progressTimer;
             settingsStage.setTitle("Settings");
             settingsStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
             settingsStage.initOwner(primaryStage);
-            settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings", null)));
+            settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings")));
 
             // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
             Scene scene = new Scene(settingsRoot); // <-- Dimensioni nella scena
@@ -832,7 +832,7 @@ private java.util.Timer progressTimer;
             // Mostra la finestra
             settingsStage.showAndWait();
             // Dopo la chiusura delle impostazioni, aggiorna il tema
-            String newTheme = ConfigManager.getInstance().getProperty("ui.theme", "light");
+            String newTheme = ConfigManager.getInstance().getProperty("ui.theme");
             updateTheme(newTheme); // Aggiorna il tema selezionato
         } catch (IOException e) {
 
@@ -890,7 +890,7 @@ private java.util.Timer progressTimer;
     }
 
     private String getFilePathTags() {
-        return ConfigManager.getInstance().getProperty("syntax_tags.properties", "./src/main/resources/properties/syntax_tags.properties");
+        return ConfigManager.getInstance().getProperty("syntax_tags.properties");
 
     }
 
@@ -932,7 +932,7 @@ private java.util.Timer progressTimer;
             vocabularyStage.setTitle("Vocabulary");
             vocabularyStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
             vocabularyStage.initOwner(primaryStage);
-            vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary", null)));
+            vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary")));
 
 // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
             Scene scene = new Scene(vocabularyRoot); // <-- Dimensioni nella scena
