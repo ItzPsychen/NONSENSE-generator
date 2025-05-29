@@ -46,6 +46,7 @@ public class SettingsController {
     private CheckBox allowRecursiveSentencesCheck;
     @FXML
     private ComboBox<String> themeComboBox;
+    ConfigManager configManager = ConfigManager.getInstance();
 
     private Stage stage;
 
@@ -117,12 +118,16 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        ConfigManager configManager = ConfigManager.getInstance();
         if (configManager.getProperty("ui.theme").equals("dark")) {
             settingsPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
         } else {
             settingsPane.getStylesheets().clear();
         }
+
+        loadItems();
+    }
+
+    private void loadItems() {
 
         // Imposta i campi di testo con valori di default vuoti se le proprietà non esistono
         apiKeyFileField.setText(getPropertyOrDefault(configManager, "api.key.file", ""));
@@ -176,7 +181,6 @@ public class SettingsController {
             alert.showAndWait();
             return; // Non chiudere la finestra
         }
-        ConfigManager configManager = ConfigManager.getInstance();
 
         // Update ConfigManager with values from text fields
         configManager.setProperty("api.key.file", apiKeyFileField.getText());
@@ -199,7 +203,6 @@ public class SettingsController {
         // Save changes to ConfigManager
         configManager.saveProperties();
 
-        logger.info(configManager.getProperty("verb.file"));
         logger.info("Settings applied");
         closeSettings();
     }
@@ -210,10 +213,10 @@ public class SettingsController {
 
 
     public void resetToDefault() throws IOException {
-        String apiKeyFile = ConfigManager.getInstance().getProperty("api.key.file");
+        String apiKeyFile = configManager.getProperty("api.key.file");
         try {
-            String defaultConfigPath = ConfigManager.getInstance().getEnv("DEFAULT_CONFIG_FILE_PATH");
-            String configFilePath = ConfigManager.getInstance().getConfigFilePath();
+            String defaultConfigPath = configManager.getEnv("DEFAULT_CONFIG_FILE_PATH");
+            String configFilePath = configManager.getConfigFilePath();
 
             // Verifica se 'DEFAULT_CONFIG_FILE_PATH' esiste
             File defaultConfigFile = new File(defaultConfigPath);
@@ -248,8 +251,8 @@ public class SettingsController {
             }
 
             // Ricarica la configurazione nel ConfigManager
-            ConfigManager.getInstance().loadProperties();
-            initialize(); // Reinizializza l'interfaccia con i valori aggiornati
+            configManager.loadProperties();
+            loadItems(); // Reinizializza l'interfaccia con i valori aggiornati
 
             logger.info("Impostazioni ripristinate correttamente ai valori di default.");
         } catch (IOException e) {
