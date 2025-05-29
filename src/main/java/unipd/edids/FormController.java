@@ -1,5 +1,8 @@
 package unipd.edids;
 
+import java.util.Properties;
+
+import edu.stanford.nlp.trees.Tree;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -428,13 +431,19 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FormController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(FormController.class);
 
     private static String currentTheme = "light"; // Tema di default
+    @FXML
+    private CheckBox checkSyntax;
     @FXML
     private CheckBox newWords;
     @FXML
@@ -479,10 +488,14 @@ public class FormController {
 
 
     private AppManager appManager;
+    private String textColor;
 
     public void setFacade(AppManager appManager) {
         this.appManager = appManager;
     }
+
+    private Map<String, String> treeTags;
+
 
     public void initialize() {
         ConfigManager configManager = ConfigManager.getInstance();
@@ -504,6 +517,8 @@ public class FormController {
         structureComboBox.getSelectionModel().selectFirst(); // Set default selection to the first item
         structureComboBox.setDisable(!selectStructureRadio.isSelected());
 
+        this.treeTags = loadSyntaxTags(getFilePathTags());
+
 
     }
 
@@ -512,13 +527,16 @@ public class FormController {
             currentTheme = theme;
             // Cambia il foglio di stile
             if (currentTheme.equals("dark")) {
+                this.textColor = "white";
                 rootPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
             } else {
+                this.textColor = "black";
                 rootPane.getStylesheets().clear();
             }
             // Aggiorna i colori nei TextFlow
             updateTextFlowColors(syntaxArea);
             updateTextFlowColors(generateArea);
+
             if (lastSyntaxFlow != null) updateTextFlowColors(lastSyntaxFlow);
             if (lastGenerateFlow != null) updateTextFlowColors(lastGenerateFlow);
         });
@@ -557,6 +575,16 @@ public class FormController {
             syntaxArea.getChildren().clear();
             syntaxArea.getChildren().add(lastSyntaxFlow);
 
+
+            if (checkSyntax.isSelected()) {
+                String analysis = prettyTree(sentence.getSyntaxTree());
+                Text analysisText = new Text(analysis + "\n");
+                analysisText.setFont(Font.font("monospace", 12));
+                analysisText.setFill(Color.web(textColor));
+
+                syntaxArea.getChildren().add(analysisText);
+            }
+
             progressBar.setProgress(1);
         });
     }
@@ -584,7 +612,7 @@ public class FormController {
                 }
 
                 // Genera la frase passando la strategia e il valore della struttura selezionata
-                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected() , false);
+                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected(), false);
             }
         };
 
@@ -596,7 +624,7 @@ public class FormController {
         Platform.runLater(() -> {
             logger.info("Generate task finished: {}", sentence.getSentence());
 
-            if(toxicityLevels.isSelected()) {
+            if (toxicityLevels.isSelected()) {
                 toxicityBar.setProgress(sentence.getToxicity());
                 toxicityBar.setStyle(getColorForValue(sentence.getToxicity()));
 
@@ -619,7 +647,9 @@ public class FormController {
             generateArea.getChildren().clear();
             generateArea.getChildren().add(lastGenerateFlow);
             generateArea.getChildren().add(new Text("\n\n"));
-            generateArea.getChildren().add(new Text(sentence.getSentence().toString()));
+            Text newText = new Text(sentence.getSentence().toString());
+            newText.setFill(Color.web(this.textColor));
+            generateArea.getChildren().add(newText);
 
             progressBar.setProgress(1);
         });
@@ -685,14 +715,11 @@ public class FormController {
     }
 
     private void updateTextFlowColors(TextFlow textFlow) {
-        String textColor = currentTheme.equals("dark") ? "white" : "black";
-
         for (Node node : textFlow.getChildren()) {
-            if (node instanceof Text textNode) {
-                textNode.setFill(Color.web(textColor)); // Cambia colore a rosso
+            if (node instanceof Text) {
+                ((Text) node).setFill(Color.web(this.textColor));
             }
         }
-
     }
 
     public void radioPressed() {
@@ -707,9 +734,57 @@ public class FormController {
         politicsBar.setDisable(!toxicityLevels.isSelected());
     }
 
-        private String getColorForValue(double value) {
+    private String getColorForValue(double value) {
         int red = (int) (255 * value);
         int green = (int) (255 * (1 - value));
         return String.format("-fx-accent: rgb(%d, %d, 0);", red, green);
     }
+
+
+    private Map<String, String> loadSyntaxTags(String filePath) {
+        Properties properties = new Properties();
+        try (FileInputStream fis = new FileInputStream(Paths.get(filePath).toFile())) {
+            properties.load(fis); // Load the .properties file
+            // Convert Properties to Map<String, String>
+            return properties.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            e -> e.getKey().toString(),
+                            e -> e.getValue().toString()
+                    ));
+        } catch (IOException e) {
+            System.err.println("Error loading properties file: " + filePath);
+            e.printStackTrace();
+            return Map.of(); // Return empty Map if error occurs
+        }
+    }
+
+    private String getFilePathTags() {
+        return ConfigManager.getInstance().getProperty("syntax_tags.properties", "./src/main/resources/properties/syntax_tags.properties");
+
+    }
+
+
+    private String prettyTree(Tree tree) {
+        return "\nTREE\n" + prettyTreeHelper(tree.children()[0], "", true);
+    }
+
+    private String prettyTreeHelper(Tree tree, String prefix, boolean isLast) {
+        StringBuilder builder = new StringBuilder();
+
+        // Add the prefix and the current node's value
+        builder.append(prefix);
+        builder.append(isLast ? "└── " : "├── ");
+        builder.append(treeTags.getOrDefault(tree.value(), tree.value())).append("\n");
+
+        // Prepare prefix for children
+        Tree[] children = tree.children();
+        for (int i = 0; i < children.length; i++) {
+            boolean last = (i == children.length - 1);
+            String newPrefix = prefix + (isLast ? "    " : "│   ");
+            builder.append(prettyTreeHelper(children[i], newPrefix, last));
+        }
+
+        return builder.toString();
+    }
+
 }
