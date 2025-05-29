@@ -2,6 +2,12 @@
 
 package unipd.edids;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import unipd.edids.strategies.RandomStructureStrategy;
+import unipd.edids.strategies.SameAsAnalyzedStructureStrategy;
+import unipd.edids.strategies.SelectedStructureStrategy;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -10,6 +16,8 @@ import java.io.IOException;
 // inoltre ha come istanza ConfigManager, LoggerManager e FileManager
 
 public class AppManager {
+    private static final Logger logger = LogManager.getLogger(AppManager.class);
+
     private Sentence inputSentence;
     private Sentence outputSentence;
     private AnalyzeSentenceService analyzeSentenceService;
@@ -25,7 +33,6 @@ public class AppManager {
     }
 
     public Sentence analyzeSentence(String text){
-        if(text.equals("eccezione"))throw new RuntimeException("Not yet implemented");
         ///////TODO lanciare eccezioni
 //        if (!this.isModified()) return new Sentence("#notmodified");
 //        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
@@ -33,19 +40,41 @@ public class AppManager {
 
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
 //        moderationSentenceService.moderateText(inputSentence);
-        if (!inputSentence.isValid()) return new Sentence("#invalid");;
+//        if (!inputSentence.isValid()) return new Sentence("#invalid");;
 
         return inputSentence;
     }
 
-    public Sentence generateSentence(boolean save){
+    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean save){
+
         if (inputSentence == null) {
             return null;
         }
+
+
+        switch (strategy) {
+            case "RANDOM":
+                generateSentenceService.setStructureSentenceStrategy(new RandomStructureStrategy());
+                break;
+            case "SAME":
+                generateSentenceService.setStructureSentenceStrategy(new SameAsAnalyzedStructureStrategy(inputSentence));
+                break;
+            case "SELECTED":
+                generateSentenceService.setStructureSentenceStrategy(new SelectedStructureStrategy(selStructure));
+                break;
+            default:
+                logger.error("Unknown strategy: {}", strategy);
+                throw new IllegalArgumentException("Invalid strategy: " + strategy);
+        }
+
         outputSentence = generateSentenceService.generateSentence(inputSentence);
-        // analyzeSentenceService.setValidateAttributes(outputSentence);
-        if (outputSentence == null || !outputSentence.isValid()) return null;
-        if (save && outputSentence != null) saveSentence(outputSentence);
+        if(toxicity){
+            moderationSentenceService.moderateText(outputSentence);
+        }
+// TODO
+// analyzeSentenceService.setValidateAttributes(outputSentence);
+//        if (outputSentence == null || !outputSentence.isValid()) return null;
+//        if (save && outputSentence != null) saveSentence(outputSentence);
         return outputSentence;
     }
 
@@ -85,5 +114,9 @@ public class AppManager {
 
     public Sentence getOutputSentence() {
         return outputSentence;
+    }
+
+    public GenerateSentenceService getGenerateSentenceService() {
+        return generateSentenceService;
     }
 }

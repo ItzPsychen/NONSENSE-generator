@@ -3,8 +3,8 @@ package unipd.edids;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-
-public class SentenceStructure {
+//fix c'è un set non usato
+public class SentenceStructure implements ConfigObserver {
     private static SentenceStructure instance; // Singola istanza della classe
     private List<String> structures;
     private final Set<String> structSet;
@@ -30,7 +30,11 @@ public class SentenceStructure {
 
     private void loadStructures() {
         try {
-            structures = Files.readAllLines(Paths.get(ConfigManager.getInstance().getProperty("sentence.structures", "./src/main/resources/structures/sentenceStructures.txt")));
+            structures = Files.readAllLines(Paths.get(ConfigManager.getInstance()
+                            .getProperty("sentence.structures", "./src/main/resources/structures/sentenceStructures.txt")))
+                    .stream()
+                    .filter(line -> !line.trim().isEmpty()) // Ignora le righe vuote o composte solo da spazi
+                    .toList();
             structSet.addAll(structures);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento delle sentence structures.");
@@ -48,5 +52,16 @@ public class SentenceStructure {
         if (structSet.contains(value)) return;
         structures.add(value);
         structSet.add(value);
+    }
+
+    @Override
+    public void onConfigChange(String key, String value) {
+        if ("sentence.structures".equals(key)) {
+            loadStructures();
+        }
+    }
+
+    public List<String> getStructures() {
+        return structures;
     }
 }

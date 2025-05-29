@@ -10,10 +10,8 @@ public class ModerationSentenceService {
 
     /**
      * Analizza il livello di tossicità e modera il testo fornito.
-     *
-     * @return un oggetto `ModerateTextResponse` contenente i risultati della moderazione del testo.
      */
-    public static List<ClassificationCategory> moderateText(Sentence sentence) {
+    public void moderateText(Sentence sentence) {
 
         try {
 
@@ -29,15 +27,12 @@ public class ModerationSentenceService {
             sentence.setToxicity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Toxic"));
             sentence.setProfanity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Profanity"));
             sentence.setInsult(getModerationConfidenceByName(response.getModerationCategoriesList(), "Insult"));
-            // sentence.setThreat(getModerationConfidenceByName(response.getModerationCategoriesList(), "Threat"));
-            sentence.setIdentityThreat(response.getModerationCategories(5).getConfidence());
+             sentence.setSexual(getModerationConfidenceByName(response.getModerationCategoriesList(), "Sexual"));
+            sentence.setPolitics(getModerationConfidenceByName(response.getModerationCategoriesList(), "Politics"));
             response.getModerationCategoriesList().forEach(category -> System.out.println("Category: " + category.getName() + ", Confidence: " + category.getConfidence()));
-
-            return response.getModerationCategoriesList();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 

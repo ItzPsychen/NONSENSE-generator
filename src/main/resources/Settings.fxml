@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="settingsPane" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.SettingsController" >
+<BorderPane fx:id="settingsPane" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.SettingsController">
 
     <!-- Top bar -->
     <top>
@@ -34,8 +34,8 @@
     <bottom>
         <AnchorPane prefHeight="38.0" prefWidth="700.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="cancelButton" layoutX="480.0" layoutY="9.0" prefWidth="100.0" text="Cancel" AnchorPane.rightAnchor="120.0" onAction="#closeSettings"/>
-                <Button fx:id="applyButton" layoutX="590.0" layoutY="9.0" prefWidth="100.0" text="Apply" AnchorPane.rightAnchor="10.0" onAction="#applySettings"/>
+                <Button fx:id="cancelButton" layoutX="480.0" layoutY="5.0" onAction="#closeSettings" prefWidth="100.0" text="Cancel" AnchorPane.rightAnchor="120.0" />
+                <Button fx:id="applyButton" layoutX="590.0" layoutY="5.0" onAction="#applySettings" prefWidth="100.0" text="Apply" AnchorPane.rightAnchor="10.0" />
             </children>
         </AnchorPane>
     </bottom>
@@ -52,55 +52,55 @@
                     <!-- File paths -->
                     <Label style="-fx-font-weight: bold;" text="File Paths" />
 
-                    <Label text="API KEY file:"/>
+                    <Label text="API KEY file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="apiKeyFileField" promptText="API key file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectApiKeyFile" text="..." />
                     </HBox>
 
-                    <Label text="Noun file:"/>
+                    <Label text="Noun file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="nounFileField" promptText="Noun file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectNounFile" text="..." />
                     </HBox>
 
-                    <Label text="Verb file:"/>
+                    <Label text="Verb file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="verbFileField" promptText="Verb file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectVerbFile" text="..." />
                     </HBox>
 
-                    <Label text="Adjective file:"/>
+                    <Label text="Adjective file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="adjectiveFileField" promptText="Adjective file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectAdjectiveFile" text="..." />
                     </HBox>
 
-                    <Label text="Sentence structures file:"/>
+                    <Label text="Sentence structures file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="sentenceStructuresFileField" promptText="Sentence structures file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectSentenceStructuresFile" text="..." />
                     </HBox>
 
-                    <Label text="Syntax tags properties file:"/>
+                    <Label text="Syntax tags properties file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="syntaxTagsFileField" promptText="Syntax tags properties file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectSyntaxTagsFile" text="..." />
                     </HBox>
 
-                    <Label text="Log file:"/>
+                    <Label text="Log file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="outputLogFileField" promptText="Log file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectOutputLogFile" text="..." />
                     </HBox>
 
-                    <Label text="Generated nonsense output file:"/>
+                    <Label text="Generated nonsense output file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="generatedNonsenseFileField" promptText="Generated nonsense output file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectGeneratedNonsenseFile" text="..." />
                     </HBox>
 
-                    <Label text="Details nonsense output file:"/>
+                    <Label text="Details nonsense output file:" />
                     <HBox spacing="5.0">
                         <TextField fx:id="detailsNonsenseFileField" promptText="Details nonsense output file path" HBox.hgrow="ALWAYS" />
                         <Button onAction="#selectDetailsNonsenseFile" text="..." />
@@ -109,14 +109,14 @@
                     <!-- Number settings -->
                     <Label style="-fx-font-weight: bold;" text="Numerical Settings" />
 
-                    <Label text="Max recursion level:"/>
+                    <Label text="Max recursion level:" />
                     <TextField fx:id="maxRecursionLevelField" promptText="Max recursion level (e.g. 3)" />
 
-                    <Label text="Max sentence length:"/>
+                    <Label text="Max sentence length:" />
                     <TextField fx:id="maxSentenceLengthField" promptText="Max sentence length (e.g. 120)" />
 
                     <!-- Boolean setting -->
-                    <CheckBox fx:id="allowRecursiveSentencesCheck" text="Allow recursive sentences" onAction="#recursionSelection"/>
+                    <CheckBox fx:id="allowRecursiveSentencesCheck" onAction="#recursionSelection" text="Allow recursive sentences" />
 
                     <!-- Theme -->
                     <Label style="-fx-font-weight: bold;" text="Theme" />

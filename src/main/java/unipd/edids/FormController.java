@@ -1,6 +1,8 @@
 package unipd.edids;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
@@ -33,8 +35,6 @@ import javafx.fxml.FXML;
 //import java.util.stream.Collectors;
 //
 //
-
-import javafx.event.ActionEvent;
 
 /// /Fix everything, il controller non si occupa della logica di business
 //
@@ -418,17 +418,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
@@ -439,6 +435,18 @@ public class FormController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(FormController.class);
 
     private static String currentTheme = "light"; // Tema di default
+    @FXML
+    public ProgressBar toxicityBar;
+    @FXML
+    public ProgressBar profanityBar;
+    @FXML
+    public ProgressBar insultBar;
+    @FXML
+    public ProgressBar sexualBar;
+    @FXML
+    public ProgressBar politicsBar;
+    @FXML
+    private CheckBox toxicityLevels;
     private TextFlow lastSyntaxFlow; // Campo che salva il contenuto del syntaxArea
     private TextFlow lastGenerateFlow; // Campo che salva il contenuto del generateArea
     @FXML
@@ -452,6 +460,19 @@ public class FormController {
     private TextFlow generateArea;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private ComboBox<String> structureComboBox;
+    @FXML
+    private RadioButton randomStructureRadio;
+
+    @FXML
+    private RadioButton sameAsAnalyzeRadio;
+
+    @FXML
+    private RadioButton selectStructureRadio;
+
+    private ToggleGroup structureToggleGroup;
+
 
     private AppManager appManager;
 
@@ -464,9 +485,22 @@ public class FormController {
 
         // Recupera il tema configurato
         String theme = configManager.getProperty("ui.theme", "light");
-
         // Applica il tema attuale
         updateTheme(theme);
+
+        structureToggleGroup = new ToggleGroup();
+
+        // Associa i RadioButton al ToggleGroup
+        randomStructureRadio.setToggleGroup(structureToggleGroup);
+        sameAsAnalyzeRadio.setToggleGroup(structureToggleGroup);
+        selectStructureRadio.setToggleGroup(structureToggleGroup);
+
+        ObservableList<String> sentenceStructuresList = FXCollections.observableArrayList(SentenceStructure.getInstance().getStructures());
+        structureComboBox.setItems(sentenceStructuresList);
+        structureComboBox.getSelectionModel().selectFirst(); // Set default selection to the first item
+        structureComboBox.setDisable(!selectStructureRadio.isSelected());
+
+
     }
 
     public void updateTheme(String theme) {
@@ -512,6 +546,8 @@ public class FormController {
 
             // Crea e salva il nuovo TextFlow
             lastSyntaxFlow = formatStructure(sentence.getStructure().toString() + " \n");
+            lastSyntaxFlow.setMaxWidth(syntaxArea.getWidth());
+
 
             // Aggiorna il contenuto del syntaxArea
             syntaxArea.getChildren().clear();
@@ -532,7 +568,19 @@ public class FormController {
             protected Sentence call() {
                 logger.info("Generation task started");
                 // Chiamata all'analisi da AppManager
-                return appManager.generateSentence(false);
+
+                String strategy = structureToggleGroup.getSelectedToggle().getUserData().toString();
+                logger.info(strategy);
+
+                // Recupera il valore dal combobox se SELECTED è selezionato
+                String selectedStructure = "";
+                if ("SELECTED".equals(strategy)) {
+                    selectedStructure = structureComboBox.getValue(); // Ottieni il valore selezionato
+                    logger.info("Selected structure: {}", selectedStructure);
+                }
+
+                // Genera la frase passando la strategia e il valore della struttura selezionata
+                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), false);
             }
         };
 
@@ -544,9 +592,25 @@ public class FormController {
         Platform.runLater(() -> {
             logger.info("Generate task finished: {}", sentence.getSentence());
 
+            if(toxicityLevels.isSelected()) {
+                toxicityBar.setProgress(sentence.getToxicity());
+                toxicityBar.setStyle(getColorForValue(sentence.getToxicity()));
+
+                profanityBar.setProgress(sentence.getProfanity());
+                profanityBar.setStyle(getColorForValue(sentence.getProfanity()));
+
+                insultBar.setProgress(sentence.getInsult());
+                insultBar.setStyle(getColorForValue(sentence.getInsult()));
+
+                sexualBar.setProgress(sentence.getSexual());
+                sexualBar.setStyle(getColorForValue(sentence.getSexual()));
+
+                politicsBar.setProgress(sentence.getPolitics());
+                politicsBar.setStyle(getColorForValue(sentence.getPolitics()));
+            }
             // Crea e salva il nuovo TextFlow
             lastGenerateFlow = formatStructure(sentence.getStructure().toString());
-
+            lastGenerateFlow.setMaxWidth(generateArea.getWidth());
             // Aggiorna il contenuto del generateArea
             generateArea.getChildren().clear();
             generateArea.getChildren().add(lastGenerateFlow);
@@ -625,5 +689,23 @@ public class FormController {
             }
         }
 
+    }
+
+    public void radioPressed() {
+        structureComboBox.setDisable(!selectStructureRadio.isSelected());
+    }
+
+    public void toxicityPressed() {
+        toxicityBar.setDisable(!toxicityLevels.isSelected());
+        profanityBar.setDisable(!toxicityLevels.isSelected());
+        insultBar.setDisable(!toxicityLevels.isSelected());
+        sexualBar.setDisable(!toxicityLevels.isSelected());
+        politicsBar.setDisable(!toxicityLevels.isSelected());
+    }
+
+        private String getColorForValue(double value) {
+        int red = (int) (255 * value);
+        int green = (int) (255 * (1 - value));
+        return String.format("-fx-accent: rgb(%d, %d, 0);", red, green);
     }
 }

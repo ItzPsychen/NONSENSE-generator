@@ -21,8 +21,8 @@ public class Sentence {
     private double toxicity;
     private double profanity;
     private double insult;
-    private double threat;
-    private double identityThreat;
+    private double sexual;
+    private double politics;
 
     private List<String> nouns;
     private List<String> verbs;
@@ -34,7 +34,6 @@ public class Sentence {
         this.sentence = new StringBuilder();
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
-        this.toxicity = 0.0;
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
@@ -47,7 +46,6 @@ public class Sentence {
         this.sentence = new StringBuilder(text);
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
-        this.toxicity = 0.0;
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
@@ -90,14 +88,14 @@ public class Sentence {
     public void setToxicity(double value) { this.toxicity = value; }
     public void setProfanity(double value) { this.profanity = value; }
     public void setInsult(double value) { this.insult = value; }
-    public void setThreat(double value) { this.threat = value; }
-    public void setIdentityThreat(double value) { this.identityThreat = value; }
+    public void setSexual(double value) { this.sexual = value; }
+    public void setPolitics(double value) { this.politics = value; }
 
     public double getToxicity() { return this.toxicity; }
     public double getProfanity() { return this.profanity; }
     public double getInsult() { return this.insult; }
-    public double getThreat() { return this.threat; }
-    public double getIdentityThreat() { return this.identityThreat; }
+    public double getSexual() { return this.sexual; }
+    public double getPolitics() { return this.politics; }
 
     public boolean isValid() {
         return true;

@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.entities.*;
+import unipd.edids.strategies.RandomStructureStrategy;
+import unipd.edids.strategies.StructureSentenceStrategy;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -15,8 +17,9 @@ import java.util.Iterator;
 //Fix usare una factory con singleton, usare una strategy per l'estrazione delle strutture
 
 public class GenerateSentenceService implements ConfigObserver {
+
+    StructureSentenceStrategy structureSentenceStrategy;
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
-    private static final int MAX_RECURSION_DEPTH = 3;
 
 
 
@@ -24,9 +27,16 @@ public class GenerateSentenceService implements ConfigObserver {
 
     public GenerateSentenceService() {
         temp = new Sentence();
+        structureSentenceStrategy = new RandomStructureStrategy();
+    }
+
+    public void setStructureSentenceStrategy(StructureSentenceStrategy strategy) {
+        logger.info("Setting Structure Sentence Strategy: {}", strategy.getClass().getSimpleName());
+        this.structureSentenceStrategy = strategy;
     }
 
     public Sentence generateSentence(Sentence inputSentence) {
+
         System.out.println("[generateSentence] " + inputSentence.getSentence().toString());
         if (inputSentence.getSentence().toString() == null || inputSentence.getSentence().toString().trim().isEmpty() ||
                 !inputSentence.getSentence().toString().matches(".*[a-zA-Z]+.*")) {
@@ -48,7 +58,14 @@ public class GenerateSentenceService implements ConfigObserver {
         System.out.println(temp.getNouns());
 
         // Step 1: Estrarre la struttura della frase
-        temp.setStructure(new StringBuilder(resolveTemplate(0)));
+        logger.warn(structureSentenceStrategy.getClass().getSimpleName());
+        temp.setStructure(structureSentenceStrategy.generateSentence());
+        if(ConfigManager.getInstance().getProperty("allow.recursive.sentences", "false").equals("true")){
+            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(),0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level", "3")))));
+        } else if ( temp.getStructure().toString().contains("[sentence]")) {
+            temp.setStructure(new StringBuilder(temp.getStructure().toString().replaceAll("\\[sentence\\]", "[noun]")));
+        }
+
         logger.info("Initial Sentence Structure: {}", temp.getStructure());
 
         // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
@@ -66,13 +83,12 @@ public class GenerateSentenceService implements ConfigObserver {
         return temp;
     }
 
-    private String resolveTemplate(int depth) {
-        String template = SentenceStructure.getInstance().getRandomStructure();
-        if (depth > MAX_RECURSION_DEPTH) {
+    private String resolveTemplate(String template, int depth, int maxRecursionDepth) {
+        if (depth > maxRecursionDepth) {
             return "[noun]";
         }
         while (template.contains("[sentence]")) {
-            template = template.replaceFirst("\\[sentence\\]", resolveTemplate(depth + 1));
+            template = template.replaceFirst("\\[sentence\\]", resolveTemplate(template, depth + 1, maxRecursionDepth));
         }
 
         return template;
