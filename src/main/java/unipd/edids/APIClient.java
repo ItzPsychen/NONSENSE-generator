@@ -110,10 +110,9 @@ public class APIClient<T> implements ConfigObserver {
     }
 
 
-    public boolean isServiceAvailable() {
+    public void isServiceAvailable() {
         try {
             InetAddress.getByName("language.googleapis.com");
-            return true;
         } catch (Exception e) {
             throw new RuntimeException("Service Unavailable: Unable to resolve the hostname for the API. Please check your internet connection or DNS settings.", e);
         }

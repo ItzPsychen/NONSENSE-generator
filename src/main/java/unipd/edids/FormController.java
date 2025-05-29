@@ -495,10 +495,15 @@ public class FormController {
     @FXML
     private RadioButton selectStructureRadio;
     private ToggleGroup structureToggleGroup;
-
+private java.util.Timer progressTimer;
     // Close everything
     @FXML
     private void handleClose() {
+        if (progressTimer != null) {
+            progressTimer.cancel();
+            progressTimer.purge();
+            progressTimer = null;
+        }
         Platform.exit();
     }
 
@@ -563,7 +568,6 @@ public class FormController {
 
         // Aggiungi il ContextMenu al TextFlow generateArea
         addContextMenuToTextFlow(generateArea);
-
 
 
     }
@@ -682,7 +686,7 @@ public class FormController {
             }
 
             progressBar.setProgress(1);
-            new java.util.Timer().schedule(
+            progressTimer.schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
@@ -762,7 +766,7 @@ public class FormController {
             generateArea.getChildren().add(newText);
 
             progressBar.setProgress(1);
-            new java.util.Timer().schedule(
+            progressTimer.schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
@@ -772,11 +776,13 @@ public class FormController {
             );
         });
     }
+
     private Stage primaryStage; // Variabile per salvare il primaryStage
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+
     private TextFlow formatStructure(String structure) {
         TextFlow textFlow = new TextFlow();
         String[] tokens = structure.split("(?<=\\s|[.,;:])|(?=[.,;:|\\s])");
@@ -964,5 +970,12 @@ public class FormController {
 
         // Cambia anche colore dinamicamente
         bar.setStyle(getColorForValue(targetValue));
+    }
+
+    public void useGenerated() {
+        logger.info("Use generated button clicked");
+        if(appManager.getOutputSentence() != null) {
+            inputText.setText(appManager.getOutputSentence().getSentence().toString());
+        }
     }
 }

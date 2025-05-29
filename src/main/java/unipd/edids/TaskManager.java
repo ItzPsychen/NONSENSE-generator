@@ -7,27 +7,61 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class TaskManager {
     private static final Logger logger = LoggerManager.getInstance().getLogger(TaskManager.class);
+    private static final List<Task<?>> runningTasks = new ArrayList<>();
 
     public static <T> void execute(Task<T> task, Consumer<T> onSuccess) {
-        task.setOnSucceeded(e -> onSuccess.accept(task.getValue()));
-        // Gestisci task falliti
+        synchronized (runningTasks) {
+            runningTasks.add(task);
+        }
+        task.setOnSucceeded(e -> {
+            // Rimuovi task dall'elenco quando è completata
+            removeTask(task);
+            onSuccess.accept(task.getValue());
+        });        // Gestisci task falliti
         task.setOnFailed(e -> {
+            // Rimuovi task dall'elenco in caso di errore
+            removeTask(task);
             Throwable ex = task.getException();
             String errorMessage = (ex != null) ? ex.getMessage() : "Unknown error occurred";
-            String errorClass = (ex != null) ? ex.getClass().toString() : "Unknown error class";
 
-            // Log dell'errore (per debugging)
-            logger.error(ex);
-            // Mostra un messaggio di errore nell'UI
-            Platform.runLater(() -> showErrorDialog(errorClass, errorMessage));
+            logger.error("Task failed", ex);
+            Platform.runLater(() -> showErrorDialog("Task Error", errorMessage));
+        });
+
+        task.setOnCancelled(e -> {
+            // Rimuovi task dall'elenco quando è annullata
+            removeTask(task);
+            logger.info("Task was cancelled.");
         });
 
         // Esegui il task su un nuovo thread
         new Thread(task).start();
+    }
+
+    // Annulla tutte le task attive
+    public static void cancelAllTasks() {
+        synchronized (runningTasks) {
+            for (Task<?> task : runningTasks) {
+                if (task.isRunning()) {
+                    task.cancel(); // Annulla la task
+                }
+            }
+            runningTasks.clear(); // Pulisce la lista
+        }
+        logger.info("All tasks have been cancelled.");
+    }
+
+    // Rimuovi una task dall'elenco
+    private static void removeTask(Task<?> task) {
+        synchronized (runningTasks) {
+            runningTasks.remove(task);
+        }
     }
 
     // Helper per mostrare la finestra di dialogo dell'errore

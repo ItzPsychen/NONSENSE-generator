@@ -16,7 +16,7 @@
 //        Graphic G = new Graphic();
 //        logger.info("Have fun :)");
 //
-////        Form form = new Form();
+/// /        Form form = new Form();
 //
 //
 //    }
@@ -25,20 +25,26 @@
 package unipd.edids;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
+
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 
 import static unipd.edids.TaskManager.showErrorDialog;
 
 public class App extends Application {
 
     private static final Logger logger = LoggerManager.getInstance().getLogger(App.class);
-
 
 
     @Override
@@ -105,7 +111,22 @@ public class App extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(800);
         primaryStage.setMinWidth(1200);
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume(); // Previene la chiusura automatica
+            handleApplicationClose(primaryStage); // Effettua l'azione di chiusura
+        });
         primaryStage.show();
+    }
+
+    private void handleApplicationClose(Stage primaryStage) {
+
+        logger.info("Application is closing...");
+        TaskManager.cancelAllTasks();
+        APIClient.closeClient();
+        primaryStage.close();
+        Platform.exit(); // Chiude il JavaFX Application Thread
+;
+
     }
 
     public static void main(String[] args) {
