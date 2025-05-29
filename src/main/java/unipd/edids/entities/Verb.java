@@ -49,9 +49,14 @@ package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
 import unipd.edids.ConfigObserver;
+import unipd.edids.strategies.FutureTenseStrategy;
+import unipd.edids.strategies.TenseStrategy;
+
+import java.util.Random;
 
 public class Verb extends Word implements ConfigObserver {
     private static Verb instance;
+    private TenseStrategy tenseStrategy;
 
     private Verb() {
         super(ConfigManager.getInstance().getProperty("verb.file", "./src/main/resources/words/verbs.txt"));
@@ -83,6 +88,24 @@ public class Verb extends Word implements ConfigObserver {
             this.filePath = value;
             loadWords(this.filePath);
         }
+    }
+    public String getRandomWord() {
+        System.out.println(tenseStrategy.getClass().getSimpleName());
+        if (words.isEmpty()) return "undefined";
+        Random random = new Random();
+        return conjugate(words.get(random.nextInt(words.size())));
+    }
+
+    public String conjugate(String verb) {
+        return this.tenseStrategy.conjugate(verb);
+    }
+
+    public void setTenseStrategy(TenseStrategy strategy) {
+        this.tenseStrategy = strategy;
+    }
+
+    public TenseStrategy getTenseStrategy() {
+        return tenseStrategy;
     }
 }
 

@@ -436,15 +436,19 @@ public class FormController {
 
     private static String currentTheme = "light"; // Tema di default
     @FXML
-    public ProgressBar toxicityBar;
+    private CheckBox newWords;
     @FXML
-    public ProgressBar profanityBar;
+    private ProgressBar toxicityBar;
     @FXML
-    public ProgressBar insultBar;
+    private ProgressBar profanityBar;
     @FXML
-    public ProgressBar sexualBar;
+    private ProgressBar insultBar;
     @FXML
-    public ProgressBar politicsBar;
+    private ProgressBar sexualBar;
+    @FXML
+    private ProgressBar politicsBar;
+    @FXML
+    private CheckBox futureTenseCheck;
     @FXML
     private CheckBox toxicityLevels;
     private TextFlow lastSyntaxFlow; // Campo che salva il contenuto del syntaxArea
@@ -580,7 +584,7 @@ public class FormController {
                 }
 
                 // Genera la frase passando la strategia e il valore della struttura selezionata
-                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), false);
+                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected() , false);
             }
         };
 

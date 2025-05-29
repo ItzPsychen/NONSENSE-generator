@@ -103,8 +103,8 @@
                         </ScrollPane>
 
                         <CheckBox fx:id="toxicityLevels" layoutX="14.0" layoutY="331.0" mnemonicParsing="false" onAction="#toxicityPressed" selected="true" style="-fx-font-weight: Bold;" text="Toxicity Levels:" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="14.0" />
-                        <CheckBox layoutX="394.0" layoutY="58.0" mnemonicParsing="false" text="Future Tense" />
-                        <CheckBox layoutX="394.0" layoutY="28.0" mnemonicParsing="false" text="All words new" />
+                        <CheckBox fx:id="futureTenseCheck" layoutX="394.0" layoutY="58.0" mnemonicParsing="false" text="Future Tense" />
+                        <CheckBox fx:id="newWords" layoutX="394.0" layoutY="28.0" mnemonicParsing="false" text="All words new" />
 
                         <Label layoutX="159.0" layoutY="4.0" text="Sentence structure" />
 

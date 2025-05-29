@@ -4,8 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.entities.*;
-import unipd.edids.strategies.RandomStructureStrategy;
-import unipd.edids.strategies.StructureSentenceStrategy;
+import unipd.edids.strategies.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -19,10 +18,12 @@ import java.util.Iterator;
 public class GenerateSentenceService implements ConfigObserver {
 
     StructureSentenceStrategy structureSentenceStrategy;
+    WordSelectionStrategy wordSelectionStrategy;
+
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
 
 
-
+//fix temp?
     private Sentence temp;
 
     public GenerateSentenceService() {
@@ -35,8 +36,12 @@ public class GenerateSentenceService implements ConfigObserver {
         this.structureSentenceStrategy = strategy;
     }
 
-    public Sentence generateSentence(Sentence inputSentence) {
+    public void setWordsStrategi(WordSelectionStrategy strategy) {
+        this.wordSelectionStrategy = strategy;
+    }
 
+    public Sentence generateSentence(Sentence inputSentence) {
+        temp = new Sentence();
         System.out.println("[generateSentence] " + inputSentence.getSentence().toString());
         if (inputSentence.getSentence().toString() == null || inputSentence.getSentence().toString().trim().isEmpty() ||
                 !inputSentence.getSentence().toString().matches(".*[a-zA-Z]+.*")) {
@@ -52,10 +57,7 @@ public class GenerateSentenceService implements ConfigObserver {
             System.out.println(" -> null");
             return null;
         }
-        temp.setNouns(new ArrayList<>(inputSentence.getNouns()));
-        temp.setVerbs(new ArrayList<>(inputSentence.getVerbs()));
-        temp.setAdjectives(new ArrayList<>(inputSentence.getAdjectives()));
-        System.out.println(temp.getNouns());
+
 
         // Step 1: Estrarre la struttura della frase
         logger.warn(structureSentenceStrategy.getClass().getSimpleName());
@@ -68,11 +70,13 @@ public class GenerateSentenceService implements ConfigObserver {
 
         logger.info("Initial Sentence Structure: {}", temp.getStructure());
 
-        // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
-        populateWordLists();
-
-        // Step 3: Shuffla le liste per diversificare l'output
-        shuffleWordLists();
+        logger.error("Word Selection Strategy: {}", wordSelectionStrategy.getClass().getSimpleName());
+        wordSelectionStrategy.populateWords(temp);
+//        // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
+//        populateWordLists();
+//
+//        // Step 3: Shuffla le liste per diversificare l'output
+//        shuffleWordLists();
 
         // Step 4: Sostituire i placeholder nella struttura con parole effettive
         temp.setSentence(new StringBuilder(replacePlaceholders()));
@@ -92,26 +96,6 @@ public class GenerateSentenceService implements ConfigObserver {
         }
 
         return template;
-    }
-
-    private void populateWordLists() {
-        while (StringUtils.countMatches(temp.getStructure(), "[noun]") - temp.getNouns().size() > 0) {
-            temp.getNouns().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
-        }
-        while (StringUtils.countMatches(temp.getStructure(), "[verb]") - temp.getVerbs().size() > 0) {
-            temp.getVerbs().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
-        }
-        while (StringUtils.countMatches(temp.getStructure(), "[adjective]") - temp.getAdjectives().size() > 0) {
-            temp.getAdjectives().add(WordFactory.getWordProvider(WordFactory.WordType.NOUN).getRandomWord());
-        }
-        logger.info("Populated Word Lists - Nouns: {}, Verbs: {}, Adjectives: {}", temp.getNouns(), temp.getVerbs(), temp.getAdjectives());
-    }
-
-    private void shuffleWordLists() {
-        Collections.shuffle(temp.getNouns());
-        Collections.shuffle(temp.getVerbs());
-        Collections.shuffle(temp.getAdjectives());
-        logger.info("Shuffled Word Lists - Nouns: {}, Verbs: {}, Adjectives: {}", temp.getNouns(), temp.getVerbs(), temp.getAdjectives());
     }
 
     private String replacePlaceholders() {
@@ -137,4 +121,6 @@ public class GenerateSentenceService implements ConfigObserver {
     public void onConfigChange(String key, String value) {
 
     }
+
+
 }

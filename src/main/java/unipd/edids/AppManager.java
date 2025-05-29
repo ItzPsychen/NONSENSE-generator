@@ -4,9 +4,8 @@ package unipd.edids;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import unipd.edids.strategies.RandomStructureStrategy;
-import unipd.edids.strategies.SameAsAnalyzedStructureStrategy;
-import unipd.edids.strategies.SelectedStructureStrategy;
+import unipd.edids.entities.Verb;
+import unipd.edids.strategies.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,14 +24,14 @@ public class AppManager {
     private ModerationSentenceService moderationSentenceService;
     private boolean modified;
 
-    public AppManager(){
+    public AppManager() {
         analyzeSentenceService = new AnalyzeSentenceService();
         generateSentenceService = new GenerateSentenceService();
         moderationSentenceService = new ModerationSentenceService();
         modified = true;
     }
 
-    public Sentence analyzeSentence(String text){
+    public Sentence analyzeSentence(String text) {
         ///////TODO lanciare eccezioni
 //        if (!this.isModified()) return new Sentence("#notmodified");
 //        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
@@ -45,7 +44,7 @@ public class AppManager {
         return inputSentence;
     }
 
-    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean save){
+    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean save) {
 
         if (inputSentence == null) {
             return null;
@@ -67,8 +66,20 @@ public class AppManager {
                 throw new IllegalArgumentException("Invalid strategy: " + strategy);
         }
 
+        if (futureTense) {
+            Verb.getInstance().setTenseStrategy(new FutureTenseStrategy());
+        } else {
+            Verb.getInstance().setTenseStrategy(new PresentTenseStrategy());
+        }
+
+        if (newWords) {
+            generateSentenceService.setWordsStrategi(new NewWordStrategy());
+        } else {
+            generateSentenceService.setWordsStrategi(new OriginalWordStrategy(inputSentence));
+        }
+
         outputSentence = generateSentenceService.generateSentence(inputSentence);
-        if(toxicity){
+        if (toxicity) {
             moderationSentenceService.moderateText(outputSentence);
         }
 // TODO
@@ -79,7 +90,7 @@ public class AppManager {
     }
 
     // Agginge al file ./logs/output/generated.txt
-    private void saveSentence(Sentence generated){
+    private void saveSentence(Sentence generated) {
         String generatedPath = ConfigManager.getInstance().getProperty("generated.nonsense", "./logs/output/generated.txt");
         try (FileWriter writer = new FileWriter(generatedPath, true)) {
             writer.write(generated.getSentence() + System.lineSeparator());
@@ -89,7 +100,7 @@ public class AppManager {
     }
 
     // Agginge al file ./logs/output/details.txt
-    private void saveAnalysis(String text, String analysis){
+    private void saveAnalysis(String text, String analysis) {
         String detailsPath = ConfigManager.getInstance().getProperty("details.nonsense", "./logs/output/details.txt");
         try (FileWriter writer = new FileWriter(detailsPath, true)) {
             writer.write(text + System.lineSeparator() + analysis + System.lineSeparator());
@@ -99,8 +110,13 @@ public class AppManager {
         }
     }
 
-    public boolean isModified() { return this.modified; }
-    public void setModified(boolean value) { this.modified = value; }
+    public boolean isModified() {
+        return this.modified;
+    }
+
+    public void setModified(boolean value) {
+        this.modified = value;
+    }
 
     public void clearAll() {
         this.inputSentence = null;
