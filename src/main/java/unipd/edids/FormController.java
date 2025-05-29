@@ -520,7 +520,58 @@ public class FormController {
 
         this.treeTags = loadSyntaxTags(getFilePathTags());
 
+        // Aggiungi il ContextMenu al TextFlow syntaxArea
+        addContextMenuToTextFlow(syntaxArea);
 
+        // Aggiungi il ContextMenu al TextFlow generateArea
+        addContextMenuToTextFlow(generateArea);
+
+
+
+    }
+
+    private void addContextMenuToTextFlow(TextFlow textFlow) {
+        // Crea il menu contestuale
+        ContextMenu contextMenu = new ContextMenu();
+
+        // Opzione "Copy"
+        MenuItem copyItem = new MenuItem("Copy");
+        copyItem.setOnAction(event -> copyTextFlowContentToClipboard(textFlow));
+
+        // Aggiungi l'opzione al menu
+        contextMenu.getItems().add(copyItem);
+
+        // Associa il menu contestuale al TextFlow
+        textFlow.setOnContextMenuRequested(e -> {
+            contextMenu.show(textFlow, e.getScreenX(), e.getScreenY());
+        });
+    }
+
+    private void copyTextFlowContentToClipboard(TextFlow textFlow) {
+        // StringBuilder per contenere tutto il testo
+        StringBuilder content = new StringBuilder();
+
+        // Metodo ricorsivo per ottenere tutto il testo
+        extractTextFromNodes(textFlow, content);
+
+        // Copia il testo completo nella clipboard
+        javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
+        javafx.scene.input.ClipboardContent clipboardContent = new javafx.scene.input.ClipboardContent();
+        clipboardContent.putString(content.toString());
+        clipboard.setContent(clipboardContent);
+    }
+
+    private void extractTextFromNodes(javafx.scene.Node node, StringBuilder content) {
+        // Controlla il tipo di nodo
+        if (node instanceof Text) {
+            // Aggiungi il testo dell'oggetto `Text`
+            content.append(((Text) node).getText());
+        } else if (node instanceof TextFlow) {
+            // Itera sui figli di un eventuale `TextFlow` nidificato
+            for (javafx.scene.Node child : ((TextFlow) node).getChildren()) {
+                extractTextFromNodes(child, content);
+            }
+        }
     }
 
     public void updateTheme(String theme) {
