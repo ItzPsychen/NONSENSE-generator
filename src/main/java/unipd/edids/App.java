@@ -28,7 +28,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
@@ -55,8 +54,8 @@ public class App extends Application {
         //TODO are those necessary?
         System.setProperty("LOG_LEVEL", ConfigManager.getInstance().getEnv("LOG_LEVEL", "info"));
         System.setProperty("OUTPUT_LOGFILE", ConfigManager.getInstance().getProperty("output.logfile", "logs/app.log"));
-        System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.nonsense", "logs/output/generated.txt"));
-        System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("details.nonsense", "logs/output/details.txt"));
+        System.setProperty("GENERATED_NONSENSE", ConfigManager.getInstance().getProperty("generated.save.file", "logs/output/generated.txt"));
+        System.setProperty("DETAILS_NONSENSE", ConfigManager.getInstance().getProperty("analyzed.save.file", "logs/output/details.txt"));
 
         logger.info("Starting the application");
 
@@ -101,7 +100,7 @@ public class App extends Application {
         // Imposta le proprietà della finestra principale
         primaryStage.setTitle("NONSENSE Generator");
         primaryStage.setScene(new Scene(root));
-        primaryStage.setMinHeight(700);
+        primaryStage.setMinHeight(800);
         primaryStage.setMinWidth(1200);
         primaryStage.show();
     }

@@ -31,6 +31,7 @@
 //    public abstract boolean isInVocabulary();
 //}
 package unipd.edids.entities;
+import unipd.edids.FileManager;
 import unipd.edids.FileObserver;
 
 import java.io.*;
@@ -55,9 +56,7 @@ public abstract class Word implements FileObserver {
     // Caricamento delle parole dal file specificato
     protected void loadWords(String filePath) {
         try {
-            words = Files.readAllLines(Paths.get(filePath)).stream()
-                    .filter(line -> !line.trim().isEmpty())
-                    .toList();
+            words = FileManager.getInstance().readFile(filePath);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento del file: " + filePath);
             e.printStackTrace();

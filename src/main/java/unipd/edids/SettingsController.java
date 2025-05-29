@@ -1,6 +1,5 @@
 package unipd.edids;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -130,8 +129,8 @@ public class SettingsController {
         sentenceStructuresFileField.setText(configManager.getProperty("sentence.structures", ""));
         syntaxTagsFileField.setText(configManager.getProperty("syntax_tags.properties", ""));
         outputLogFileField.setText(configManager.getProperty("output.logfile", ""));
-        generatedNonsenseFileField.setText(configManager.getProperty("generated.nonsense", ""));
-        detailsNonsenseFileField.setText(configManager.getProperty("details.nonsense", ""));
+        generatedNonsenseFileField.setText(configManager.getProperty("generated.save.file", ""));
+        detailsNonsenseFileField.setText(configManager.getProperty("analyzed.save.file", ""));
 
         // Imposta i campi numerici
         maxRecursionLevelField.setText(configManager.getProperty("max.recursion.level", "3"));
@@ -164,8 +163,8 @@ public class SettingsController {
         configManager.setProperty("sentence.structures", sentenceStructuresFileField.getText());
         configManager.setProperty("syntax_tags.properties", syntaxTagsFileField.getText());
         configManager.setProperty("output.logfile", outputLogFileField.getText());
-        configManager.setProperty("generated.nonsense", generatedNonsenseFileField.getText());
-        configManager.setProperty("details.nonsense", detailsNonsenseFileField.getText());
+        configManager.setProperty("generated.save.file", generatedNonsenseFileField.getText());
+        configManager.setProperty("analyzed.save.file", detailsNonsenseFileField.getText());
 
         // Update ConfigManager with numeric and boolean fields
         configManager.setProperty("max.recursion.level", maxRecursionLevelField.getText());

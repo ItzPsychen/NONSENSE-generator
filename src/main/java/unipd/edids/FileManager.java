@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,13 +46,21 @@ public class FileManager {
      * @param newLine  La linea da aggiungere.
      * @throws IOException Se ci sono problemi con la scrittura del file.
      */
-    public void appendLineToFile(String filePath, String newLine) throws IOException {
+    public void appendLineToVocabularyFile(String filePath, String newLine) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
             writer.write(newLine);
         }
         // Notifica gli observer del cambiamento
         notifyObservers(filePath);
+    }
+
+
+    public void appendLineToSavingFile(String filePath, String newLine) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
+            writer.write(newLine);
+        }
     }
 
     /**
@@ -63,7 +71,9 @@ public class FileManager {
      * @throws IOException Se ci sono problemi con la lettura del file.
      */
     public List<String> readFile(String filePath) throws IOException {
-        return Files.readAllLines(Path.of(filePath));
+        return Files.readAllLines(Paths.get(filePath)).stream()
+                .filter(line -> !line.trim().isEmpty())
+                .toList();
     }
 
 

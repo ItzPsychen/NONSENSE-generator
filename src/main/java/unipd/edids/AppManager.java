@@ -23,15 +23,17 @@ public class AppManager {
     private GenerateSentenceService generateSentenceService;
     private ModerationSentenceService moderationSentenceService;
     private boolean modified;
+    private ConfigManager configManager;
 
     public AppManager() {
         analyzeSentenceService = new AnalyzeSentenceService();
         generateSentenceService = new GenerateSentenceService();
         moderationSentenceService = new ModerationSentenceService();
+        configManager = ConfigManager.getInstance();
         modified = true;
     }
 
-    public Sentence analyzeSentence(String text) {
+    public Sentence analyzeSentence(String text, boolean saveSelected)  {
         ///////TODO lanciare eccezioni
 //        if (!this.isModified()) return new Sentence("#notmodified");
 //        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
@@ -41,10 +43,17 @@ public class AppManager {
 //        moderationSentenceService.moderateText(inputSentence);
 //        if (!inputSentence.isValid()) return new Sentence("#invalid");;
 
+        if (saveSelected) {
+            try {
+                FileManager.getInstance().appendLineToSavingFile(configManager.getProperty("analyzed.save.file", ""), inputSentence.toString());
+            } catch (IOException e) {
+                throw new RuntimeException("Error file writing: " + e.getMessage());
+            }
+        }
         return inputSentence;
     }
 
-    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean save) {
+    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean saveSelected) {
 
         if (inputSentence == null) {
             return null;
@@ -86,29 +95,19 @@ public class AppManager {
 // analyzeSentenceService.setValidateAttributes(outputSentence);
 //        if (outputSentence == null || !outputSentence.isValid()) return null;
 //        if (save && outputSentence != null) saveSentence(outputSentence);
+
+
+        if (saveSelected) {
+            try {
+                FileManager.getInstance().appendLineToSavingFile(configManager.getProperty("generated.save.file", ""), outputSentence.toString());
+            } catch (IOException e) {
+                throw new RuntimeException("Error file writing: " + e.getMessage());
+            }
+        }
         return outputSentence;
     }
 
-    // Agginge al file ./logs/output/generated.txt
-    private void saveSentence(Sentence generated) {
-        String generatedPath = ConfigManager.getInstance().getProperty("generated.nonsense", "./logs/output/generated.txt");
-        try (FileWriter writer = new FileWriter(generatedPath, true)) {
-            writer.write(generated.getSentence() + System.lineSeparator());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    // Agginge al file ./logs/output/details.txt
-    private void saveAnalysis(String text, String analysis) {
-        String detailsPath = ConfigManager.getInstance().getProperty("details.nonsense", "./logs/output/details.txt");
-        try (FileWriter writer = new FileWriter(detailsPath, true)) {
-            writer.write(text + System.lineSeparator() + analysis + System.lineSeparator());
-            if (!analysis.isEmpty()) writer.write(System.lineSeparator());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean isModified() {
         return this.modified;

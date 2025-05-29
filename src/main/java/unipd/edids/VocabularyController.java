@@ -1,7 +1,6 @@
 package unipd.edids;
 
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +38,7 @@ public class VocabularyController {
         }
         String[] parts = inputText.split("[ ,]+");
         String result = String.join(System.lineSeparator(), parts);
-        FileManager.getInstance().appendLineToFile(ConfigManager.getInstance().getProperty("verb.file", ""), result);
+        FileManager.getInstance().appendLineToVocabularyFile(ConfigManager.getInstance().getProperty("verb.file", ""), result);
         verbInputField.clear();
         verbInputField.setPromptText("Enter a verb"); // Reset the error prompt
         verbInputField.setStyle(""); // Reset the style
@@ -54,7 +53,7 @@ public class VocabularyController {
         }
         String[] parts = inputText.split("[ ,]+");
         String result = String.join(System.lineSeparator(), parts);
-        FileManager.getInstance().appendLineToFile(ConfigManager.getInstance().getProperty("noun.file", ""), result);
+        FileManager.getInstance().appendLineToVocabularyFile(ConfigManager.getInstance().getProperty("noun.file", ""), result);
         nounInputField.clear();
         nounInputField.setPromptText("Enter a noun"); // Reset the error prompt
         nounInputField.setStyle(""); // Reset the style
@@ -69,7 +68,7 @@ public class VocabularyController {
         }
         String[] parts = inputText.split("[ ,]+");
         String result = String.join(System.lineSeparator(), parts);
-        FileManager.getInstance().appendLineToFile(ConfigManager.getInstance().getProperty("adjective.file", ""), result);
+        FileManager.getInstance().appendLineToVocabularyFile(ConfigManager.getInstance().getProperty("adjective.file", ""), result);
         adjectiveInputField.clear();
         adjectiveInputField.setPromptText("Enter an adjective"); // Reset the error prompt
         adjectiveInputField.setStyle(""); // Reset the style

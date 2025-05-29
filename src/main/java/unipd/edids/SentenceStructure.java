@@ -30,11 +30,7 @@ public class SentenceStructure implements ConfigObserver {
 
     private void loadStructures() {
         try {
-            structures = Files.readAllLines(Paths.get(ConfigManager.getInstance()
-                            .getProperty("sentence.structures", "./src/main/resources/structures/sentenceStructures.txt")))
-                    .stream()
-                    .filter(line -> !line.trim().isEmpty()) // Ignora le righe vuote o composte solo da spazi
-                    .toList();
+            structures = FileManager.getInstance().readFile(ConfigManager.getInstance().getProperty("sentence.structures", "src/main/resources/properties/sentence-structures.txt"));
             structSet.addAll(structures);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento delle sentence structures.");

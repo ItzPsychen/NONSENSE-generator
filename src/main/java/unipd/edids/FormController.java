@@ -444,6 +444,8 @@ public class FormController {
 
     private static String currentTheme = "light"; // Tema di default
     @FXML
+    private CheckBox checkSaveSentence;
+    @FXML
     private CheckBox checkSyntax;
     @FXML
     private CheckBox newWords;
@@ -606,7 +608,7 @@ public class FormController {
                 // Simula tempo di elaborazione (500ms per test)
                 logger.info("Analyze task started");
                 // Chiamata all'analisi da AppManager
-                return appManager.analyzeSentence(inputText.getText());
+                return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
             }
         };
 
@@ -664,7 +666,7 @@ public class FormController {
                 }
 
                 // Genera la frase passando la strategia e il valore della struttura selezionata
-                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected(), false);
+                return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected(), checkSaveSentence.isSelected());
             }
         };
 

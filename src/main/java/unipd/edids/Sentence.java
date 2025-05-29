@@ -104,4 +104,10 @@ public class Sentence {
         // if (this.threat > 0.5 || this.identityThreat > 0.5) return false;
         // return this.insult < 0.4;
     }
+
+
+    @Override
+    public String toString() {
+        return sentence + "\n" + structure +"\n" + syntaxTree.toString();
+    }
 }
