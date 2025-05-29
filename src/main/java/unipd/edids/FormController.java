@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 //package unipd.edids;
@@ -787,4 +788,43 @@ public class FormController {
         return builder.toString();
     }
 
+    public void vocabularyForm() {
+        logger.info("Open vacabulary button clicked");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vocabulary.fxml"));
+            Parent vocabularyRoot = loader.load();
+
+            // Ottieni istanza del controller associato
+            VocabularyController controller = loader.getController();
+
+            // Crea la finestra dello Stage
+            Stage vocabularyStage = new Stage();
+            vocabularyStage.setTitle("Vocabulary");
+
+// Imposta la scena con il root (settingsRoot) e dimensioni iniziali
+            Scene scene = new Scene(vocabularyRoot); // <-- Dimensioni nella scena
+            vocabularyStage.setScene(scene);
+
+// Opzionale: Blocca dimensioni minime/massime (se necessario)
+            vocabularyStage.setMinWidth(450);
+            vocabularyStage.setMinHeight(350);
+            // Passa lo Stage al controller
+            controller.setStage(vocabularyStage);
+
+
+            // Mostra la finestra
+            vocabularyStage.showAndWait();
+            // Dopo la chiusura delle impostazioni, aggiorna il tema
+            String newTheme = ConfigManager.getInstance().getProperty("ui.theme", "light");
+            updateTheme(newTheme); // Aggiorna il tema selezionato
+        } catch (IOException e) {
+
+            // Puoi mostrare un alert per segnalare l'errore all'utente
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unable to open Settings");
+            alert.setContentText("An error occurred while loading the Settings window.");
+            alert.showAndWait();
+        }
+    }
 }

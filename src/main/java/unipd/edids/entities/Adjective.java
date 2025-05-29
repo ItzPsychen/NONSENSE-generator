@@ -37,6 +37,7 @@ package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
 import unipd.edids.ConfigObserver;
+import unipd.edids.FileManager;
 
 public class Adjective extends Word implements ConfigObserver {
     private static Adjective instance;
@@ -45,6 +46,8 @@ public class Adjective extends Word implements ConfigObserver {
         super(ConfigManager.getInstance().getProperty("adjective.file","./src/main/resources/words/adjectives.txt"));
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
+        FileManager.getInstance().addObserver(this);
+
     }
 
     public static Adjective getInstance() {

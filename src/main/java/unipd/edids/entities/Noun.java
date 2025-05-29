@@ -41,6 +41,8 @@ package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
 import unipd.edids.ConfigObserver;
+import unipd.edids.FileManager;
+import unipd.edids.FileObserver;
 
 public class Noun extends Word implements ConfigObserver {
     private static Noun instance;
@@ -50,6 +52,7 @@ public class Noun extends Word implements ConfigObserver {
 
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
+        FileManager.getInstance().addObserver(this);
     }
 
     public static Noun getInstance() {
@@ -75,4 +78,6 @@ public class Noun extends Word implements ConfigObserver {
             loadWords(this.filePath);
         }
     }
+
+
 }

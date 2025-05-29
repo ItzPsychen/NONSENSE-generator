@@ -49,6 +49,7 @@ package unipd.edids.entities;
 
 import unipd.edids.ConfigManager;
 import unipd.edids.ConfigObserver;
+import unipd.edids.FileManager;
 import unipd.edids.strategies.FutureTenseStrategy;
 import unipd.edids.strategies.TenseStrategy;
 
@@ -63,6 +64,7 @@ public class Verb extends Word implements ConfigObserver {
 
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
+        FileManager.getInstance().addObserver(this);
     }
 
     public static Verb getInstance() {
