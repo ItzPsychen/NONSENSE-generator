@@ -28,6 +28,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
@@ -98,6 +99,7 @@ public class App extends Application {
         controller.setFacade(appManager);
 
         // Imposta le proprietà della finestra principale
+        primaryStage.getIcons().add(new Image(configManager.getProperty("icon.main", null)));
         primaryStage.setTitle("NONSENSE Generator");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(800);

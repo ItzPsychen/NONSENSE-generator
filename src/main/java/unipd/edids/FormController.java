@@ -427,6 +427,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -515,8 +517,11 @@ public class FormController {
         alert.setTitle("About");
         alert.setHeaderText("NONSENSE Generator");
         alert.setContentText("Created by team NoIdeaName\n\n" +
-                "Casarotto Milo\nDonnagemma Davide\nHu Stefania\nManiglio Federico\n\n" +
+                "→ Casarotto Milo\n→ Donnagemma Davide\n→ Hu Stefania\n→ Maniglio Federico\n\n" +
                 "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
+
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about", null)));
         alert.showAndWait();
     }
 
@@ -606,6 +611,9 @@ public class FormController {
         }
     }
 
+    @FXML
+    private AnchorPane bottomBar;
+
     public void updateTheme(String theme) {
         Platform.runLater(() -> {
             currentTheme = theme;
@@ -613,10 +621,13 @@ public class FormController {
             if (currentTheme.equals("dark")) {
                 this.textColor = "white";
                 rootPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
+                bottomBar.setStyle("-fx-background-color: #444444;"); // Light color
             } else {
                 this.textColor = "black";
                 rootPane.getStylesheets().clear();
+                bottomBar.setStyle("-fx-background-color: #E0E0E0;"); // Dark color
             }
+
             // Aggiorna i colori nei TextFlow
             updateTextFlowColors(syntaxArea);
             updateTextFlowColors(generateArea);
@@ -792,12 +803,13 @@ public class FormController {
             // Crea la finestra dello Stage
             Stage settingsStage = new Stage();
             settingsStage.setTitle("Settings");
+            settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings", null)));
 
-// Imposta la scena con il root (settingsRoot) e dimensioni iniziali
+            // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
             Scene scene = new Scene(settingsRoot); // <-- Dimensioni nella scena
             settingsStage.setScene(scene);
 
-// Opzionale: Blocca dimensioni minime/massime (se necessario)
+            // Opzionale: Blocca dimensioni minime/massime (se necessario)
             settingsStage.setMinWidth(800);
             settingsStage.setMinHeight(600);
             // Passa lo Stage al controller
@@ -905,6 +917,7 @@ public class FormController {
             // Crea la finestra dello Stage
             Stage vocabularyStage = new Stage();
             vocabularyStage.setTitle("Vocabulary");
+            vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary", null)));
 
 // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
             Scene scene = new Scene(vocabularyRoot); // <-- Dimensioni nella scena

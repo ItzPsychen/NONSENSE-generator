@@ -54,7 +54,7 @@
 
     <!-- Bottom bar -->
     <bottom>
-        <AnchorPane prefHeight="36.0" style="-fx-background-color: #E0E0E0;" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="bottomBar" prefHeight="36.0" BorderPane.alignment="CENTER">
             <children>
                 <ProgressBar fx:id="progressBar" layoutY="8.0" maxWidth="400.0" minWidth="400.0" prefHeight="8.0" prefWidth="300.0" progress="0.0" stylesheets="@style/progress.css" AnchorPane.leftAnchor="265.0" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="14.0" />
                   <CheckBox fx:id="checkSaveSentence" layoutX="20.0" layoutY="7.0" mnemonicParsing="false" text="Save" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="7.0">
