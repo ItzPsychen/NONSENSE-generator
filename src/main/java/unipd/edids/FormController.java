@@ -435,6 +435,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.Logger;
@@ -771,7 +772,11 @@ public class FormController {
             );
         });
     }
+    private Stage primaryStage; // Variabile per salvare il primaryStage
 
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
     private TextFlow formatStructure(String structure) {
         TextFlow textFlow = new TextFlow();
         String[] tokens = structure.split("(?<=\\s|[.,;:])|(?=[.,;:|\\s])");
@@ -803,6 +808,8 @@ public class FormController {
             // Crea la finestra dello Stage
             Stage settingsStage = new Stage();
             settingsStage.setTitle("Settings");
+            settingsStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
+            settingsStage.initOwner(primaryStage);
             settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings", null)));
 
             // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
@@ -917,6 +924,8 @@ public class FormController {
             // Crea la finestra dello Stage
             Stage vocabularyStage = new Stage();
             vocabularyStage.setTitle("Vocabulary");
+            vocabularyStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
+            vocabularyStage.initOwner(primaryStage);
             vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary", null)));
 
 // Imposta la scena con il root (settingsRoot) e dimensioni iniziali

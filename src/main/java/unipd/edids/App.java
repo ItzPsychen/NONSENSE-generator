@@ -97,6 +97,7 @@ public class App extends Application {
 
         FormController controller = loader.getController();
         controller.setFacade(appManager);
+        controller.setPrimaryStage(primaryStage);
 
         // Imposta le proprietà della finestra principale
         primaryStage.getIcons().add(new Image(configManager.getProperty("icon.main", null)));
