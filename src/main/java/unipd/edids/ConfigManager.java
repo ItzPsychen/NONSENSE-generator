@@ -70,7 +70,7 @@ public class ConfigManager {
 
     public String getEnv(String key) {
         String value = dotenv.get(key);
-        if (value == null) {
+        if (value == null || value.isBlank()) {
             logger.error("Configuration key {} not found.", key);
             throw new IllegalArgumentException("Environment variable " + key + " is not defined.");
         }
@@ -79,7 +79,7 @@ public class ConfigManager {
 
     public String getProperty(String key) {
         String value = properties.getProperty(key);
-        if (value == null) {
+        if (value == null || value.isBlank()) {
             logger.error("Property key {} not found.", key);
             throw new IllegalArgumentException("Property " + key + " is not defined.");
         }

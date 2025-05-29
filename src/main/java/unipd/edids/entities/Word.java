@@ -45,7 +45,7 @@ public abstract class Word implements FileObserver {
     // Costruttore protetto
     protected Word(String filePath) {
         this.filePath = filePath;
-        System.out.println(this.filePath);
+
         words = new ArrayList<>();
         loadWords(filePath); // Carica le parole direttamente
     }
@@ -55,6 +55,7 @@ public abstract class Word implements FileObserver {
 
     // Caricamento delle parole dal file specificato
     protected void loadWords(String filePath) {
+
             words = FileManager.readFile(filePath);
 
 

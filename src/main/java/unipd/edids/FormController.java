@@ -841,7 +841,7 @@ private java.util.Timer progressTimer;
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Unable to open Settings");
-            alert.setContentText("An error occurred while loading the Settings window.");
+            alert.setContentText("An error occurred while loading the Settings window:\n" + e.getMessage());
             alert.showAndWait();
         }
     }

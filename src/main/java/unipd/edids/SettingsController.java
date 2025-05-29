@@ -124,29 +124,40 @@ public class SettingsController {
             settingsPane.getStylesheets().clear();
         }
 
-        // Imposta i campi di testo
-        apiKeyFileField.setText(configManager.getProperty("api.key.file"));
-        nounFileField.setText(configManager.getProperty("noun.file"));
-        verbFileField.setText(configManager.getProperty("verb.file"));
-        adjectiveFileField.setText(configManager.getProperty("adjective.file"));
-        sentenceStructuresFileField.setText(configManager.getProperty("sentence.structures"));
-        syntaxTagsFileField.setText(configManager.getProperty("syntax_tags.properties"));
-        outputLogFileField.setText(configManager.getProperty("output.logfile"));
-        generatedNonsenseFileField.setText(configManager.getProperty("generated.save.file"));
-        detailsNonsenseFileField.setText(configManager.getProperty("analyzed.save.file"));
+        // Imposta i campi di testo con valori di default vuoti se le proprietà non esistono
+        apiKeyFileField.setText(getPropertyOrDefault(configManager, "api.key.file", ""));
+        nounFileField.setText(getPropertyOrDefault(configManager, "noun.file", ""));
+        verbFileField.setText(getPropertyOrDefault(configManager, "verb.file", ""));
+        adjectiveFileField.setText(getPropertyOrDefault(configManager, "adjective.file", ""));
+        sentenceStructuresFileField.setText(getPropertyOrDefault(configManager, "sentence.structures", ""));
+        syntaxTagsFileField.setText(getPropertyOrDefault(configManager, "syntax_tags.properties", ""));
+        outputLogFileField.setText(getPropertyOrDefault(configManager, "output.logfile", ""));
+        generatedNonsenseFileField.setText(getPropertyOrDefault(configManager, "generated.save.file", ""));
+        detailsNonsenseFileField.setText(getPropertyOrDefault(configManager, "analyzed.save.file", ""));
 
-        // Imposta i campi numerici
-        maxRecursionLevelField.setText(configManager.getProperty("max.recursion.level"));
-        maxSentenceLengthField.setText(configManager.getProperty("max.sentence.length"));
+        // Imposta i campi numerici con valori di default (se necessari)
+        maxRecursionLevelField.setText(getPropertyOrDefault(configManager, "max.recursion.level", "10"));
+        maxSentenceLengthField.setText(getPropertyOrDefault(configManager, "max.sentence.length", "50"));
 
-        // Imposta il valore del CheckBox
-        allowRecursiveSentencesCheck.setSelected(Boolean.parseBoolean(configManager.getProperty("allow.recursive.sentences")));
+        // Imposta il valore del CheckBox con valore di default
+        allowRecursiveSentencesCheck.setSelected(Boolean.parseBoolean(getPropertyOrDefault(configManager, "allow.recursive.sentences", "false")));
         maxRecursionLevelField.disableProperty().setValue(!allowRecursiveSentencesCheck.isSelected());
 
-        // Imposta la ComboBox con i temi (aggiungi i temi disponibili)
-        themeComboBox.setValue(configManager.getProperty("ui.theme")); // Imposta il tema default
+        // Imposta la ComboBox con un tema di default
+        themeComboBox.setValue(getPropertyOrDefault(configManager, "ui.theme", "light"));
 
         logger.info("Settings initialized with default values from configuration.");
+    }
+
+    private String getPropertyOrDefault(ConfigManager configManager, String key, String defaultValue) {
+        try {
+            // Prova ad ottenere il valore della proprietà
+            return configManager.getProperty(key);
+        } catch (IllegalArgumentException e) {
+            // Se la proprietà non esiste, restituisci il valore di default
+            logger.warn("Property '{}' not found. Using default value '{}'.", key, defaultValue);
+            return defaultValue;
+        }
     }
 
     public void closeSettings() {
