@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="wordInputPane" prefHeight="380.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.VocabularyController">
+<BorderPane fx:id="wordInputPane" prefHeight="380.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.VocabularyController">
 
     <!-- Top bar -->
     <top>
@@ -29,46 +29,45 @@
     <bottom>
         <AnchorPane prefHeight="40.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="closeButton" layoutX="350.0" layoutY="5.0" onAction="#closeWindow" prefWidth="80.0" text="Close" />
+                <Button fx:id="closeButton" layoutX="350.0" layoutY="5.0" onAction="#closeWindow" prefWidth="80.0" text="Close" AnchorPane.rightAnchor="20.0" />
             </children>
         </AnchorPane>
     </bottom>
 
     <!-- Center content -->
     <center>
-        <VBox spacing="15.0" alignment="TOP_LEFT">
+        <VBox alignment="TOP_LEFT" spacing="15.0">
             <padding>
                 <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
             </padding>
 
             <!-- Instruction label -->
-            <Label text="For multiple entries, separate words with spaces or commas"
-                   style="-fx-font-style: italic; -fx-text-fill: #555;"/>
+            <Label style="-fx-font-style: italic; -fx-text-fill: #555;" text="For multiple entries, separate words with spaces or commas" />
 
             <!-- Verbs section -->
             <VBox spacing="5.0">
-                <Label text="Verbs:" style="-fx-font-weight: bold;"/>
-                <HBox spacing="5.0" alignment="CENTER_LEFT">
-                    <TextField fx:id="verbInputField" promptText="Enter a verb" prefWidth="300.0" />
-                    <Button onAction="#addVerb" text="Add" prefWidth="80.0" />
+                <Label style="-fx-font-weight: bold;" text="Verbs:" />
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <TextField fx:id="verbInputField" prefWidth="300.0" promptText="Enter a verb" />
+                    <Button onAction="#addVerb" prefWidth="80.0" text="Add" />
                 </HBox>
             </VBox>
 
             <!-- Nouns section -->
             <VBox spacing="5.0">
-                <Label text="Nouns:" style="-fx-font-weight: bold;"/>
-                <HBox spacing="5.0" alignment="CENTER_LEFT">
-                    <TextField fx:id="nounInputField" promptText="Enter a noun" prefWidth="300.0" />
-                    <Button onAction="#addNoun" text="Add" prefWidth="80.0" />
+                <Label style="-fx-font-weight: bold;" text="Nouns:" />
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <TextField fx:id="nounInputField" prefWidth="300.0" promptText="Enter a noun" />
+                    <Button onAction="#addNoun" prefWidth="80.0" text="Add" />
                 </HBox>
             </VBox>
 
             <!-- Adjectives section -->
             <VBox spacing="5.0">
-                <Label text="Adjectives:" style="-fx-font-weight: bold;"/>
-                <HBox spacing="5.0" alignment="CENTER_LEFT">
-                    <TextField fx:id="adjectiveInputField" promptText="Enter an adjective" prefWidth="300.0" />
-                    <Button onAction="#addAdjective" text="Add" prefWidth="80.0" />
+                <Label style="-fx-font-weight: bold;" text="Adjectives:" />
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <TextField fx:id="adjectiveInputField" prefWidth="300.0" promptText="Enter an adjective" />
+                    <Button onAction="#addAdjective" prefWidth="80.0" text="Add" />
                 </HBox>
             </VBox>
 

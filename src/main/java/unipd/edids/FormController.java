@@ -807,7 +807,8 @@ public class FormController {
 
 // Opzionale: Blocca dimensioni minime/massime (se necessario)
             vocabularyStage.setMinWidth(450);
-            vocabularyStage.setMinHeight(350);
+            vocabularyStage.setMinHeight(450);
+
             // Passa lo Stage al controller
             controller.setStage(vocabularyStage);
 
@@ -815,8 +816,6 @@ public class FormController {
             // Mostra la finestra
             vocabularyStage.showAndWait();
             // Dopo la chiusura delle impostazioni, aggiorna il tema
-            String newTheme = ConfigManager.getInstance().getProperty("ui.theme", "light");
-            updateTheme(newTheme); // Aggiorna il tema selezionato
         } catch (IOException e) {
 
             // Puoi mostrare un alert per segnalare l'errore all'utente
