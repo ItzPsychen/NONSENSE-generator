@@ -3,6 +3,10 @@ package unipd.edids;
 import java.util.Properties;
 
 import edu.stanford.nlp.trees.Tree;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -430,6 +434,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
@@ -486,9 +491,34 @@ public class FormController {
 
     @FXML
     private RadioButton selectStructureRadio;
-
     private ToggleGroup structureToggleGroup;
 
+    // Close everything
+    @FXML
+    private void handleClose() {
+        Platform.exit();
+    }
+
+    // Delete input (and optionally output)
+    @FXML
+    private void handleDelete() {
+        inputText.clear();
+        syntaxArea.getChildren().clear();
+        generateArea.getChildren().clear();
+        appManager.clearAll();
+    }
+
+    // Show About info
+    @FXML
+    private void handleAbout() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About");
+        alert.setHeaderText("NONSENSE Generator");
+        alert.setContentText("Created by team NoIdeaName\n\n" +
+                "Casarotto Milo\nDonnagemma Davide\nHu Stefania\nManiglio Federico\n\n" +
+                "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
+        alert.showAndWait();
+    }
 
     private AppManager appManager;
     private String textColor;
@@ -640,6 +670,14 @@ public class FormController {
             }
 
             progressBar.setProgress(1);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                        }
+                    }, 1000
+            );
         });
     }
 
@@ -679,20 +717,26 @@ public class FormController {
             logger.info("Generate task finished: {}", sentence.getSentence());
 
             if (toxicityLevels.isSelected()) {
-                toxicityBar.setProgress(sentence.getToxicity());
-                toxicityBar.setStyle(getColorForValue(sentence.getToxicity()));
+                animateProgressBar(toxicityBar, sentence.getToxicity());
+                animateProgressBar(profanityBar, sentence.getProfanity());
+                animateProgressBar(insultBar, sentence.getInsult());
+                animateProgressBar(sexualBar, sentence.getSexual());
+                animateProgressBar(politicsBar, sentence.getPolitics());
 
-                profanityBar.setProgress(sentence.getProfanity());
-                profanityBar.setStyle(getColorForValue(sentence.getProfanity()));
-
-                insultBar.setProgress(sentence.getInsult());
-                insultBar.setStyle(getColorForValue(sentence.getInsult()));
-
-                sexualBar.setProgress(sentence.getSexual());
-                sexualBar.setStyle(getColorForValue(sentence.getSexual()));
-
-                politicsBar.setProgress(sentence.getPolitics());
-                politicsBar.setStyle(getColorForValue(sentence.getPolitics()));
+//                toxicityBar.setProgress(sentence.getToxicity());
+//                toxicityBar.setStyle(getColorForValue(sentence.getToxicity()));
+//
+//                profanityBar.setProgress(sentence.getProfanity());
+//                profanityBar.setStyle(getColorForValue(sentence.getProfanity()));
+//
+//                insultBar.setProgress(sentence.getInsult());
+//                insultBar.setStyle(getColorForValue(sentence.getInsult()));
+//
+//                sexualBar.setProgress(sentence.getSexual());
+//                sexualBar.setStyle(getColorForValue(sentence.getSexual()));
+//
+//                politicsBar.setProgress(sentence.getPolitics());
+//                politicsBar.setStyle(getColorForValue(sentence.getPolitics()));
             }
             // Crea e salva il nuovo TextFlow
             lastGenerateFlow = formatStructure(sentence.getStructure().toString());
@@ -706,6 +750,14 @@ public class FormController {
             generateArea.getChildren().add(newText);
 
             progressBar.setProgress(1);
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                        }
+                    }, 1000
+            );
         });
     }
 
@@ -878,5 +930,17 @@ public class FormController {
             alert.setContentText("An error occurred while loading the Settings window.");
             alert.showAndWait();
         }
+    }
+
+    private void animateProgressBar(ProgressBar bar, double targetValue) {
+        double transformed = Math.pow(targetValue, 0.5);
+
+        KeyValue kv = new KeyValue(bar.progressProperty(), transformed, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
+        Timeline timeline = new Timeline(kf);
+        timeline.play();
+
+        // Cambia anche colore dinamicamente
+        bar.setStyle(getColorForValue(targetValue));
     }
 }
