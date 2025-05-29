@@ -28,6 +28,11 @@ public class FileManager {
      * @throws IOException Se ci sono problemi con la scrittura del file.
      */
     public static void appendLineToVocabularyFile(String filePath, String newLine) throws IOException {
+        // Verifica se il file non esiste e, in tal caso, crealo
+        if (Files.notExists(Paths.get(filePath))) {
+            Files.createFile(Paths.get(filePath));
+        }
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
             writer.write(newLine);
@@ -37,9 +42,16 @@ public class FileManager {
     }
 
     public static void appendLineToSavingFile(String filePath, String newLine) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
-            writer.write(newLine);
+        try {
+            // Verifica se il file non esiste e, in tal caso, crealo
+            if (Files.notExists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
+                writer.write(newLine);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
