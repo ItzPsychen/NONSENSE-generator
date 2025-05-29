@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class SettingsController {
@@ -153,6 +156,15 @@ public class SettingsController {
     }
 
     public void applySettings() {
+        // Check se il campo apiKeyFileField è vuoto
+        if (apiKeyFileField.getText() == null || apiKeyFileField.getText().trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING); // Mostra un avviso all'utente
+            alert.setTitle("Campo obbligatorio mancante");
+            alert.setHeaderText("Il campo API Key File non può essere vuoto.");
+            alert.setContentText("Inserisci il percorso del file della chiave API prima di applicare le impostazioni.");
+            alert.showAndWait();
+            return; // Non chiudere la finestra
+        }
         ConfigManager configManager = ConfigManager.getInstance();
 
         // Update ConfigManager with values from text fields
@@ -178,10 +190,59 @@ public class SettingsController {
 
         logger.info(configManager.getProperty("verb.file"));
         logger.info("Settings applied");
-        stage.close();
+        closeSettings();
     }
 
     public void recursionSelection() {
         maxRecursionLevelField.disableProperty().setValue(!allowRecursiveSentencesCheck.isSelected());
     }
-}
+
+
+    public void resetToDefault() throws IOException {
+        String apiKeyFile = ConfigManager.getInstance().getProperty("api.key.file");
+        try {
+            String defaultConfigPath = ConfigManager.getInstance().getEnv("DEFAULT_CONFIG_FILE_PATH");
+            String configFilePath = ConfigManager.getInstance().getConfigFilePath();
+
+            // Verifica se 'DEFAULT_CONFIG_FILE_PATH' esiste
+            File defaultConfigFile = new File(defaultConfigPath);
+            if (!defaultConfigFile.exists()) {
+                logger.error("File di configurazione di default non trovato: {}", defaultConfigPath);
+                throw new IOException("File di configurazione di default mancante o non accessibile: " + defaultConfigPath);
+            }
+
+            // Usa un file temporaneo per la scrittura
+            File tempFile = new File(configFilePath + ".tmp");
+
+            // Elimina il file corrente esistente
+            FileManager.deleteFile(configFilePath);
+
+            // Copia il contenuto del file di default nel file temporaneo
+            List<String> lines = new ArrayList<>(FileManager.readFile(defaultConfigPath));
+            String newApiLine = "api.key.file=" + apiKeyFile;
+
+            if (lines.removeIf(line -> line.startsWith("api.key.file="))) {
+                lines.add(newApiLine);
+            } else {
+                lines.add(newApiLine);
+            }
+
+            for (String line : lines) {
+                FileManager.appendLineToSavingFile(tempFile.getAbsolutePath(), line);
+            }
+
+            // Rinomina il file temporaneo in quello ufficiale
+            if (!tempFile.renameTo(new File(configFilePath))) {
+                throw new IOException("Impossibile rinominare il file temporaneo in: " + configFilePath);
+            }
+
+            // Ricarica la configurazione nel ConfigManager
+            ConfigManager.getInstance().loadProperties();
+            initialize(); // Reinizializza l'interfaccia con i valori aggiornati
+
+            logger.info("Impostazioni ripristinate correttamente ai valori di default.");
+        } catch (IOException e) {
+            logger.error("Errore durante il reset alle impostazioni di default: {}", e.getMessage());
+            throw new IOException("Errore durante il reset: " + e.getMessage());
+        }
+    }}

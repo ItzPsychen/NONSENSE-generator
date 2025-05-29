@@ -22,7 +22,19 @@ public class ConfigManager {
 
     private ConfigManager() {
         dotenv = Dotenv.load();
-configFilePath = getEnv("CONFIG_FILE_PATH");
+        configFilePath = getEnv("CONFIG_FILE_PATH");
+        File configFile = new File(configFilePath);
+        if (!configFile.exists()) {
+            logger.error("Configuration file {} does not exist.", configFilePath);
+            List<String> lines = null;
+            lines = FileManager.readFile(getEnv("DEFAULT_CONFIG_FILE_PATH"));
+
+            for (String line : lines) {
+                FileManager.appendLineToSavingFile(configFilePath, line);
+
+            }
+        }
+
         properties = new Properties();
         loadProperties();
     }
@@ -38,13 +50,14 @@ configFilePath = getEnv("CONFIG_FILE_PATH");
         return instance;
     }
 
-    private void loadProperties() {
+    void loadProperties() {
         try (InputStream input = new FileInputStream(configFilePath)) {
             properties.load(input);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public void addObserver(ConfigObserver observer) {
         observers.add(observer);
     }
@@ -55,23 +68,23 @@ configFilePath = getEnv("CONFIG_FILE_PATH");
         }
     }
 
-public String getEnv(String key) {
-    String value = dotenv.get(key);
-    if (value == null) {
-        logger.error("Configuration key {} not found.", key);
-        throw new IllegalArgumentException("Environment variable " + key + " is not defined.");
+    public String getEnv(String key) {
+        String value = dotenv.get(key);
+        if (value == null) {
+            logger.error("Configuration key {} not found.", key);
+            throw new IllegalArgumentException("Environment variable " + key + " is not defined.");
+        }
+        return value;
     }
-    return value;
-}
 
-public String getProperty(String key) {
-    String value = properties.getProperty(key);
-    if (value == null) {
-        logger.error("Property key {} not found.", key);
-        throw new IllegalArgumentException("Property " + key + " is not defined.");
+    public String getProperty(String key) {
+        String value = properties.getProperty(key);
+        if (value == null) {
+            logger.error("Property key {} not found.", key);
+            throw new IllegalArgumentException("Property " + key + " is not defined.");
+        }
+        return value;
     }
-    return value;
-}
 
     public void setProperty(String key, String value) {
         String oldValue = properties.getProperty(key); // Controlla il valore precedente
@@ -92,4 +105,8 @@ public String getProperty(String key) {
         }
     }
 
+
+    public String getConfigFilePath() {
+        return configFilePath;
+    }
 }

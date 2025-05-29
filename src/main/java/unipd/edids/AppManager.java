@@ -44,11 +44,9 @@ public class AppManager {
 //        if (!inputSentence.isValid()) return new Sentence("#invalid");;
 
         if (saveSelected) {
-            try {
+
                 FileManager.appendLineToSavingFile(configManager.getProperty("analyzed.save.file"), inputSentence.toString());
-            } catch (IOException e) {
-                throw new RuntimeException("Error file writing: " + e.getMessage());
-            }
+
         }
         return inputSentence;
     }
@@ -98,11 +96,8 @@ public class AppManager {
 
 
         if (saveSelected) {
-            try {
                 FileManager.appendLineToSavingFile(configManager.getProperty("generated.save.file"), outputSentence.toString());
-            } catch (IOException e) {
-                throw new RuntimeException("Error file writing: " + e.getMessage());
-            }
+
         }
         return outputSentence;
     }

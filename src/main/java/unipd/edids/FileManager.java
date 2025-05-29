@@ -36,10 +36,12 @@ public class FileManager {
         notifyObservers(filePath);
     }
 
-    public static void appendLineToSavingFile(String filePath, String newLine) throws IOException {
+    public static void appendLineToSavingFile(String filePath, String newLine) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
             writer.write(newLine);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -48,12 +50,15 @@ public class FileManager {
      *
      * @param filePath Il path del file da leggere.
      * @return Una lista di stringhe, una per ogni riga del file.
-     * @throws IOException Se ci sono problemi con la lettura del file.
      */
-    public static List<String> readFile(String filePath) throws IOException {
-        return Files.readAllLines(Paths.get(filePath)).stream()
-                .filter(line -> !line.trim().isEmpty())
-                .toList();
+    public static List<String> readFile(String filePath) {
+        try {
+            return Files.readAllLines(Paths.get(filePath)).stream()
+                    .filter(line -> !line.trim().isEmpty())
+                    .toList();
+        } catch (IOException e) {
+            throw new RuntimeException("Errore durante la lettura del file: " + filePath, e);
+        }
     }
 
     /**
@@ -79,4 +84,19 @@ public class FileManager {
             observer.onFileChanged(filePath);
         }
     }
+
+    /**
+     * Metodo per eliminare un file dato il suo percorso.
+     *
+     * @param filePath Il path del file da eliminare.
+     * @throws IOException Se ci sono problemi con l'eliminazione del file.
+     */
+    public static void deleteFile(String filePath) throws IOException {
+        if (!Files.deleteIfExists(Paths.get(filePath))) {
+            throw new IOException("Eliminazione del file fallita o il file non esiste: " + filePath);
+        }
+    }
+    
+    
+
 }

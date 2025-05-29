@@ -445,6 +445,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
 import java.util.stream.Collectors;
 
 public class FormController {
@@ -569,7 +570,7 @@ private java.util.Timer progressTimer;
         // Aggiungi il ContextMenu al TextFlow generateArea
         addContextMenuToTextFlow(generateArea);
 
-
+        this.progressTimer = new Timer();
     }
 
     private void addContextMenuToTextFlow(TextFlow textFlow) {

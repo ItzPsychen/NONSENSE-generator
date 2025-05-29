@@ -39,6 +39,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.concurrent.TimeUnit;
 
 import static unipd.edids.TaskManager.showErrorDialog;
 
@@ -118,20 +119,49 @@ public class App extends Application {
         primaryStage.show();
     }
 
-    private void handleApplicationClose(Stage primaryStage) {
-
-        logger.info("Application is closing...");
-        TaskManager.cancelAllTasks();
-        APIClient.closeClient();
-        primaryStage.close();
-        Platform.exit(); // Chiude il JavaFX Application Thread
-;
-
+    /**
+     * Metodo chiamato automaticamente alla chiusura dell'applicazione.
+     */
+    @Override
+    public void stop() {
+        logger.info("Stopping the application...");
+        try {
+            TaskManager.cancelAllTasks(); // Metodo esistente per chiudere i task
+            APIClient.closeClient(); // Metodo per chiudere eventuali connessioni API
+        } catch (Exception e) {
+            logger.error("Error during shutdown: ", e);
+        } finally {
+            Platform.exit(); // Chiude il thread JavaFX
+            System.exit(0); // Forza la chiusura di eventuali thread bloccati
+        }
     }
 
+    /**
+     * Gestione della chiusura dell'applicazione.
+     *
+     * @param primaryStage Finestra principale da chiudere
+     */
+    private void handleApplicationClose(Stage primaryStage) {
+        logger.info("Application is closing...");
+        try {
+            TaskManager.cancelAllTasks(); // Chiudi i task
+            APIClient.closeClient(); // Chiudi il client API
+            primaryStage.close();
+            Platform.exit();
+        } finally {
+            logger.warn("Application has been closed forcefully.");
+            System.exit(0); // Forza la chiusura dell'applicazione
+        }
+    }
+
+
+
+    /**
+     * Metodo principale per avviare l'applicazione.
+     *
+     * @param args Argomenti del programma
+     */
     public static void main(String[] args) {
-        // Avvia l'applicazione
-        launch(args);
+        launch(args); // Avvia l'applicazione JavaFX
     }
 }
-
