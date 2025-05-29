@@ -45,7 +45,7 @@ public class AppManager {
 
         if (saveSelected) {
             try {
-                FileManager.getInstance().appendLineToSavingFile(configManager.getProperty("analyzed.save.file", ""), inputSentence.toString());
+                FileManager.appendLineToSavingFile(configManager.getProperty("analyzed.save.file", ""), inputSentence.toString());
             } catch (IOException e) {
                 throw new RuntimeException("Error file writing: " + e.getMessage());
             }
@@ -99,7 +99,7 @@ public class AppManager {
 
         if (saveSelected) {
             try {
-                FileManager.getInstance().appendLineToSavingFile(configManager.getProperty("generated.save.file", ""), outputSentence.toString());
+                FileManager.appendLineToSavingFile(configManager.getProperty("generated.save.file", ""), outputSentence.toString());
             } catch (IOException e) {
                 throw new RuntimeException("Error file writing: " + e.getMessage());
             }

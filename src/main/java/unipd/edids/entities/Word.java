@@ -56,7 +56,7 @@ public abstract class Word implements FileObserver {
     // Caricamento delle parole dal file specificato
     protected void loadWords(String filePath) {
         try {
-            words = FileManager.getInstance().readFile(filePath);
+            words = FileManager.readFile(filePath);
         } catch (IOException e) {
             System.out.println("Errore nel caricamento del file: " + filePath);
             e.printStackTrace();

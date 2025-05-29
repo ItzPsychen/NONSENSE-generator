@@ -52,7 +52,7 @@ public class Noun extends Word implements ConfigObserver {
 
         // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
-        FileManager.getInstance().addObserver(this);
+        FileManager.addObserver(this);
     }
 
     public static Noun getInstance() {

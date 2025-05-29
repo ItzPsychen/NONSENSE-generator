@@ -10,33 +10,14 @@ import java.util.List;
 
 public class FileManager {
 
-    // Instanza unica della classe (Singleton)
-    private static FileManager instance;
-
-    // Lista degli observer registrati
-    private final List<FileObserver> observers = new ArrayList<>();
+    // Lista degli observer registrati (statica)
+    private static final List<FileObserver> observers = new ArrayList<>();
 
     /**
-     * Costruttore privato per impedire la creazione di istanze esterne.
+     * Costruttore privato per impedire l'istanza della classe.
      */
     private FileManager() {
-        // Costruttore privato
-    }
-
-    /**
-     * Metodo per avere l'istanza unica di FileManager.
-     *
-     * @return L'istanza unica di FileManager.
-     */
-    public static FileManager getInstance() {
-        if (instance == null) {
-            synchronized (FileManager.class) {
-                if (instance == null) {
-                    instance = new FileManager();
-                }
-            }
-        }
-        return instance;
+        // Previene l'istanza della classe
     }
 
     /**
@@ -46,7 +27,7 @@ public class FileManager {
      * @param newLine  La linea da aggiungere.
      * @throws IOException Se ci sono problemi con la scrittura del file.
      */
-    public void appendLineToVocabularyFile(String filePath, String newLine) throws IOException {
+    public static void appendLineToVocabularyFile(String filePath, String newLine) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
             writer.write(newLine);
@@ -55,8 +36,7 @@ public class FileManager {
         notifyObservers(filePath);
     }
 
-
-    public void appendLineToSavingFile(String filePath, String newLine) throws IOException {
+    public static void appendLineToSavingFile(String filePath, String newLine) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
             writer.write(newLine);
@@ -70,20 +50,18 @@ public class FileManager {
      * @return Una lista di stringhe, una per ogni riga del file.
      * @throws IOException Se ci sono problemi con la lettura del file.
      */
-    public List<String> readFile(String filePath) throws IOException {
+    public static List<String> readFile(String filePath) throws IOException {
         return Files.readAllLines(Paths.get(filePath)).stream()
                 .filter(line -> !line.trim().isEmpty())
                 .toList();
     }
-
-
 
     /**
      * Aggiunge un observer alla lista degli observer registrati.
      *
      * @param observer L'istanza che implementa l'interfaccia FileObserver.
      */
-    public void addObserver(FileObserver observer) {
+    public static void addObserver(FileObserver observer) {
         observers.add(observer);
     }
 
@@ -92,12 +70,11 @@ public class FileManager {
      *
      * @param observer L'istanza da rimuovere.
      */
-    public void removeObserver(FileObserver observer) {
+    public static void removeObserver(FileObserver observer) {
         observers.remove(observer);
     }
 
-
-    private void notifyObservers(String filePath) {
+    private static void notifyObservers(String filePath) {
         for (FileObserver observer : observers) {
             observer.onFileChanged(filePath);
         }
