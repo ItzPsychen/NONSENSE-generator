@@ -69,8 +69,13 @@ public class App extends Application {
 
         // Verifica se l'API key è configurata
         ConfigManager configManager = ConfigManager.getInstance();
-        String apiKeyFile = configManager.getProperty("api.key.file");
-
+        String apiKeyFile = null;
+        try {
+            apiKeyFile = ConfigManager.getInstance().getProperty("api.key.file");
+        } catch (IllegalArgumentException e) {
+            // Ignora questa eccezione e logga un messaggio
+            logger.warn("api.key.file is not defined or is blank. Ignoring and proceeding.");
+        }
         if (apiKeyFile == null || apiKeyFile.isEmpty()) {
             logger.warn("API Key file not configured. Opening settings window.");
 
@@ -87,7 +92,12 @@ public class App extends Application {
             settingsStage.showAndWait();
 
             // Dopo la chiusura della finestra, verifica di nuovo l'API key
-            apiKeyFile = configManager.getProperty("api.key.file");
+            try {
+                apiKeyFile = ConfigManager.getInstance().getProperty("api.key.file");
+            } catch (IllegalArgumentException e) {
+                // Ignora questa eccezione e logga un messaggio
+                logger.warn("api.key.file is not defined or is blank. Ignoring and proceeding.");
+            }
             if (apiKeyFile == null || apiKeyFile.isEmpty()) {
                 logger.error("API Key configuration is mandatory. The application will not start.");
                 showErrorDialog("Missing Configuration", "API Key configuration file is mandatory. Please configure it in settings.");
