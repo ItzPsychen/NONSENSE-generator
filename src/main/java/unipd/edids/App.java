@@ -29,19 +29,19 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.logicBusiness.*;
+import unipd.edids.logicBusiness.managers.ConfigManager;
+import unipd.edids.logicBusiness.managers.LoggerManager;
+import unipd.edids.logicBusiness.services.APIClient;
+import unipd.edids.userInterface.FormController;
+import unipd.edids.userInterface.SettingsController;
+import unipd.edids.userInterface.TaskManager;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
-import java.util.concurrent.TimeUnit;
-
-import static unipd.edids.TaskManager.showErrorDialog;
+import static unipd.edids.userInterface.TaskManager.showErrorDialog;
 
 public class App extends Application {
 
