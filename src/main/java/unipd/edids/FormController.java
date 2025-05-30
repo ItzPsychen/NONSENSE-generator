@@ -649,18 +649,19 @@ private java.util.Timer progressTimer;
         logger.info("Analyze button clicked");
 
         // Crea il task da eseguire in background
-        Task<Sentence> analyzeTask = new Task<>() {
-            @Override
-            protected Sentence call() {
-                // Simula tempo di elaborazione (500ms per test)
-                logger.info("Analyze task started");
-                // Chiamata all'analisi da AppManager
-                return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
-            }
-        };
+            Task<Sentence> analyzeTask = new Task<>() {
+                @Override
+                protected Sentence call() {
+                    // Simula tempo di elaborazione (500ms per test)
+                    logger.info("Analyze task started");
+                    // Chiamata all'analisi da AppManager
+                    return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
+                }
+            };
+            TaskManager.execute(analyzeTask, this::handleAnalyzeSuccess);
+
 
         // Esegui il task utilizzando TaskManager
-        TaskManager.execute(analyzeTask, this::handleAnalyzeSuccess);
     }
 
     private void handleAnalyzeSuccess(Sentence sentence) {
@@ -704,7 +705,7 @@ private java.util.Timer progressTimer;
         logger.info("Generate button clicked");
 
         // Crea il task da eseguire in background
-        Task<Sentence> analyzeTask = new Task<>() {
+        Task<Sentence> generateTask = new Task<>() {
             @Override
             protected Sentence call() {
                 logger.info("Generation task started");
@@ -726,7 +727,7 @@ private java.util.Timer progressTimer;
         };
 
         // Esegui il task utilizzando TaskManager
-        TaskManager.execute(analyzeTask, this::handleGenerateSuccess);
+        TaskManager.execute(generateTask, this::handleGenerateSuccess);
     }
 
     private void handleGenerateSuccess(Sentence sentence) {
@@ -740,20 +741,6 @@ private java.util.Timer progressTimer;
                 animateProgressBar(sexualBar, sentence.getSexual());
                 animateProgressBar(politicsBar, sentence.getPolitics());
 
-//                toxicityBar.setProgress(sentence.getToxicity());
-//                toxicityBar.setStyle(getColorForValue(sentence.getToxicity()));
-//
-//                profanityBar.setProgress(sentence.getProfanity());
-//                profanityBar.setStyle(getColorForValue(sentence.getProfanity()));
-//
-//                insultBar.setProgress(sentence.getInsult());
-//                insultBar.setStyle(getColorForValue(sentence.getInsult()));
-//
-//                sexualBar.setProgress(sentence.getSexual());
-//                sexualBar.setStyle(getColorForValue(sentence.getSexual()));
-//
-//                politicsBar.setProgress(sentence.getPolitics());
-//                politicsBar.setStyle(getColorForValue(sentence.getPolitics()));
             }
             // Crea e salva il nuovo TextFlow
             lastGenerateFlow = formatStructure(sentence.getStructure().toString());

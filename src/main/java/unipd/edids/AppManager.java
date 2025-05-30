@@ -33,28 +33,20 @@ public class AppManager {
         modified = true;
     }
 
-    public Sentence analyzeSentence(String text, boolean saveSelected)  {
-        ///////TODO lanciare eccezioni
-//        if (!this.isModified()) return new Sentence("#notmodified");
-//        if (text == null || text.trim().isEmpty()) return new Sentence("#length");
-//        if (!text.matches(".*[a-zA-Z]+.*")) return new Sentence("#chars");
-
+    public Sentence analyzeSentence(String text, boolean saveSelected) {
+        validateText(text);
         inputSentence = analyzeSentenceService.analyzeSyntax(text);
-//        moderationSentenceService.moderateText(inputSentence);
-//        if (!inputSentence.isValid()) return new Sentence("#invalid");;
-
-        if (saveSelected) {
-
-                FileManager.appendLineToSavingFile(configManager.getProperty("analyzed.save.file"), inputSentence.toString());
-
-        }
+        if (saveSelected)
+            FileManager.appendLineToSavingFile(configManager.getProperty("analyzed.save.file"), inputSentence.toString());
         return inputSentence;
     }
 
     public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean saveSelected) {
 
+
         if (inputSentence == null) {
-            return null;
+            if (!newWords || (strategy.equals("SAME")))
+                throw new IllegalArgumentException("Input sentence cannot be null. Please analyze a sentence first or enable the 'new words' option while selecting a valid structure (Random or Selected).");
         }
 
 
@@ -85,32 +77,19 @@ public class AppManager {
             generateSentenceService.setWordsStrategi(new OriginalWordStrategy(inputSentence));
         }
 
-        outputSentence = generateSentenceService.generateSentence(inputSentence);
+        outputSentence = generateSentenceService.generateSentence();
         if (toxicity) {
             moderationSentenceService.moderateText(outputSentence);
         }
-// TODO
-// analyzeSentenceService.setValidateAttributes(outputSentence);
-//        if (outputSentence == null || !outputSentence.isValid()) return null;
-//        if (save && outputSentence != null) saveSentence(outputSentence);
-
 
         if (saveSelected) {
-                FileManager.appendLineToSavingFile(configManager.getProperty("generated.save.file"), outputSentence.toString());
+            FileManager.appendLineToSavingFile(configManager.getProperty("generated.save.file"), outputSentence.toString());
 
         }
         return outputSentence;
     }
 
 
-
-    public boolean isModified() {
-        return this.modified;
-    }
-
-    public void setModified(boolean value) {
-        this.modified = value;
-    }
 
     public void clearAll() {
         this.inputSentence = null;
@@ -126,7 +105,32 @@ public class AppManager {
         return outputSentence;
     }
 
-    public GenerateSentenceService getGenerateSentenceService() {
-        return generateSentenceService;
+    private void validateText(String text) {
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException("Input text cannot be null or empty.");
+        }
+        int maxLength = Integer.parseInt(configManager.getProperty("max.sentence.length"));
+        if (text.length() > maxLength) {
+            throw new IllegalArgumentException("Input text cannot exceed " + maxLength + " characters.");
+        }
+        if (text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input text cannot be empty or whitespace only.");
+        }
+        if (!text.matches(".*[a-zA-Z]+.*")) {
+            throw new IllegalArgumentException("Input text must contain at least one alphabetical character.");
+        }
+
+
+        if (text.matches("^[^a-zA-Z0-9\\s].*")) {
+            throw new IllegalArgumentException("Input text contains invalid characters at the start of the text.");
+        }
+        if (text.matches(".*[^a-zA-Z0-9.\\s]$")) {
+            throw new IllegalArgumentException("Input text contains invalid characters at the end of the text.");
+        }
+        if (text.matches(".*[^a-zA-Z0-9.,:'\"\\s].*")) {
+            throw new IllegalArgumentException("Input text contains invalid characters.");
+        }
+
+
     }
 }

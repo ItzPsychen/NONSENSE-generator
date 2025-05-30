@@ -113,12 +113,6 @@
       <version>2.20.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
 
 
 
@@ -153,6 +147,22 @@
         <artifactId>stanford-corenlp</artifactId>
         <version>4.5.6</version> <classifier>models</classifier>
       </dependency>
+
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.9.3</version> <!-- Puoi usare una versione più aggiornata se disponibile -->
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Motore di esecuzione per JUnit (necessario per Maven Surefire Plugin) -->
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.9.3</version>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 

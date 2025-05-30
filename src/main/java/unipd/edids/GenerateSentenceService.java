@@ -36,29 +36,16 @@ public class GenerateSentenceService implements ConfigObserver {
         this.structureSentenceStrategy = strategy;
     }
 
+    public StructureSentenceStrategy getStructureSentenceStrategy() {
+        return structureSentenceStrategy;
+    }
+
     public void setWordsStrategi(WordSelectionStrategy strategy) {
         this.wordSelectionStrategy = strategy;
     }
 
-    public Sentence generateSentence(Sentence inputSentence) {
+    public Sentence generateSentence() {
         temp = new Sentence();
-        System.out.println("[generateSentence] " + inputSentence.getSentence().toString());
-        if (inputSentence.getSentence().toString() == null || inputSentence.getSentence().toString().trim().isEmpty() ||
-                !inputSentence.getSentence().toString().matches(".*[a-zA-Z]+.*")) {
-
-            // TODO
-            // scrivere una frase con termini poco adatti
-            // fare l'analisi
-            // scrivere una frase adatta
-            // fare l'analisi
-            // fare la generazione
-            // ERRORE: entra qui per nessuna ragione
-
-            System.out.println(" -> null");
-            return null;
-        }
-
-
         // Step 1: Estrarre la struttura della frase
         logger.warn(structureSentenceStrategy.getClass().getSimpleName());
         temp.setStructure(structureSentenceStrategy.generateSentence());

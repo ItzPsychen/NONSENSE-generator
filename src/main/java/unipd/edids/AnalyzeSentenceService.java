@@ -40,20 +40,23 @@ public class AnalyzeSentenceService {
                 .execute().getTokensList();
         for (Token token : tokens) {
             String word = token.getText().getContent();
-            String pos = String.valueOf(token.getPartOfSpeech().getTag());
+            PartOfSpeech.Tag pos = token.getPartOfSpeech().getTag();
             switch (pos) {
-                case "NOUN":
+                case NOUN:
                     analyzedSentence.getNouns().add(word);
                     analyzedSentence.getStructure().append("[noun] ");
                     break;
-                case "VERB":
+                case VERB:
                     analyzedSentence.getVerbs().add(word);
                     analyzedSentence.getStructure().append("[verb] ");
                     break;
-                case "ADJ":
+                case ADJ:
                     analyzedSentence.getAdjectives().add(word);
                     analyzedSentence.getStructure().append("[adjective] ");
                     break;
+                case X:        // Tipo non riconosciuto
+                case UNKNOWN:
+                    throw new IllegalArgumentException("Invalid token for grammatical type: " + pos + ", word: " + word);
                 default:
                     analyzedSentence.getStructure().append(word).append(" ");
             }

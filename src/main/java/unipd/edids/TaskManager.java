@@ -30,7 +30,7 @@ public class TaskManager {
             Throwable ex = task.getException();
             String errorMessage = (ex != null) ? ex.getMessage() : "Unknown error occurred";
 
-            logger.error("Task failed", ex);
+            logger.error("Task failed: {}", errorMessage);
             Platform.runLater(() -> showErrorDialog("Task Error", errorMessage));
         });
 
