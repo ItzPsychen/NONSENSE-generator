@@ -1,5 +1,7 @@
 # NONSENSE-generator
 
+<img src="src/main/resources/icons/icon.png" alt="App Preview" width="300" height="300" />
+
 ## *The Application*
 
 The *NONSENSE-generator* is an application that lets you create an **infinite amount of sentences** without any logical reason. You can use it to analyze sentences you type in, visualize the syntactic tree of any kind of phrase, or even to know the levels of toxicity and more!
