@@ -1,75 +1,57 @@
-//package unipd.edids;
-//
-//import java.util.*;
-//import java.io.*;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//
-//public class Noun extends Word {
-//    // the vocabulary is created only once
-//    private static Set<String> vocabulary;
-//    static {
-//        try {
-//            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/nouns.txt")));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            vocabulary = new HashSet<>();
-//        }
-//    }
-//
-//    // class attributes                         TO ADD SOME OTHERS (maybe)
-//    private boolean plural;
-//    private boolean gender;
-//    private boolean countable;
-//
-//    // public constructor of the class
-//    public Noun(String value) {
-//        super(value);
-//    }
-//
-//    // to set some information                  TO BE COMPLETED
-//    @Override
-//    protected void setAttributes() {
-//
-//    }
-//
-//    public boolean isInVocabulary() {
-//        return vocabulary.contains(this.text);
-//    }
-//}
 package unipd.edids.logicBusiness.entities;
 
 import unipd.edids.logicBusiness.managers.ConfigManager;
-import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 import unipd.edids.logicBusiness.managers.FileManager;
+import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 
+/**
+ * The Noun class is responsible for managing and accessing a list of nouns
+ * loaded from a file, with support for dynamic updates to the file configuration.
+ *
+ * <p> Responsibilities:
+ * - Implements the Singleton design pattern to ensure a single instance of the class.
+ * - Observes configuration changes related to noun file management and updates accordingly.
+ * - Extends the "Word" class for file-based noun word handling.
+ *
+ * <p> Design Patterns:
+ * - Singleton: Ensures a single instance of the Noun class.
+ * - Observer: Observes configuration changes via "ConfigObserver".
+ */
 public class Noun extends Word implements ConfigObserver {
+
+    /**
+     * Singleton instance of the Noun class shared across the application.
+     */
     private static Noun instance;
 
+    /**
+     * Private constructor for the Noun class.
+     * Initializes the Noun instance with filePath and observes configuration and file updates.
+     */
     private Noun() {
         super(ConfigManager.getInstance().getProperty("noun.file"));
-
-        // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
         FileManager.addObserver(this);
     }
 
+    /**
+     * Provides a globally accessible instance of the Noun class.
+     *
+     * @return the singleton instance of the Noun class
+     */
     public static Noun getInstance() {
         if (instance == null) {
-            synchronized (Noun.class) {
-                if (instance == null) {
-                    instance = new Noun();
-                }
-            }
+            instance = new Noun();
         }
         return instance;
     }
 
-    @Override
-    protected String getFilePath() {
-        return this.filePath;
-    }
-
+    /**
+     * Handles configuration changes for the Noun class, specifically updates the file path for loading adjectives.
+     *
+     * @param key The configuration property that has changed.
+     * @param value The new value of the configuration property.
+     */
     @Override
     public void onConfigChange(String key, String value) {
         if ("noun.file".equals(key)) {
@@ -77,6 +59,4 @@ public class Noun extends Word implements ConfigObserver {
             loadWords(this.filePath);
         }
     }
-
-
 }

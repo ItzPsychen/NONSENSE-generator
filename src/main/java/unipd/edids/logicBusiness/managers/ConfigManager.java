@@ -1,5 +1,6 @@
 package unipd.edids.logicBusiness.managers;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

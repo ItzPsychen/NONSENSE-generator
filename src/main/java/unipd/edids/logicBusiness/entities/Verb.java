@@ -1,88 +1,70 @@
-//package unipd.edids;
-//
-//import java.util.*;
-//import java.io.*;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//
-//public class Verb extends Word {
-//    // the vocabulary is created only once
-//    private static Set<String> vocabulary;
-//    static {
-//        try {
-//            vocabulary = new HashSet<>(Files.readAllLines(Paths.get("./src/main/resources/verbs.txt")));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            vocabulary = new HashSet<>();
-//        }
-//    }
-//
-//    // class attributes                         TO ADD SOME OTHERS (maybe)
-//    private String verbForm;
-//    private String tense;
-//    private boolean irregular;
-//
-//    // public constructor of the class
-//    public Verb(String value) {
-//        super(value);
-//    }
-//
-//    // to set some information                  TO BE COMPLETED
-//    @Override
-//    protected void setAttributes() {
-//
-//    }
-//
-//    public String form() {
-//        if (this.text.endsWith("ing")) return "+ing";
-//        return (this.text.endsWith("ed") || this.irregular) ? "+ed" : "";
-//    }
-//
-//    @Override
-//    public boolean isInVocabulary() {
-//        return vocabulary.contains(this.text);
-//    }
-//}
-
-
 package unipd.edids.logicBusiness.entities;
 
 import unipd.edids.logicBusiness.managers.ConfigManager;
-import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 import unipd.edids.logicBusiness.managers.FileManager;
+import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 import unipd.edids.logicBusiness.strategies.tenseStrategies.TenseStrategy;
 
 import java.util.Random;
 
+/**
+ * The Verb class is responsible for managing and accessing a list of verbs
+ * loaded from a file, with support for dynamic updates to the file configuration.
+ *
+ * <p>
+ * Responsibilities:
+ * - Manages a list of verbs loaded from an external file.
+ * - Monitors configuration updates to adapt file references dynamically.
+ * - Supports verb conjugation via a pluggable strategy pattern.
+ * - Provides a Singleton instance to ensure a single point of access.
+ *
+ * <p>
+ * Design Patterns:
+ * - Singleton: Ensures only one instance of the class exists.
+ * - Strategy: Allows dynamic changes in the conjugation logic via TenseStrategy.
+ * - Observer: Responds to configuration changes for dynamic file management.
+ */
 public class Verb extends Word implements ConfigObserver {
+
+    /**
+     * Singleton instance of the Verb class shared across the application.
+     */
     private static Verb instance;
+    /**
+     * Strategy interface for verb conjugation logic.
+     * Allows dynamic changes to the conjugation process.
+     */
     private TenseStrategy tenseStrategy;
 
+    /**
+     * Private constructor for the Verb class.
+     * Initializes the Verb instance with filePath and observes configuration and file updates.
+     */
     private Verb() {
         super(ConfigManager.getInstance().getProperty("verb.file"));
-
-        // Registra questo oggetto come osservatore delle modifiche di configurazione
         ConfigManager.getInstance().addObserver(this);
         FileManager.addObserver(this);
     }
 
+    /**
+     * Provides a globally accessible instance of the Verb class.
+     *
+     * @return the singleton instance of the Verb class
+     */
     public static Verb getInstance() {
         if (instance == null) {
-            synchronized (Verb.class) {
-                if (instance == null) {
-                    instance = new Verb();
-                }
-            }
+            instance = new Verb();
         }
         return instance;
     }
 
-    @Override
-    protected String getFilePath() {
-        // Restituisce il percorso corrente del file dei sostantivi
-        return this.filePath;
-    }
 
+    /**
+     * Handles configuration changes for the Verb class, specifically updates the file path for loading adjectives.
+     *
+     * @param key The configuration property that has changed.
+     * @param value The new value of the changed configuration property.
+     */
     @Override
     public void onConfigChange(String key, String value) {
         if ("verb.file".equals(key)) {
@@ -90,6 +72,14 @@ public class Verb extends Word implements ConfigObserver {
             loadWords(this.filePath);
         }
     }
+
+    /**
+     * Returns a random verb from the list of verbs and applies
+     * the currently set conjugation strategy.
+     *
+     * @return A conjugated verb chosen randomly from the list,
+     * or "undefined" if the list is empty.
+     */
     public String getRandomWord() {
         System.out.println(tenseStrategy.getClass().getSimpleName());
         if (words.isEmpty()) return "undefined";
@@ -97,16 +87,32 @@ public class Verb extends Word implements ConfigObserver {
         return conjugate(words.get(random.nextInt(words.size())));
     }
 
+    /**
+     * Conjugates the provided verb using the current tense strategy.
+     *
+     * @param verb The verb to be conjugated.
+     * @return The conjugated form of the provided verb.
+     */
     public String conjugate(String verb) {
         return this.tenseStrategy.conjugate(verb);
     }
 
-    public void setTenseStrategy(TenseStrategy strategy) {
-        this.tenseStrategy = strategy;
-    }
-
+    /**
+     * Retrieves the currently assigned TenseStrategy for conjugating verbs.
+     *
+     * @return the active TenseStrategy used for verb conjugation.
+     */
     public TenseStrategy getTenseStrategy() {
         return tenseStrategy;
+    }
+
+    /**
+     * Sets the conjugation strategy for handling verb tenses.
+     *
+     * @param strategy The specific TenseStrategy implementation to apply for conjugating verbs.
+     */
+    public void setTenseStrategy(TenseStrategy strategy) {
+        this.tenseStrategy = strategy;
     }
 }
 
