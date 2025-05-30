@@ -38,7 +38,7 @@ public class SettingsController {
     @FXML
     private TextField generatedNonsenseFileField;
     @FXML
-    private TextField detailsNonsenseFileField;
+    private TextField analysisNonsenseFileField;
 
     @FXML
     private TextField maxRecursionLevelField;
@@ -100,8 +100,8 @@ public class SettingsController {
     }
 
     @FXML
-    private void selectDetailsNonsenseFile() {
-        selectFileForField(detailsNonsenseFileField, "Select Details Nonsense Output File");
+    private void selectAnalysisNonsenseFile() {
+        selectFileForField(analysisNonsenseFileField, "Select Details Nonsense Output File");
     }
 
     // Metodo comune per scegliere un file e impostare il path nel TextField
@@ -141,7 +141,7 @@ public class SettingsController {
         syntaxTagsFileField.setText(getPropertyOrDefault(configManager, "syntax_tags.properties", ""));
         outputLogFileField.setText(getPropertyOrDefault(configManager, "output.logfile", ""));
         generatedNonsenseFileField.setText(getPropertyOrDefault(configManager, "generated.save.file", ""));
-        detailsNonsenseFileField.setText(getPropertyOrDefault(configManager, "analyzed.save.file", ""));
+        analysisNonsenseFileField.setText(getPropertyOrDefault(configManager, "analyzed.save.file", ""));
 
         // Imposta i campi numerici con valori di default (se necessari)
         maxRecursionLevelField.setText(getPropertyOrDefault(configManager, "max.recursion.level", "10"));
@@ -194,7 +194,7 @@ public class SettingsController {
         configManager.setProperty("syntax_tags.properties", syntaxTagsFileField.getText());
         configManager.setProperty("output.logfile", outputLogFileField.getText());
         configManager.setProperty("generated.save.file", generatedNonsenseFileField.getText());
-        configManager.setProperty("analyzed.save.file", detailsNonsenseFileField.getText());
+        configManager.setProperty("analyzed.save.file", analysisNonsenseFileField.getText());
 
         // Update ConfigManager with numeric and boolean fields
         configManager.setProperty("max.recursion.level", maxRecursionLevelField.getText());

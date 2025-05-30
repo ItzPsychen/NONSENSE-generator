@@ -93,10 +93,10 @@
                         <Button onAction="#selectGeneratedNonsenseFile" text="..." />
                     </HBox>
 
-                    <Label text="Details nonsense output file:" />
+                    <Label text="Analysis nonsense output file:" />
                     <HBox spacing="5.0">
-                        <TextField fx:id="detailsNonsenseFileField" promptText="Details nonsense output file path" HBox.hgrow="ALWAYS" />
-                        <Button onAction="#selectDetailsNonsenseFile" text="..." />
+                        <TextField fx:id="analysisNonsenseFileField" promptText="Details nonsense output file path" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#selectAnalysisNonsenseFile" text="..." />
                     </HBox>
 
                     <!-- Number settings -->
