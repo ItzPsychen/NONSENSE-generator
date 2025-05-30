@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyzeSentenceServiceTest {
 
-    private static final String CONFIG_FILE_NAME = "config.properties";
 
     private ConfigManager configManager;
 
@@ -23,14 +22,11 @@ class AnalyzeSentenceServiceTest {
     public void setUp() {
         configManager = ConfigManager.getInstance();
 
-
-        // Mocking configuration properties for test purposes
-        configManager.setProperty("analyzed.save.file", "testFile.txt");
-        configManager.setProperty("generated.save.file", "testFile.txt");
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDown() throws IOException {
+        configManager.resetDefault(configManager.getProperty("api.key.file"));
         File file = new File("testFile.txt");
         if (file.exists()) {
             file.delete();
@@ -81,13 +77,7 @@ class AnalyzeSentenceServiceTest {
     @Test
     void testAnalyzeSyntax_exceedsMaxLength() throws IOException {
         // Temporarily create and set config file for max length
-        File tempConfig = new File(CONFIG_FILE_NAME);
-        tempConfig.deleteOnExit();
-        var writer = new java.io.PrintWriter(tempConfig);
-        writer.println("max.sentence.length=10");
-        writer.close();
-
-        System.setProperty("config.file", tempConfig.getAbsolutePath());
+       configManager.setProperty("max.sentence.length", "10");
 
         AnalyzeSentenceService service = new AnalyzeSentenceService();
         String text = "This text exceeds the maximum allowed length";
@@ -155,7 +145,7 @@ class AnalyzeSentenceServiceTest {
     @Test
     void testAnalyzeSyntax_unknownTokenHandling() {
         AnalyzeSentenceService service = new AnalyzeSentenceService();
-        String text = "Word with unknown token type";
+        String text = "74c9nywrq9cn";
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> service.analyzeSyntax(text),

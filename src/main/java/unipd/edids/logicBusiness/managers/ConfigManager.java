@@ -111,4 +111,45 @@ public class ConfigManager {
     public String getConfigFilePath() {
         return configFilePath;
     }
+
+    public void resetDefault(String apiKey) throws IOException {
+        String defaultConfigPath = getEnv("DEFAULT_CONFIG_FILE_PATH");
+        String configFilePath = getConfigFilePath();
+
+        // Verifica se 'DEFAULT_CONFIG_FILE_PATH' esiste
+        File defaultConfigFile = new File(defaultConfigPath);
+        if (!defaultConfigFile.exists()) {
+            logger.error("File di configurazione di default non trovato: {}", defaultConfigPath);
+            throw new IOException("File di configurazione di default mancante o non accessibile: " + defaultConfigPath);
+        }
+
+        // Usa un file temporaneo per la scrittura
+        File tempFile = new File(configFilePath + ".tmp");
+
+        // Elimina il file corrente esistente
+        FileManager.deleteFile(configFilePath);
+
+        // Copia il contenuto del file di default nel file temporaneo
+        List<String> lines = new ArrayList<>(FileManager.readFile(defaultConfigPath));
+        String newApiLine = "api.key.file=" + apiKey;
+
+        if (lines.removeIf(line -> line.startsWith("api.key.file="))) {
+            lines.add(newApiLine);
+        } else {
+            lines.add(newApiLine);
+        }
+
+        for (String line : lines) {
+            FileManager.appendLineToSavingFile(tempFile.getAbsolutePath(), line);
+        }
+
+        // Rinomina il file temporaneo in quello ufficiale
+        if (!tempFile.renameTo(new File(configFilePath))) {
+            throw new IOException("Impossibile rinominare il file temporaneo in: " + configFilePath);
+        }
+
+        // Ricarica la configurazione nel ConfigManager
+        loadProperties();
+
+    }
 }

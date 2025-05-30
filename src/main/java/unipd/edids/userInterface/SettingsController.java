@@ -218,47 +218,12 @@ public class SettingsController {
     public void resetToDefault() throws IOException {
         String apiKeyFile = configManager.getProperty("api.key.file");
         try {
-            String defaultConfigPath = configManager.getEnv("DEFAULT_CONFIG_FILE_PATH");
-            String configFilePath = configManager.getConfigFilePath();
 
-            // Verifica se 'DEFAULT_CONFIG_FILE_PATH' esiste
-            File defaultConfigFile = new File(defaultConfigPath);
-            if (!defaultConfigFile.exists()) {
-                logger.error("File di configurazione di default non trovato: {}", defaultConfigPath);
-                throw new IOException("File di configurazione di default mancante o non accessibile: " + defaultConfigPath);
-            }
-
-            // Usa un file temporaneo per la scrittura
-            File tempFile = new File(configFilePath + ".tmp");
-
-            // Elimina il file corrente esistente
-            FileManager.deleteFile(configFilePath);
-
-            // Copia il contenuto del file di default nel file temporaneo
-            List<String> lines = new ArrayList<>(FileManager.readFile(defaultConfigPath));
-            String newApiLine = "api.key.file=" + apiKeyFile;
-
-            if (lines.removeIf(line -> line.startsWith("api.key.file="))) {
-                lines.add(newApiLine);
-            } else {
-                lines.add(newApiLine);
-            }
-
-            for (String line : lines) {
-                FileManager.appendLineToSavingFile(tempFile.getAbsolutePath(), line);
-            }
-
-            // Rinomina il file temporaneo in quello ufficiale
-            if (!tempFile.renameTo(new File(configFilePath))) {
-                throw new IOException("Impossibile rinominare il file temporaneo in: " + configFilePath);
-            }
-
-            // Ricarica la configurazione nel ConfigManager
-            configManager.loadProperties();
+            configManager.resetDefault(apiKeyFile);
             loadItems(); // Reinizializza l'interfaccia con i valori aggiornati
 
             logger.info("Impostazioni ripristinate correttamente ai valori di default.");
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("Errore durante il reset alle impostazioni di default: {}", e.getMessage());
             throw new IOException("Errore durante il reset: " + e.getMessage());
         }
