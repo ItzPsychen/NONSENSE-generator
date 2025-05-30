@@ -106,6 +106,4 @@ public class GenerateSentenceService implements ConfigObserver {
     public void onConfigChange(String key, String value) {
 
     }
-
-
 }

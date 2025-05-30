@@ -87,7 +87,7 @@
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Label>
-                        <ScrollPane layoutX="14.0" layoutY="13.0" prefHeight="337.0" prefWidth="430.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="156.0">
+                        <ScrollPane fx:id="scrollPaneSyntax" layoutX="14.0" layoutY="13.0" prefHeight="337.0" prefWidth="430.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="156.0">
                             <content>
                                 <TextFlow fx:id="syntaxArea" prefHeight="335.0" prefWidth="428.0" />
                             </content>
@@ -119,7 +119,7 @@
                         <Label layoutX="526.0" layoutY="511.0" style="-fx-font-weight: bold;" text="Sexual" AnchorPane.bottomAnchor="41.0" AnchorPane.rightAnchor="27.0" />
                         <Label layoutX="525.0" layoutY="541.0" style="-fx-font-weight: bold;" text="Politics" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="24.0" />
 
-                        <ScrollPane layoutX="5.0" layoutY="150.0" minHeight="181.0" prefHeight="181.0" prefWidth="432.0" AnchorPane.bottomAnchor="190.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="156.0">
+                        <ScrollPane  fx:id="scrollPaneGenerate" layoutX="5.0" layoutY="150.0" minHeight="181.0" prefHeight="181.0" prefWidth="432.0" AnchorPane.bottomAnchor="190.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="156.0">
                             <content>
                                 <TextFlow fx:id="generateArea" minHeight="230.0" prefWidth="425.0" AnchorPane.bottomAnchor="190.0" />
                             </content>

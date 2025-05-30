@@ -484,6 +484,10 @@ public class FormController {
     @FXML
     private TextField inputText;
     @FXML
+    private ScrollPane scrollPaneSyntax;
+    @FXML
+    private ScrollPane scrollPaneGenerate;
+    @FXML
     private TextFlow syntaxArea;
     @FXML
     private TextFlow generateArea;
@@ -500,7 +504,9 @@ public class FormController {
     @FXML
     private RadioButton selectStructureRadio;
     private ToggleGroup structureToggleGroup;
-private java.util.Timer progressTimer;
+
+    private java.util.Timer progressTimer;
+
     // Close everything
     @FXML
     private void handleClose() {
@@ -573,6 +579,9 @@ private java.util.Timer progressTimer;
 
         // Aggiungi il ContextMenu al TextFlow generateArea
         addContextMenuToTextFlow(generateArea);
+
+        syntaxArea.prefWidthProperty().bind(scrollPaneSyntax.widthProperty().subtract(20));
+        generateArea.prefWidthProperty().bind(scrollPaneGenerate.widthProperty().subtract(20));
 
         this.progressTimer = new Timer();
     }
@@ -679,6 +688,7 @@ private java.util.Timer progressTimer;
 
             // Aggiorna il contenuto del syntaxArea
             syntaxArea.getChildren().clear();
+            lastSyntaxFlow.prefWidthProperty().bind(syntaxArea.widthProperty().subtract(20));
             syntaxArea.getChildren().add(lastSyntaxFlow);
 
 
@@ -688,6 +698,7 @@ private java.util.Timer progressTimer;
                 analysisText.setFont(Font.font("monospace", 12));
                 analysisText.setFill(Color.web(textColor));
 
+                analysisText.wrappingWidthProperty().bind(syntaxArea.widthProperty());
                 syntaxArea.getChildren().add(analysisText);
             }
 
@@ -751,10 +762,12 @@ private java.util.Timer progressTimer;
             lastGenerateFlow.setMaxWidth(generateArea.getWidth());
             // Aggiorna il contenuto del generateArea
             generateArea.getChildren().clear();
+            lastGenerateFlow.prefWidthProperty().bind(generateArea.widthProperty().subtract(20));
             generateArea.getChildren().add(lastGenerateFlow);
             generateArea.getChildren().add(new Text("\n\n"));
             Text newText = new Text(sentence.getSentence().toString());
             newText.setFill(Color.web(this.textColor));
+            newText.wrappingWidthProperty().bind(generateArea.widthProperty().subtract(20));
             generateArea.getChildren().add(newText);
 
             progressBar.setProgress(1);
