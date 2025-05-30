@@ -25,7 +25,6 @@ public class Sentence {
         this.sentence = new StringBuilder();
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
-        this.syntaxTree.setValue("ROOT");
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
@@ -35,7 +34,6 @@ public class Sentence {
         this.sentence = new StringBuilder(text);
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
-        this.syntaxTree.setValue("ROOT");
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
