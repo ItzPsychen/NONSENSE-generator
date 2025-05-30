@@ -7,7 +7,7 @@ public class SelectedStructureStrategy implements StructureSentenceStrategy{
         this.selectedStructure = selectedStructure; // Inizializzazione del valore
     }
     @Override
-    public StringBuilder generateSentence() {
+    public StringBuilder generateSentenceStructure() {
         return new StringBuilder(selectedStructure);
     }
 }

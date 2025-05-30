@@ -9,7 +9,7 @@ public class SameAsAnalyzedStructureStrategy implements StructureSentenceStrateg
         this.inputSentence = inputSentence; // Inizializzazione del valore
     }
     @Override
-    public StringBuilder generateSentence() {
+    public StringBuilder generateSentenceStructure() {
         return new StringBuilder(inputSentence.getStructure().toString());
     }
 }

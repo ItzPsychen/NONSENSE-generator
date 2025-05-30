@@ -4,7 +4,7 @@ import unipd.edids.logicBusiness.entities.SentenceStructure;
 
 public class RandomStructureStrategy implements StructureSentenceStrategy{
     @Override
-    public StringBuilder generateSentence() {
+    public StringBuilder generateSentenceStructure() {
         return new StringBuilder(SentenceStructure.getInstance().getRandomStructure());
     }
 }

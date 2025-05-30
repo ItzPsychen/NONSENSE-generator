@@ -210,7 +210,7 @@ public class AnalyzeSentenceService {
         CoreDocument document = pipeline.processToCoreDocument(text);
 
         if (!document.sentences().isEmpty()) {
-            CoreSentence coreSentence = document.sentences().get(0);
+            CoreSentence coreSentence = document.sentences().getFirst();
             logger.debug("Syntax tree created for the first sentence.");
             return coreSentence.constituencyParse();
         }

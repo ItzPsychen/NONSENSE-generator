@@ -5,7 +5,6 @@ import unipd.edids.logicBusiness.entities.Sentence;
 
 import java.util.List;
 
-//fix forse serve un adapter? chiamare API bene
 
 public class ModerationSentenceService {
 
@@ -22,8 +21,6 @@ public class ModerationSentenceService {
                     .execute();
 
 
-            // TODO scegliere categorie da mettere a posto
-            // Toxic - Profanity - Insult - Threat - Identity Threat
 
             sentence.setToxicity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Toxic"));
             sentence.setProfanity(getModerationConfidenceByName(response.getModerationCategoriesList(), "Profanity"));

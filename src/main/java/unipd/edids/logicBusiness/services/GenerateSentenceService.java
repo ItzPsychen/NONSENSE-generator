@@ -4,103 +4,113 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.managers.ConfigManager;
-import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 import unipd.edids.logicBusiness.strategies.structureStrategies.*;
 import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.NewWordStrategy;
 import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.OriginalWordStrategy;
 import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.WordSelectionStrategy;
 
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
-import static unipd.edids.logicBusiness.strategies.structureStrategies.StrategyType.SAME;
 
-//Fix usare una factory con singleton, usare una strategy per l'estrazione delle strutture
-
-public class GenerateSentenceService implements ConfigObserver {
-
+/**
+ * Service responsible for generating sentences based on configurable strategies for structure and word selection.
+ *
+ * <p> Responsibilities:
+ * - Generates sentences by applying configurable structure generation and word selection strategies.
+ * - Handles recursive sentence structures and resolves placeholders with appropriate words (nouns, verbs, adjectives).
+ * - Observes configuration changes and adapts behavior dynamically.
+ *
+ * <p> Design Pattern:
+ * - Strategy Pattern: Uses structure and word selection strategies to modularize and extend behavior.
+ */
+public class GenerateSentenceService {
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
-    StructureSentenceStrategy structureSentenceStrategy;
-    WordSelectionStrategy wordSelectionStrategy;
-    //fix temp?
-    private Sentence temp;
-
-    public GenerateSentenceService() {
-        temp = new Sentence();
-        structureSentenceStrategy = new RandomStructureStrategy();
-    }
-
-
-    public StructureSentenceStrategy getStructureSentenceStrategy() {
-        return structureSentenceStrategy;
-    }
-
-    public void setWordsStrategi(WordSelectionStrategy strategy) {
-        this.wordSelectionStrategy = strategy;
-    }
+    private static final String SENTENCE_TAG = "[sentence]";
+    private final String NOUN_TAG = "[noun]";
+private final String VERB_TAG = "[verb]";
+private final String ADJECTIVE_TAG = "[adjective]";
+    private StructureSentenceStrategy structureSentenceStrategy;
+    private WordSelectionStrategy wordSelectionStrategy;
+    private Sentence currentSentence = new Sentence(); // Inizializzato direttamente qui
 
     public Sentence generateSentence() {
-        temp = new Sentence();
-        // Step 1: Estrarre la struttura della frase
-        logger.warn(structureSentenceStrategy.getClass().getSimpleName());
-        temp.setStructure(structureSentenceStrategy.generateSentence());
-        if (ConfigManager.getInstance().getProperty("allow.recursive.sentences").equals("true")) {
-            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(), 0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level")))));
-        } else if (temp.getStructure().toString().contains("[sentence]")) {
-            temp.setStructure(new StringBuilder(temp.getStructure().toString().replaceAll("\\[sentence\\]", "[noun]")));
+        // Ricrea la frase corrente prima di ogni generazione.
+        currentSentence = new Sentence();
+
+        logger.info("Generating sentence with strategy: {}", structureSentenceStrategy.getClass().getSimpleName());
+
+        // Configura la struttura della frase
+        configureSentenceStructure();
+
+        logger.info("Initial Sentence Structure: {}", currentSentence.getStructure());
+
+        // Popola i placeholder con le parole
+        logger.info("Word Selection Strategy: {}", wordSelectionStrategy.getClass().getSimpleName());
+        wordSelectionStrategy.populateWords(currentSentence);
+
+        // Sostituisci i segnaposto e applica ulteriori trasformazioni
+        replacePlaceholders();
+        capitalizeFirstLetter();
+
+        logger.info("Final Sentence: {}", currentSentence.getSentence());
+        return currentSentence;
+    }
+
+    // Estrae e configura la struttura della frase
+    private void configureSentenceStructure() {
+        currentSentence.setStructure(structureSentenceStrategy.generateSentenceStructure());
+
+        // Estrae impostazioni di configurazione
+        boolean allowRecursive = "true".equals(ConfigManager.getInstance().getProperty("allow.recursive.sentences"));
+        int maxRecursionLevel = Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level"));
+
+        if (allowRecursive) {
+            String resolvedTemplate = resolveTemplate(currentSentence.getStructure().toString(), 0, maxRecursionLevel);
+            currentSentence.setStructure(new StringBuilder(resolvedTemplate));
+        } else if (currentSentence.getStructure().toString().contains(SENTENCE_TAG)) {
+            String adjustedStructure = currentSentence.getStructure().toString().replaceAll(Pattern.quote(SENTENCE_TAG), NOUN_TAG);
+            currentSentence.setStructure(new StringBuilder(adjustedStructure));
+        }
+    }
+
+    // Sostituisce i segnaposti [noun], [verb], [adjective]
+    private void replacePlaceholders() {
+        String result = currentSentence.getStructure().toString();
+        Iterator<String> nounsIterator = currentSentence.getNouns().iterator();
+        Iterator<String> verbsIterator = currentSentence.getVerbs().iterator();
+        Iterator<String> adjectiveIterator = currentSentence.getAdjectives().iterator();
+
+        while (result.contains(NOUN_TAG) && nounsIterator.hasNext()) {
+            result = result.replaceFirst(Pattern.quote(NOUN_TAG), nounsIterator.next());
+        }
+        while (result.contains(VERB_TAG) && verbsIterator.hasNext()) {
+            result = result.replaceFirst(Pattern.quote(VERB_TAG), verbsIterator.next());
+        }
+        while (result.contains(ADJECTIVE_TAG) && adjectiveIterator.hasNext()) {
+            result = result.replaceFirst(Pattern.quote(ADJECTIVE_TAG), adjectiveIterator.next());
         }
 
-        logger.info("Initial Sentence Structure: {}", temp.getStructure());
+        logger.info("Sentence after placeholders replacement: {}", result);
+        currentSentence.setSentence(new StringBuilder(result));
+    }
 
-        logger.error("Word Selection Strategy: {}", wordSelectionStrategy.getClass().getSimpleName());
-        wordSelectionStrategy.populateWords(temp);
-//        // Step 2: Verifica e caricamento delle liste (nouns, verbs, adjectives)
-//        populateWordLists();
-//
-//        // Step 3: Shuffla le liste per diversificare l'output
-//        shuffleWordLists();
-
-        // Step 4: Sostituire i placeholder nella struttura con parole effettive
-        temp.setSentence(new StringBuilder(replacePlaceholders()));
-
-        temp.getSentence().setCharAt(0, Character.toUpperCase(temp.getSentence().charAt(0)));
-        logger.info("Final Sentence: {}", temp.getSentence());
-
-        return temp;
+    // Capitalizza la prima lettera della frase generata
+    private void capitalizeFirstLetter() {
+        StringBuilder sentence = currentSentence.getSentence();
+        if (!sentence.isEmpty()) {
+            sentence.setCharAt(0, Character.toUpperCase(sentence.charAt(0)));
+        }
     }
 
     private String resolveTemplate(String template, int depth, int maxRecursionDepth) {
         if (depth > maxRecursionDepth) {
-            return "[noun]";
+            return NOUN_TAG;
         }
-        while (template.contains("[sentence]")) {
-            template = template.replaceFirst("\\[sentence\\]", resolveTemplate(template, depth + 1, maxRecursionDepth));
+        while (template.contains(SENTENCE_TAG)) {
+            template = template.replaceFirst(Pattern.quote(SENTENCE_TAG), resolveTemplate(template, depth + 1, maxRecursionDepth));
         }
-
         return template;
-    }
-
-    private String replacePlaceholders() {
-        String result = temp.getStructure().toString(); // Converte lo StringBuilder iniziale
-        Iterator<String> nounsIterator = temp.getNouns().iterator();
-        Iterator<String> verbsIterator = temp.getVerbs().iterator();
-        Iterator<String> adjectiveIterator = temp.getAdjectives().iterator();
-
-        while (result.contains("[noun]") && nounsIterator.hasNext()) {
-            result = result.replaceFirst("\\[noun\\]", nounsIterator.next());
-        }
-        while (result.contains("[verb]") && verbsIterator.hasNext()) {
-            result = result.replaceFirst("\\[verb\\]", verbsIterator.next());
-        }
-        while (result.contains("[adjective]") && adjectiveIterator.hasNext()) {
-            result = result.replaceFirst("\\[adjective\\]", adjectiveIterator.next());
-        }
-        logger.info("Sentence after placeholders replacement: {}", result);
-        return result;
-    }
-
-    @Override
-    public void onConfigChange(String key, String value) {
-
     }
 
 
@@ -120,21 +130,17 @@ public class GenerateSentenceService implements ConfigObserver {
                 logger.error("Unknown strategy: {}", strategy);
                 throw new IllegalArgumentException("Invalid strategy: " + strategy);
         }
-
     }
 
     public void validateInput(Sentence inputSentence, boolean newWords, StrategyType strategy) {
         if (inputSentence == null) {
-            if (!newWords || strategy.equals(SAME))
+            if (!newWords || strategy.equals(StrategyType.SAME)) {
                 throw new IllegalArgumentException("Input sentence cannot be null. Please analyze a sentence first or enable the 'new words' option while selecting a valid structure (Random or Selected).");
+            }
         }
     }
 
     public void configureWordStrategy(boolean newWords, Sentence inputSentence) {
-        if (newWords) {
-            this.wordSelectionStrategy = new NewWordStrategy();
-        } else {
-            this.wordSelectionStrategy = new OriginalWordStrategy(inputSentence);
-        }
+        this.wordSelectionStrategy = newWords ? new NewWordStrategy() : new OriginalWordStrategy(inputSentence);
     }
 }
