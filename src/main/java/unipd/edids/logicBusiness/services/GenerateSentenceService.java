@@ -5,23 +5,23 @@ import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
-import unipd.edids.logicBusiness.strategies.structureStrategies.RandomStructureStrategy;
-import unipd.edids.logicBusiness.strategies.structureStrategies.StructureSentenceStrategy;
+import unipd.edids.logicBusiness.strategies.structureStrategies.*;
+import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.NewWordStrategy;
+import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.OriginalWordStrategy;
 import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.WordSelectionStrategy;
 
 import java.util.Iterator;
+
+import static unipd.edids.logicBusiness.strategies.structureStrategies.StrategyType.SAME;
 
 //Fix usare una factory con singleton, usare una strategy per l'estrazione delle strutture
 
 public class GenerateSentenceService implements ConfigObserver {
 
+    private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
     StructureSentenceStrategy structureSentenceStrategy;
     WordSelectionStrategy wordSelectionStrategy;
-
-    private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
-
-
-//fix temp?
+    //fix temp?
     private Sentence temp;
 
     public GenerateSentenceService() {
@@ -29,10 +29,6 @@ public class GenerateSentenceService implements ConfigObserver {
         structureSentenceStrategy = new RandomStructureStrategy();
     }
 
-    public void setStructureSentenceStrategy(StructureSentenceStrategy strategy) {
-        logger.info("Setting Structure Sentence Strategy: {}", strategy.getClass().getSimpleName());
-        this.structureSentenceStrategy = strategy;
-    }
 
     public StructureSentenceStrategy getStructureSentenceStrategy() {
         return structureSentenceStrategy;
@@ -47,9 +43,9 @@ public class GenerateSentenceService implements ConfigObserver {
         // Step 1: Estrarre la struttura della frase
         logger.warn(structureSentenceStrategy.getClass().getSimpleName());
         temp.setStructure(structureSentenceStrategy.generateSentence());
-        if(ConfigManager.getInstance().getProperty("allow.recursive.sentences").equals("true")){
-            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(),0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level")))));
-        } else if ( temp.getStructure().toString().contains("[sentence]")) {
+        if (ConfigManager.getInstance().getProperty("allow.recursive.sentences").equals("true")) {
+            temp.setStructure(new StringBuilder(resolveTemplate(temp.getStructure().toString(), 0, Integer.parseInt(ConfigManager.getInstance().getProperty("max.recursion.level")))));
+        } else if (temp.getStructure().toString().contains("[sentence]")) {
             temp.setStructure(new StringBuilder(temp.getStructure().toString().replaceAll("\\[sentence\\]", "[noun]")));
         }
 
@@ -105,5 +101,40 @@ public class GenerateSentenceService implements ConfigObserver {
     @Override
     public void onConfigChange(String key, String value) {
 
+    }
+
+
+    public void setStructureSentenceStrategy(StrategyType strategy, Sentence inputSentence, String selStructure) {
+        logger.info("Setting Structure Sentence Strategy: {}", strategy.getClass().getSimpleName());
+        switch (strategy) {
+            case RANDOM:
+                this.structureSentenceStrategy = new RandomStructureStrategy();
+                break;
+            case SAME:
+                this.structureSentenceStrategy = new SameAsAnalyzedStructureStrategy(inputSentence);
+                break;
+            case SELECTED:
+                this.structureSentenceStrategy = new SelectedStructureStrategy(selStructure);
+                break;
+            default:
+                logger.error("Unknown strategy: {}", strategy);
+                throw new IllegalArgumentException("Invalid strategy: " + strategy);
+        }
+
+    }
+
+    public void validateInput(Sentence inputSentence, boolean newWords, StrategyType strategy) {
+        if (inputSentence == null) {
+            if (!newWords || strategy.equals(SAME))
+                throw new IllegalArgumentException("Input sentence cannot be null. Please analyze a sentence first or enable the 'new words' option while selecting a valid structure (Random or Selected).");
+        }
+    }
+
+    public void configureWordStrategy(boolean newWords, Sentence inputSentence) {
+        if (newWords) {
+            this.wordSelectionStrategy = new NewWordStrategy();
+        } else {
+            this.wordSelectionStrategy = new OriginalWordStrategy(inputSentence);
+        }
     }
 }

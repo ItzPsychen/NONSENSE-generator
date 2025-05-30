@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.entities.Sentence;
-import unipd.edids.logicBusiness.entities.WordFactory;
+import unipd.edids.logicBusiness.factories.WordFactory;
 
 public class NewWordStrategy implements WordSelectionStrategy {
 

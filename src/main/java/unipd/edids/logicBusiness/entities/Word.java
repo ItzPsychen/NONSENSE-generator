@@ -1,6 +1,7 @@
 package unipd.edids.logicBusiness.entities;
 import unipd.edids.logicBusiness.managers.FileManager;
 import unipd.edids.logicBusiness.observers.fileObserver.FileObserver;
+import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.WordSelectionStrategy;
 
 import java.util.*;
 
@@ -27,6 +28,7 @@ public abstract class Word implements FileObserver {
      * The file path to the source file containing words for this Word instance.
      */
     protected String filePath;
+
 
     /**
      * Initializes a Word instance with the provided file path and loads words from the file.
@@ -81,4 +83,6 @@ public abstract class Word implements FileObserver {
             loadWords(this.filePath);
         }
     }
+
+
 }

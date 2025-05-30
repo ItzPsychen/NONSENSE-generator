@@ -2,20 +2,13 @@ package unipd.edids.logicBusiness.entities;
 
 import edu.stanford.nlp.trees.SimpleTree;
 import edu.stanford.nlp.trees.Tree;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
-//Fix moderation
-
-
 public class Sentence {
-    private static final Logger logger = LogManager.getLogger(Sentence.class);
 
-    private StringBuilder sentence;                 // frase originale o generata
-    private StringBuilder structure;                // frase con i placeholder tipo "The [NOUN] [VERB]..."
+    private StringBuilder sentence;
+    private StringBuilder structure;
     private Tree syntaxTree;
 
     private double toxicity;
@@ -28,24 +21,21 @@ public class Sentence {
     private List<String> verbs;
     private List<String> adjectives;
 
-    // Costruttori, getter, setter
-
     public Sentence() {
         this.sentence = new StringBuilder();
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
+        this.syntaxTree.setValue("ROOT");
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
     }
 
-
-
-
     public Sentence(String text) {
         this.sentence = new StringBuilder(text);
         this.structure = new StringBuilder();
         this.syntaxTree = new SimpleTree();
+        this.syntaxTree.setValue("ROOT");
         this.nouns = new ArrayList<>();
         this.verbs = new ArrayList<>();
         this.adjectives = new ArrayList<>();
@@ -96,15 +86,6 @@ public class Sentence {
     public double getInsult() { return this.insult; }
     public double getSexual() { return this.sexual; }
     public double getPolitics() { return this.politics; }
-
-    public boolean isValid() {
-        return true;
-
-        // if (this.toxicity > 0.3 || this.profanity > 0.3) return false;
-        // if (this.threat > 0.5 || this.identityThreat > 0.5) return false;
-        // return this.insult < 0.4;
-    }
-
 
     @Override
     public String toString() {

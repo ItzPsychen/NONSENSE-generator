@@ -3,6 +3,7 @@ package unipd.edids.userInterface;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.Logger;
@@ -70,17 +71,34 @@ public class TaskManager {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("WATCH OUT!");
         alert.setHeaderText(errorClass);
-        Text generalText = new Text("A problem occurred during the execution of the task:\n");
 
-        // Testo per l'errorMessage (grassetto e rosso)
+        // Testo iniziale (informativo)
+        Text generalText = new Text("A problem occurred during the execution of the task.\n\n");
+
+        // Testo per il messaggio d'errore (grassetto e rosso)
         Text errorText = new Text(errorMessage);
-        errorText.setStyle("-fx-fill: red; -fx-font-weight: bold;"); // Rosso e grassetto
+        errorText.setStyle("-fx-fill: red; -fx-font-weight: bold;"); // Stile (rosso e grassetto)
 
-        // TextFlow per combinare i messaggi
+        // TextFlow per combinare i due messaggi
         TextFlow textFlow = new TextFlow(generalText, errorText);
 
-        // Imposta il TextFlow come contenuto della finestra di dialogo
+        // Imposta una larghezza massima per il TextFlow (il testo andrà a capo se supera questa larghezza)
+        textFlow.setPrefWidth(400); // Cambia il valore per regolare la larghezza desiderata
+        textFlow.setMaxWidth(400);
+        textFlow.setMaxHeight(Region.USE_PREF_SIZE); // Comportamento fisso per l'altezza
+
+        // Abilita il wrapping del testo (per andare a capo)
+        generalText.wrappingWidthProperty().set(380); // Deve essere inferiore alla larghezza del TextFlow
+        errorText.wrappingWidthProperty().set(380);
+
+        // Imposta il TextFlow come contenuto del DialogPane
         alert.getDialogPane().setContent(textFlow);
+
+        // Imposta una dimensione fissa per il DialogPane
+        alert.getDialogPane().setPrefWidth(450);
+        alert.getDialogPane().setPrefHeight(200);
+        alert.getDialogPane().setMaxWidth(450); // Massima larghezza
+        alert.getDialogPane().setMaxHeight(200); // Massima altezza
 
         // Mostra la finestra di dialogo
         alert.showAndWait();

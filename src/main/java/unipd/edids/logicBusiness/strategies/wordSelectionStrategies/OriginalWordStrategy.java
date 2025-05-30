@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.entities.Verb;
-import unipd.edids.logicBusiness.entities.WordFactory;
+import unipd.edids.logicBusiness.factories.WordFactory;
 import unipd.edids.logicBusiness.strategies.tenseStrategies.FutureTenseStrategy;
 
 import java.util.ArrayList;

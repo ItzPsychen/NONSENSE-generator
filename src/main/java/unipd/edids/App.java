@@ -108,7 +108,7 @@ public class App extends Application {
         // Inizializzazione dell'app principale
         logger.info("API Key file detected. Continuing application initialization.");
 
-        AppManager appManager = new AppManager();
+        AppManager appManager = new AppManager(configManager);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Form.fxml"));
         Parent root = loader.load();
 

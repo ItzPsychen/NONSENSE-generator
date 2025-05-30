@@ -1,4 +1,9 @@
-package unipd.edids.logicBusiness.entities;
+package unipd.edids.logicBusiness.factories;
+
+import unipd.edids.logicBusiness.entities.Adjective;
+import unipd.edids.logicBusiness.entities.Noun;
+import unipd.edids.logicBusiness.entities.Verb;
+import unipd.edids.logicBusiness.entities.Word;
 
 public class WordFactory {
 

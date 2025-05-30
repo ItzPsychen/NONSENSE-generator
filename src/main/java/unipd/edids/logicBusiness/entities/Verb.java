@@ -3,6 +3,8 @@ package unipd.edids.logicBusiness.entities;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.managers.FileManager;
 import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
+import unipd.edids.logicBusiness.strategies.tenseStrategies.FutureTenseStrategy;
+import unipd.edids.logicBusiness.strategies.tenseStrategies.PresentTenseStrategy;
 import unipd.edids.logicBusiness.strategies.tenseStrategies.TenseStrategy;
 
 import java.util.Random;
@@ -107,12 +109,19 @@ public class Verb extends Word implements ConfigObserver {
     }
 
     /**
-     * Sets the conjugation strategy for handling verb tenses.
+     * Configures the verb tense strategy for the Verb class.
+     * Adjusts between future tense and present tense strategies
+     * based on the input parameter.
      *
-     * @param strategy The specific TenseStrategy implementation to apply for conjugating verbs.
+     * @param futureTense A boolean value indicating if future tense
+     *                    should be applied (true for future, false for present).
      */
-    public void setTenseStrategy(TenseStrategy strategy) {
-        this.tenseStrategy = strategy;
+    public void configureVerbTense(boolean futureTense) {
+        if (futureTense) {
+            this.tenseStrategy = new FutureTenseStrategy();
+        } else {
+            this.tenseStrategy = new PresentTenseStrategy();
+        }
     }
 }
 

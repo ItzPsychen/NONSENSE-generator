@@ -1,145 +1,187 @@
-// Facade
-
 package unipd.edids.logicBusiness;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.entities.Verb;
+import unipd.edids.logicBusiness.exceptions.AnalyzeException;
+import unipd.edids.logicBusiness.exceptions.GenerateException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.managers.FileManager;
 import unipd.edids.logicBusiness.services.AnalyzeSentenceService;
 import unipd.edids.logicBusiness.services.GenerateSentenceService;
 import unipd.edids.logicBusiness.services.ModerationSentenceService;
-import unipd.edids.logicBusiness.strategies.structureStrategies.RandomStructureStrategy;
-import unipd.edids.logicBusiness.strategies.structureStrategies.SameAsAnalyzedStructureStrategy;
-import unipd.edids.logicBusiness.strategies.structureStrategies.SelectedStructureStrategy;
-import unipd.edids.logicBusiness.strategies.tenseStrategies.FutureTenseStrategy;
-import unipd.edids.logicBusiness.strategies.tenseStrategies.PresentTenseStrategy;
-import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.NewWordStrategy;
-import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.OriginalWordStrategy;
+import unipd.edids.logicBusiness.strategies.structureStrategies.StrategyType;
 
-
-//FIX il facade chiama il service layer, non ha logica di business
-// inoltre ha come istanza ConfigManager, LoggerManager e FileManager
-
+/**
+ * Acts as a Facade for the core application logic, managing sentence analysis, generation, and moderation.
+ *
+ * <p>Main Responsibilities:
+ * - Provides a simplified interface for the underlying services:
+ * - Sentence analysis via {@link AnalyzeSentenceService}.
+ * - Sentence generation via {@link GenerateSentenceService}.
+ * - Sentence moderation via {@link ModerationSentenceService}.
+ * - Manages input and output sentences.
+ * - Offers utilities for clearing and retrieving processed sentences.
+ * - Handles application configurations via {@link ConfigManager}.
+ *
+ * <p>Design Pattern:
+ * - Implements the Facade pattern to centralize and simplify the access to sentence-related operations
+ * by delegating tasks to underlying services while minimizing direct dependencies among components.
+ * - Utilizes the Singleton pattern for {@link ConfigManager} initialization.
+ */
 public class AppManager {
+    /**
+     * Logger instance for the AppManager class.
+     * Used for logging messages and tracking application behavior.
+     */
     private static final Logger logger = LogManager.getLogger(AppManager.class);
 
+    /**
+     * The AnalyzeSentenceService is responsible for performing syntax analysis on text input.
+     */
+    private final AnalyzeSentenceService analyzeSentenceService;
+
+    /**
+     * Responsible for generating sentences based on specified structure and word selection strategies.
+     */
+    private final GenerateSentenceService generateSentenceService;
+
+    /**
+     * Service responsible for moderating the sentences by analyzing their toxicity
+     * and adjusting content according to predefined categories.
+     */
+    private final ModerationSentenceService moderationSentenceService;
+
+    /**
+     * Manages application configuration settings.
+     */
+    private final ConfigManager configManager;
+
+    /**
+     * Represents the sentence input provided to the application.
+     */
     private Sentence inputSentence;
+
+    /**
+     * Stores the output sentence generated or analyzed by the application.
+     */
     private Sentence outputSentence;
-    private AnalyzeSentenceService analyzeSentenceService;
-    private GenerateSentenceService generateSentenceService;
-    private ModerationSentenceService moderationSentenceService;
-    private boolean modified;
-    private ConfigManager configManager;
 
-    public AppManager() {
-        analyzeSentenceService = new AnalyzeSentenceService();
-        generateSentenceService = new GenerateSentenceService();
-        moderationSentenceService = new ModerationSentenceService();
-        configManager = ConfigManager.getInstance();
-        modified = true;
+    /**
+     * Constructs an instance of the AppManager Facade.
+     * Initializes the core services responsible for sentence analysis, generation, and moderation.
+     * Additionally, it applies the singleton instance of {@link ConfigManager} to manage configuration settings.</p>
+     */
+    public AppManager(ConfigManager configManager) {
+        this.analyzeSentenceService = new AnalyzeSentenceService();
+        this.generateSentenceService = new GenerateSentenceService();
+        this.moderationSentenceService = new ModerationSentenceService();
+        this.configManager = configManager;
     }
 
+    /**
+     * Analyzes the syntax of a sentence and optionally saves the analyzed sentence to a file.
+     *
+     * @param text         the input text to analyze.
+     * @param saveSelected a boolean indicating whether the analyzed sentence should be saved to a file.
+     * @return an instance of {@code Sentence} containing the details of the analyzed sentence.
+     * @throws AnalyzeException if an error occurs during the analysis process.
+     */
     public Sentence analyzeSentence(String text, boolean saveSelected) {
-        validateText(text);
-        inputSentence = analyzeSentenceService.analyzeSyntax(text);
-        if (saveSelected)
-            FileManager.appendLineToSavingFile(configManager.getProperty("analyzed.save.file"), inputSentence.toString());
-        return inputSentence;
+        logger.info("Starting sentence analysis. Input text: '{}', saveSelected: {}", text, saveSelected);
+        try {
+            inputSentence = analyzeSentenceService.analyzeSyntax(text);
+            logger.debug("Sentence successfully analyzed: {}", inputSentence);
+
+            if (saveSelected) {
+                String savePath = configManager.getProperty("analyzed.save.file");
+                FileManager.appendLineToSavingFile(savePath, inputSentence.toString());
+                logger.info("Analyzed sentence saved to file: {}", savePath);
+            }
+
+            logger.info("Sentence analysis completed successfully.");
+            return inputSentence;
+        } catch (Exception e) {
+            String errorMessage = "Sentence analysis failed: " + e.getClass().getSimpleName() + " - " + e.getMessage();
+            logger.error(errorMessage, e);
+            throw new AnalyzeException(errorMessage, e);
+        }
     }
 
-    public Sentence generateSentence(String strategy, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean saveSelected) {
+    /**
+     * Generates a sentence based on the specified strategy, input structure, and configuration options.
+     *
+     * @param strategyName     The strategy for sentence structure determination (e.g., RANDOM, SAME, SELECTED).
+     * @param selStructure The selected structure to use when the SELECTED strategy is applied.
+     * @param toxicity     Whether to moderate the generated sentence for toxicity.
+     * @param futureTense  Specifies whether to configure the sentence with a future verb tense.
+     * @param newWords     Configures if new words should be used in the generated sentence.
+     * @param saveSelected Whether to save the generated sentence to a persistent storage.
+     * @return A {@code Sentence} object containing the generated sentence, structure, and related metadata.
+     * @throws GenerateException If the sentence generation process encounters an error.
+     */
+    public Sentence generateSentence(String strategyName, String selStructure, boolean toxicity, boolean futureTense, boolean newWords, boolean saveSelected) {
+        logger.info("Starting sentence generation with params [strategy: {}, selStructure: {}, toxicity: {}, futureTense: {}, newWords: {}, saveSelected: {}]", strategyName, selStructure, toxicity, futureTense, newWords, saveSelected);
+        try {
+            StrategyType strategy = StrategyType.valueOf(strategyName.toUpperCase());
 
+            // Validazione dell'input
+            logger.debug("Validating input sentence: {}", inputSentence);
+            generateSentenceService.validateInput(inputSentence, newWords, strategy);
 
-        if (inputSentence == null) {
-            if (!newWords || (strategy.equals("SAME")))
-                throw new IllegalArgumentException("Input sentence cannot be null. Please analyze a sentence first or enable the 'new words' option while selecting a valid structure (Random or Selected).");
+            // Imposta le strategie e genera la frase
+            logger.debug("Setting structure strategy: {}", strategy);
+            generateSentenceService.setStructureSentenceStrategy(strategy, inputSentence, selStructure);
+
+            logger.debug("Configuring verb tense: futureTense = {}", futureTense);
+            Verb.getInstance().configureVerbTense(futureTense);
+
+            logger.debug("Configuring word strategy: newWords = {}", newWords);
+            generateSentenceService.configureWordStrategy(newWords, inputSentence);
+
+            outputSentence = generateSentenceService.generateSentence();
+            logger.debug("Generated sentence: {}", outputSentence);
+
+            // Moderazione della tossicità
+            if (toxicity) {
+                logger.debug("Moderating sentence for toxicity...");
+                moderationSentenceService.moderateText(outputSentence);
+                logger.info("Toxicity moderation completed.");
+            }
+
+            // Salvataggio della frase
+            if (saveSelected) {
+                String savePath = configManager.getProperty("generated.save.file");
+                FileManager.appendLineToSavingFile(savePath, outputSentence.toString());
+                logger.info("Generated sentence saved to file: {}", savePath);
+            }
+
+            logger.info("Sentence generation completed successfully.");
+            return outputSentence;
+        } catch (Exception e) {
+            String errorMessage = "Sentence generation failed: " + e.getClass().getSimpleName() + " - " + e.getMessage();
+            logger.error(errorMessage, e);
+            throw new GenerateException(errorMessage, e);
         }
-
-
-        switch (strategy) {
-            case "RANDOM":
-                generateSentenceService.setStructureSentenceStrategy(new RandomStructureStrategy());
-                break;
-            case "SAME":
-                generateSentenceService.setStructureSentenceStrategy(new SameAsAnalyzedStructureStrategy(inputSentence));
-                break;
-            case "SELECTED":
-                generateSentenceService.setStructureSentenceStrategy(new SelectedStructureStrategy(selStructure));
-                break;
-            default:
-                logger.error("Unknown strategy: {}", strategy);
-                throw new IllegalArgumentException("Invalid strategy: " + strategy);
-        }
-
-        if (futureTense) {
-            Verb.getInstance().setTenseStrategy(new FutureTenseStrategy());
-        } else {
-            Verb.getInstance().setTenseStrategy(new PresentTenseStrategy());
-        }
-
-        if (newWords) {
-            generateSentenceService.setWordsStrategi(new NewWordStrategy());
-        } else {
-            generateSentenceService.setWordsStrategi(new OriginalWordStrategy(inputSentence));
-        }
-
-        outputSentence = generateSentenceService.generateSentence();
-        if (toxicity) {
-            moderationSentenceService.moderateText(outputSentence);
-        }
-
-        if (saveSelected) {
-            FileManager.appendLineToSavingFile(configManager.getProperty("generated.save.file"), outputSentence.toString());
-
-        }
-        return outputSentence;
     }
 
 
-
+    /**
+     * Resets the input and output sentences to a null state.
+     */
     public void clearAll() {
+        logger.info("Clearing input and output sentences.");
         this.inputSentence = null;
         this.outputSentence = null;
     }
 
-
-    public Sentence getInputSentence() {
-        return inputSentence;
-    }
-
+    /**
+     * Provides the current output sentence generated or processed by the application.
+     *
+     * @return the current output Sentence instance, or null if no sentence has been processed or generated.
+     */
     public Sentence getOutputSentence() {
         return outputSentence;
-    }
-
-    private void validateText(String text) {
-        if (text == null || text.isEmpty()) {
-            throw new IllegalArgumentException("Input text cannot be null or empty.");
-        }
-        int maxLength = Integer.parseInt(configManager.getProperty("max.sentence.length"));
-        if (text.length() > maxLength) {
-            throw new IllegalArgumentException("Input text cannot exceed " + maxLength + " characters.");
-        }
-        if (text.trim().isEmpty()) {
-            throw new IllegalArgumentException("Input text cannot be empty or whitespace only.");
-        }
-        if (!text.matches(".*[a-zA-Z]+.*")) {
-            throw new IllegalArgumentException("Input text must contain at least one alphabetical character.");
-        }
-
-
-        if (text.matches("^[^a-zA-Z0-9\\s].*")) {
-            throw new IllegalArgumentException("Input text contains invalid characters at the start of the text.");
-        }
-        if (text.matches(".*[^a-zA-Z0-9.\\s]$")) {
-            throw new IllegalArgumentException("Input text contains invalid characters at the end of the text.");
-        }
-        if (text.matches(".*[^a-zA-Z0-9.,:'\"\\s].*")) {
-            throw new IllegalArgumentException("Input text contains invalid characters.");
-        }
-
-
     }
 }
