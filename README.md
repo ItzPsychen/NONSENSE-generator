@@ -32,7 +32,7 @@ At the top of our Generator, you can open a *Credits* section using the *"About"
 
 ---
 
-## **The All-Functions Manual**
+## *The All-Functions Manual*
 
 The following section provides a detailed breakdown of the Application, so that you won't get lost using it in the future.
 
