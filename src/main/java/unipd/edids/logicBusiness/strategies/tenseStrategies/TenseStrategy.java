@@ -13,5 +13,12 @@ package unipd.edids.logicBusiness.strategies.tenseStrategies;
  */
 // Interfaccia Strategy
 public interface TenseStrategy {
+    /**
+     * Conjugates the provided verb into the appropriate tense.
+     *
+     * @param verb the verb to conjugate; must not be null.
+     * @return the conjugated form of the provided verb.
+     * @throws IllegalArgumentException if the verb parameter is null.
+     */
     String conjugate(String verb);
 }

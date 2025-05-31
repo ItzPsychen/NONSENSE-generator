@@ -1,9 +1,11 @@
 package unipd.edids.logicBusiness.entities;
+
 import unipd.edids.logicBusiness.managers.FileManager;
 import unipd.edids.logicBusiness.observers.fileObserver.FileObserver;
-import unipd.edids.logicBusiness.strategies.wordSelectionStrategies.WordSelectionStrategy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * The Word class is an abstract representation of a word list
@@ -36,6 +38,9 @@ public abstract class Word implements FileObserver {
      * @param filePath The file path used to load the list of words.
      */
     protected Word(String filePath) {
+        if (filePath == null) {
+            throw new IllegalArgumentException("The file path for " + this.getClass().getSimpleName() +" cannot be null.");
+        }
         this.filePath = filePath;
         words = new ArrayList<>();
         loadWords(filePath);
@@ -47,7 +52,10 @@ public abstract class Word implements FileObserver {
      * @param filePath the path of the file containing the words to load
      */
     protected void loadWords(String filePath) {
-            words = FileManager.readFile(filePath);
+        if (filePath == null) {
+            throw new IllegalArgumentException("The file path for " + this.getClass().getSimpleName() +" cannot be null.");
+        }
+        words = FileManager.readFile(filePath);
     }
 
     /**

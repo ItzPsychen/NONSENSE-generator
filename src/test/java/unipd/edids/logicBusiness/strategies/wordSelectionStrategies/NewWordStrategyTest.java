@@ -5,8 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.entities.Verb;
-import unipd.edids.logicBusiness.services.GenerateSentenceService;
-import unipd.edids.logicBusiness.strategies.structureStrategies.StrategyType;
+
 
 import java.util.ArrayList;
 import java.util.List;

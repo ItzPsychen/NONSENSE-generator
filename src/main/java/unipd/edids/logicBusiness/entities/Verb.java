@@ -95,6 +95,9 @@ public class Verb extends Word implements ConfigObserver {
      * @return The conjugated form of the provided verb.
      */
     public String conjugate(String verb) {
+        if (this.tenseStrategy == null) {
+            configureVerbTense(false);
+        }
         return this.tenseStrategy.conjugate(verb);
     }
 

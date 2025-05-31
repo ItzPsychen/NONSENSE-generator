@@ -63,4 +63,5 @@ public class Adjective extends Word implements ConfigObserver {
             loadWords(this.filePath);
         }
     }
+
 }

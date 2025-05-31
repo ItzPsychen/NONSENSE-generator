@@ -10,5 +10,11 @@ import unipd.edids.logicBusiness.entities.Sentence;
  * </p>
  */
 public interface WordSelectionStrategy {
+    /**
+     * Populates the word lists (nouns, verbs, adjectives) in the provided Sentence object
+     * based on specific rules or structure.
+     *
+     * @param temp The Sentence object whose word lists will be populated.
+     */
     void populateWords(Sentence temp);
 }

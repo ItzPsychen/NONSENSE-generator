@@ -1,15 +1,20 @@
 package unipd.edids.logicBusiness.strategies.structureStrategies;
 
 /**
- * Represents a strategy for defining the sentence structure during sentence generation.
+ * Strategy interface for generating sentence structures.
  *
  * <p>Responsibilities:</p>
- * - Abstracts the process of determining how a sentence's structure is configured.
- * - Provides mechanism to implement different strategies to define sentence structures.
+ * - Defines the contract for generating sentence structures as mutable strings.
+ * - Supports variability and flexibility in sentence generation by enabling multiple implementation strategies.
  *
  * <p>Design Pattern:</p>
- * - Implements the Strategy Design Pattern, enabling interchangeable algorithms for sentence structure generation.
+ * - Follows the Strategy Design Pattern, allowing interchangeable algorithms for sentence structure generation.
  */
 public interface StructureSentenceStrategy {
-    public StringBuilder generateSentenceStructure();
+    /**
+     * Generates the structure of a sentence in the form of a mutable string.
+     *
+     * @return A StringBuilder representing the generated sentence structure.
+     */
+    StringBuilder generateSentenceStructure();
 }

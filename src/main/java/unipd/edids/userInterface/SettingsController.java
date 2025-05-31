@@ -175,39 +175,45 @@ public class SettingsController {
     }
 
     public void applySettings() {
-        // Check se il campo apiKeyFileField è vuoto
-        if (apiKeyFileField.getText() == null || apiKeyFileField.getText().trim().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING); // Mostra un avviso all'utente
-            alert.setTitle("Campo obbligatorio mancante");
-            alert.setHeaderText("Il campo API Key File non può essere vuoto.");
-            alert.setContentText("Inserisci il percorso del file della chiave API prima di applicare le impostazioni.");
-            alert.showAndWait();
-            return; // Non chiudere la finestra
-        }
+        //fix every field must be filled
+//        try {
+            // Check se il campo apiKeyFileField è vuoto
+            if (apiKeyFileField.getText() == null || apiKeyFileField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING); // Mostra un avviso all'utente
+                alert.setTitle("Campo obbligatorio mancante");
+                alert.setHeaderText("Il campo API Key File non può essere vuoto.");
+                alert.setContentText("Inserisci il percorso del file della chiave API prima di applicare le impostazioni.");
+                alert.showAndWait();
+                return; // Non chiudere la finestra
+            }
 
-        // Update ConfigManager with values from text fields
-        configManager.setProperty("api.key.file", apiKeyFileField.getText());
-        configManager.setProperty("noun.file", nounFileField.getText());
-        configManager.setProperty("verb.file", verbFileField.getText());
-        configManager.setProperty("adjective.file", adjectiveFileField.getText());
-        configManager.setProperty("sentence.structures", sentenceStructuresFileField.getText());
-        configManager.setProperty("syntax_tags.properties", syntaxTagsFileField.getText());
-        configManager.setProperty("output.logfile", outputLogFileField.getText());
-        configManager.setProperty("generated.save.file", generatedNonsenseFileField.getText());
-        configManager.setProperty("analyzed.save.file", analysisNonsenseFileField.getText());
+            // Update ConfigManager with values from text fields
+            configManager.setProperty("api.key.file", apiKeyFileField.getText());
+            configManager.setProperty("noun.file", nounFileField.getText());
+            configManager.setProperty("verb.file", verbFileField.getText());
+            configManager.setProperty("adjective.file", adjectiveFileField.getText());
+            configManager.setProperty("sentence.structures", sentenceStructuresFileField.getText());
+            configManager.setProperty("syntax_tags.properties", syntaxTagsFileField.getText());
+            configManager.setProperty("output.logfile", outputLogFileField.getText());
+            configManager.setProperty("generated.save.file", generatedNonsenseFileField.getText());
+            configManager.setProperty("analyzed.save.file", analysisNonsenseFileField.getText());
 
-        // Update ConfigManager with numeric and boolean fields
-        configManager.setProperty("max.recursion.level", maxRecursionLevelField.getText());
-        configManager.setProperty("max.sentence.length", maxSentenceLengthField.getText());
-        configManager.setProperty("allow.recursive.sentences", String.valueOf(allowRecursiveSentencesCheck.isSelected()));
+            // Update ConfigManager with numeric and boolean fields
+            configManager.setProperty("max.recursion.level", maxRecursionLevelField.getText());
+            configManager.setProperty("max.sentence.length", maxSentenceLengthField.getText());
+            configManager.setProperty("allow.recursive.sentences", String.valueOf(allowRecursiveSentencesCheck.isSelected()));
 
-        // Update ConfigManager with theme
-        configManager.setProperty("ui.theme", themeComboBox.getValue());
-        // Save changes to ConfigManager
-        configManager.saveProperties();
+            // Update ConfigManager with theme
+            configManager.setProperty("ui.theme", themeComboBox.getValue());
+            // Save changes to ConfigManager
+            configManager.saveProperties();
 
-        logger.info("Settings applied");
-        closeSettings();
+            logger.info("Settings applied");
+            closeSettings();
+//        }
+//        catch (Exception e){
+//            throw new RuntimeException("Errore durante l'applicazione delle impostazioni: " + e.getMessage());
+//        }
     }
 
     public void recursionSelection() {
