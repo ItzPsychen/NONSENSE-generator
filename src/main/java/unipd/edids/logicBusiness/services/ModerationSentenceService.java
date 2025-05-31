@@ -167,7 +167,7 @@ public class ModerationSentenceService {
             throw new IllegalArgumentException(errorMessage);
         }
 
-        if (sentenceText.matches(".*[^a-zA-Z0-9.,:'\"\\s].*")) {
+        if (sentenceText.matches(".*[^a-zA-Z0-9.,:'\"\\s-].*")) {
             String errorMessage = "Input text contains invalid characters.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);

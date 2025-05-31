@@ -264,7 +264,7 @@ public class AnalyzeSentenceService {
             throw new IllegalArgumentException(errorMessage);
         }
 
-        if (text.matches(".*[^a-zA-Z0-9.,:'\"\\s].*")) {
+        if (text.matches(".*[^a-zA-Z0-9.,:'\"\\s-].*")) {
             String errorMessage = "Input text contains invalid characters.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
