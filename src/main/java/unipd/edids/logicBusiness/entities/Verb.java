@@ -83,7 +83,6 @@ public class Verb extends Word implements ConfigObserver {
      * or "undefined" if the list is empty.
      */
     public String getRandomWord() {
-        System.out.println(tenseStrategy.getClass().getSimpleName());
         if (words.isEmpty()) return "undefined";
         Random random = new Random();
         return conjugate(words.get(random.nextInt(words.size())));
