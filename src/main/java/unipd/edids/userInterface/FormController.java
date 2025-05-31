@@ -1,7 +1,5 @@
 package unipd.edids.userInterface;
 
-import java.util.Properties;
-
 import edu.stanford.nlp.trees.Tree;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -29,7 +27,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.Logger;
-import unipd.edids.logicBusiness.*;
+import unipd.edids.logicBusiness.AppManager;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.entities.SentenceStructure;
 import unipd.edids.logicBusiness.managers.ConfigManager;
@@ -40,13 +38,30 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.stream.Collectors;
 
+/**
+ * The `FormController` class is responsible for managing the application's user interface and coordinating interactions
+ * between the backend logic and frontend components.
+ *
+ * <p>Responsibilities:
+ * - Acts as the Controller in the Model-View-Controller (MVC) architecture, connecting the View (UI) with the backend services.
+ * - Manages application states and user interactions such as text input, analysis, generation, and settings updates.
+ * - Provides utilities for manipulating UI components, including syntax highlighting, structure formatting,
+ *   and progress bar animations.
+ * - Handles logic for displaying and interacting with different application modes, such as text analysis and text generation.
+ *
+ * <p>Design Pattern:
+ * - Implements the **Facade Pattern** by abstracting and managing interactions with complex backend systems,
+ *   primarily through the `AppManager`.
+ * - Utilizes the **Command Pattern** for encapsulating operations like text analysis and sentence generation into discrete tasks.
+ */
 public class FormController {
     private static final Logger logger = LoggerManager.getInstance().getLogger(FormController.class);
 
-    private static String currentTheme = "light"; // Tema di default
+    private static String currentTheme = "light"; // Default theme
     @FXML
     private CheckBox checkSaveSentence;
     @FXML
@@ -67,8 +82,8 @@ public class FormController {
     private CheckBox futureTenseCheck;
     @FXML
     private CheckBox toxicityLevels;
-    private TextFlow lastSyntaxFlow; // Campo che salva il contenuto del syntaxArea
-    private TextFlow lastGenerateFlow; // Campo che salva il contenuto del generateArea
+    private TextFlow lastSyntaxFlow; // Field that saves the content of syntaxArea 
+    private TextFlow lastGenerateFlow; // Field that saves the content of generateArea
     @FXML
     private BorderPane rootPane;
 
@@ -97,7 +112,21 @@ public class FormController {
     private ToggleGroup structureToggleGroup;
 
     private java.util.Timer progressTimer;
+    private AppManager appManager;
+    private String textColor;
+    private Map<String, String> treeTags;
+    @FXML
+    private AnchorPane bottomBar;
+    private Stage primaryStage; // Variable to save primaryStage
 
+    /**
+     * Terminates the application by stopping active timers and exiting the application platform.
+     *
+     * <p>
+     * This method cancels and purges the `progressTimer` if it exists to ensure proper resource cleanup.
+     * It then exits the JavaFX application via the `Platform.exit()` call, effectively shutting down
+     * the entire application.
+     */
     // Close everything
     @FXML
     private void handleClose() {
@@ -109,6 +138,9 @@ public class FormController {
         Platform.exit();
     }
 
+    /**
+     * Deletes the current input text, clears the syntax and generation areas, and resets the application state.
+     */
     // Delete input (and optionally output)
     @FXML
     private void handleDelete() {
@@ -118,42 +150,57 @@ public class FormController {
         appManager.clearAll();
     }
 
+    /**
+     * Responsible for handling the "About" action in the application.
+     * It displays an informational alert dialog about the project and its creators.
+     */
     // Show About info
     @FXML
     private void handleAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("NONSENSE Generator");
-        alert.setContentText("Created by team NoIdeaName\n\n" +
-                "→ Casarotto Milo\n→ Donnagemma Davide\n→ Hu Stefania\n→ Maniglio Federico\n\n" +
-                "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
+        alert.setContentText("Created by team NoIdeaName\n\n" + "→ Casarotto Milo\n→ Donnagemma Davide\n→ Hu Stefania\n→ Maniglio Federico\n\n" + "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
 
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
         alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about")));
         alert.showAndWait();
     }
 
-    private AppManager appManager;
-    private String textColor;
-
+    /**
+     * Sets the Facade for the FormController by assigning an instance of AppManager.
+     *
+     * @param appManager an instance of AppManager, acting as the Facade for managing core application logic and services.
+     */
     public void setFacade(AppManager appManager) {
         this.appManager = appManager;
     }
 
-    private Map<String, String> treeTags;
-
-
+    /**
+     * Initializes the user interface components and sets up the primary configurations
+     * for the application.
+     *
+     * This method is responsible for:
+     * - Applying the configured UI theme.
+     * - Setting up toggle groups for radio buttons.
+     * - Populating the structure combo box with sentence structure options and initializing
+     *   its state.
+     * - Loading syntax tags used in the application.
+     * - Adding context menus to specific areas in the interface.
+     * - Binding UI components to respective layout properties for responsive design.
+     * - Initializing a timer instance for UI-related progress tracking or updates.
+     */
     public void initialize() {
         ConfigManager configManager = ConfigManager.getInstance();
 
-        // Recupera il tema configurato
+        // Get configured theme
         String theme = configManager.getProperty("ui.theme");
-        // Applica il tema attuale
+        // Apply current theme
         updateTheme(theme);
 
         structureToggleGroup = new ToggleGroup();
 
-        // Associa i RadioButton al ToggleGroup
+        // Associate RadioButtons to ToggleGroup
         randomStructureRadio.setToggleGroup(structureToggleGroup);
         sameAsAnalyzeRadio.setToggleGroup(structureToggleGroup);
         selectStructureRadio.setToggleGroup(structureToggleGroup);
@@ -165,10 +212,10 @@ public class FormController {
 
         this.treeTags = loadSyntaxTags(getFilePathTags());
 
-        // Aggiungi il ContextMenu al TextFlow syntaxArea
+        // Add ContextMenu to TextFlow syntaxArea
         addContextMenuToTextFlow(syntaxArea);
 
-        // Aggiungi il ContextMenu al TextFlow generateArea
+        // Add ContextMenu to TextFlow generateArea
         addContextMenuToTextFlow(generateArea);
 
         syntaxArea.prefWidthProperty().bind(scrollPaneSyntax.widthProperty().subtract(20));
@@ -177,57 +224,77 @@ public class FormController {
         this.progressTimer = new Timer();
     }
 
+    /**
+     * Adds a context menu with a "Copy" option to the specified TextFlow.
+     * The context menu allows users to copy the content of the TextFlow to the clipboard.
+     *
+     * @param textFlow The TextFlow component to which the context menu will be added.
+     */
     private void addContextMenuToTextFlow(TextFlow textFlow) {
-        // Crea il menu contestuale
+        // Create context menu
         ContextMenu contextMenu = new ContextMenu();
 
-        // Opzione "Copy"
+        // "Copy" option
         MenuItem copyItem = new MenuItem("Copy");
         copyItem.setOnAction(event -> copyTextFlowContentToClipboard(textFlow));
 
-        // Aggiungi l'opzione al menu
+        // Add option to menu
         contextMenu.getItems().add(copyItem);
 
-        // Associa il menu contestuale al TextFlow
+        // Associate context menu to TextFlow
         textFlow.setOnContextMenuRequested(e -> {
             contextMenu.show(textFlow, e.getScreenX(), e.getScreenY());
         });
     }
 
+    /**
+     * Copies all text content from a given {@code TextFlow} node to the system clipboard.
+     *
+     * @param textFlow The {@code TextFlow} node whose content is to be copied.
+     */
     private void copyTextFlowContentToClipboard(TextFlow textFlow) {
-        // StringBuilder per contenere tutto il testo
+        // StringBuilder to contain all text
         StringBuilder content = new StringBuilder();
 
-        // Metodo ricorsivo per ottenere tutto il testo
+        // Recursive method to get all text
         extractTextFromNodes(textFlow, content);
 
-        // Copia il testo completo nella clipboard
+        // Copy complete text to clipboard
         javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
         javafx.scene.input.ClipboardContent clipboardContent = new javafx.scene.input.ClipboardContent();
         clipboardContent.putString(content.toString());
         clipboard.setContent(clipboardContent);
     }
 
+    /**
+     * Extracts text content from a given JavaFX Node recursively and appends it to a StringBuilder.
+     *
+     * @param node     The JavaFX Node from which text is to be extracted.
+     *                 It can include Text or TextFlow instances.
+     * @param content  The StringBuilder object where the extracted text will be appended.
+     */
     private void extractTextFromNodes(javafx.scene.Node node, StringBuilder content) {
-        // Controlla il tipo di nodo
+        // Check node type
         if (node instanceof Text) {
-            // Aggiungi il testo dell'oggetto `Text`
+            // Add text from `Text` object
             content.append(((Text) node).getText());
         } else if (node instanceof TextFlow) {
-            // Itera sui figli di un eventuale `TextFlow` nidificato
+            // Iterate on children of a nested `TextFlow`
             for (javafx.scene.Node child : ((TextFlow) node).getChildren()) {
                 extractTextFromNodes(child, content);
             }
         }
     }
 
-    @FXML
-    private AnchorPane bottomBar;
-
+    /**
+     * Updates the application's theme and its related visual properties.
+     *
+     * @param theme The name of the desired theme to apply (e.g., "dark", "light").
+     */
     public void updateTheme(String theme) {
         Platform.runLater(() -> {
             currentTheme = theme;
-            // Cambia il foglio di stile
+            // Change style sheet
             if (currentTheme.equals("dark")) {
                 this.textColor = "white";
                 rootPane.getStylesheets().add(Objects.requireNonNull(FormController.class.getResource("/style/dark-theme.css")).toExternalForm());
@@ -238,7 +305,7 @@ public class FormController {
                 bottomBar.setStyle("-fx-background-color: #E0E0E0;"); // Dark color
             }
 
-            // Aggiorna i colori nei TextFlow
+            // Update colors in TextFlows
             updateTextFlowColors(syntaxArea);
             updateTextFlowColors(generateArea);
 
@@ -248,36 +315,49 @@ public class FormController {
 
     }
 
+    /**
+     * Handles the behavior when the "Analyze" button is clicked.
+     *
+     * 1. Starts a progress indicator to provide visual feedback to the user.
+     * 2. Creates and executes a background task to analyze the given sentence with
+     *    options determined by the user interface state.
+     * 3. Leverages task management mechanisms to handle asynchronous operations gracefully.
+     */
     public void analyzeClick() {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         logger.info("Analyze button clicked");
 
-        // Crea il task da eseguire in background
-            Task<Sentence> analyzeTask = new Task<>() {
-                @Override
-                protected Sentence call() {
-                    // Simula tempo di elaborazione (500ms per test)
-                    logger.info("Analyze task started");
-                    // Chiamata all'analisi da AppManager
-                    return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
-                }
-            };
-            TaskManager.execute(analyzeTask, this::handleAnalyzeSuccess);
+        // Create background task
+        Task<Sentence> analyzeTask = new Task<>() {
+            @Override
+            protected Sentence call() {
+                // Simulate processing time (500ms for test)
+                logger.info("Analyze task started");
+                // Call analysis from AppManager
+                return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
+            }
+        };
+        TaskManager.execute(analyzeTask, this::handleAnalyzeSuccess);
 
 
-        // Esegui il task utilizzando TaskManager
+        // Execute task using TaskManager
     }
 
+    /**
+     * Handles the successful completion of the sentence analysis process, updating the UI components accordingly.
+     *
+     * @param sentence The analyzed sentence containing its structure and syntax tree information.
+     */
     private void handleAnalyzeSuccess(Sentence sentence) {
         Platform.runLater(() -> {
             logger.info("Analyze task finished: {}", sentence.getStructure().toString());
 
-            // Crea e salva il nuovo TextFlow
+            // Create and save new TextFlow
             lastSyntaxFlow = formatStructure(sentence.getStructure().toString() + " \n");
             lastSyntaxFlow.setMaxWidth(syntaxArea.getWidth());
 
 
-            // Aggiorna il contenuto del syntaxArea
+            // Update syntaxArea content
             syntaxArea.getChildren().clear();
             lastSyntaxFlow.prefWidthProperty().bind(syntaxArea.widthProperty().subtract(20));
             syntaxArea.getChildren().add(lastSyntaxFlow);
@@ -294,48 +374,62 @@ public class FormController {
             }
 
             progressBar.setProgress(1);
-            progressTimer.schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
-                        }
-                    }, 1000
-            );
+            progressTimer.schedule(new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                }
+            }, 1000);
         });
     }
 
-
+    /**
+     * Initiates the process to generate a new sentence based on current configurations.
+     *
+     * <p>
+     * Responsibilities:
+     * - Handles the click action of the "Generate" button.
+     * - Initiates a background task for sentence generation with configurable input options.
+     *
+     * <p>
+     * Design Pattern:
+     * - Follows the **Command Pattern** to encapsulate the sentence generation functionality into a task.
+     */
     public void generateClick() {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         logger.info("Generate button clicked");
 
-        // Crea il task da eseguire in background
+        // Create background task
         Task<Sentence> generateTask = new Task<>() {
             @Override
             protected Sentence call() {
                 logger.info("Generation task started");
-                // Chiamata all'analisi da AppManager
+                // Call analysis from AppManager
 
                 String strategy = structureToggleGroup.getSelectedToggle().getUserData().toString();
                 logger.info(strategy);
 
-                // Recupera il valore dal combobox se SELECTED è selezionato
+                // Get value from combobox if SELECTED is selected
                 String selectedStructure = "";
                 if ("SELECTED".equals(strategy)) {
-                    selectedStructure = structureComboBox.getValue(); // Ottieni il valore selezionato
+                    selectedStructure = structureComboBox.getValue(); // Get selected value
                     logger.info("Selected structure: {}", selectedStructure);
                 }
 
-                // Genera la frase passando la strategia e il valore della struttura selezionata
+                // Generate sentence passing strategy and selected structure value
                 return appManager.generateSentence(strategy, selectedStructure, toxicityLevels.isSelected(), futureTenseCheck.isSelected(), newWords.isSelected(), checkSaveSentence.isSelected());
             }
         };
 
-        // Esegui il task utilizzando TaskManager
+        // Execute task using TaskManager
         TaskManager.execute(generateTask, this::handleGenerateSuccess);
     }
 
+    /**
+     * Handles the successful generation of a sentence, updating the UI components and triggering animations for progress bars.
+     *
+     * @param sentence The generated sentence object containing text and metadata such as toxicity and structure.
+     */
     private void handleGenerateSuccess(Sentence sentence) {
         Platform.runLater(() -> {
             logger.info("Generate task finished: {}", sentence.getSentence());
@@ -348,10 +442,10 @@ public class FormController {
                 animateProgressBar(politicsBar, sentence.getPolitics());
 
             }
-            // Crea e salva il nuovo TextFlow
+            // Create and save new TextFlow
             lastGenerateFlow = formatStructure(sentence.getStructure().toString());
             lastGenerateFlow.setMaxWidth(generateArea.getWidth());
-            // Aggiorna il contenuto del generateArea
+            // Update generateArea content
             generateArea.getChildren().clear();
             lastGenerateFlow.prefWidthProperty().bind(generateArea.widthProperty().subtract(20));
             generateArea.getChildren().add(lastGenerateFlow);
@@ -362,23 +456,30 @@ public class FormController {
             generateArea.getChildren().add(newText);
 
             progressBar.setProgress(1);
-            progressTimer.schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
-                        }
-                    }, 1000
-            );
+            progressTimer.schedule(new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    javafx.application.Platform.runLater(() -> progressBar.setProgress(0));
+                }
+            }, 1000);
         });
     }
 
-    private Stage primaryStage; // Variabile per salvare il primaryStage
-
+    /**
+     * Sets the primary stage of the application to manage the main window elements.
+     *
+     * @param primaryStage The primary stage representing the main application window.
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * Formats a given structure string into a styled {@code TextFlow}, applying specific formatting based on identified tokens.
+     *
+     * @param structure The structure string to be processed and formatted.
+     * @return A {@code TextFlow} containing styled {@code Text} nodes based on the structure input.
+     */
     private TextFlow formatStructure(String structure) {
         TextFlow textFlow = new TextFlow();
         String[] tokens = structure.split("(?<=\\s|[.,;:])|(?=[.,;:|\\s])");
@@ -398,41 +499,49 @@ public class FormController {
         return textFlow;
     }
 
+    /**
+     * Opens the settings window of the application.
+     *
+     * <p> This method loads the settings window from an FXML file and displays it in a modal dialog.
+     * It initializes the settings stage, sets its properties including title, size, and modality,
+     * and passes the stage to the settings controller. If an error occurs during loading, an alert
+     * is displayed to notify the user.
+     */
     public void openSettings() {
         logger.info("Open settings button clicked");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Settings.fxml"));
             Parent settingsRoot = loader.load();
 
-            // Ottieni istanza del controller associato
+            // Get instance of associated controller
             SettingsController controller = loader.getController();
 
-            // Crea la finestra dello Stage
+            // Create Stage window
             Stage settingsStage = new Stage();
             settingsStage.setTitle("Settings");
-            settingsStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
+            settingsStage.initModality(Modality.WINDOW_MODAL); // Modal windows
             settingsStage.initOwner(primaryStage);
             settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings")));
 
-            // Imposta la scena con il root (settingsRoot) e dimensioni iniziali
-            Scene scene = new Scene(settingsRoot); // <-- Dimensioni nella scena
+            // Set scene with root (settingsRoot) and initial dimensions
+            Scene scene = new Scene(settingsRoot); // <-- Scene dimensions
             settingsStage.setScene(scene);
 
-            // Opzionale: Blocca dimensioni minime/massime (se necessario)
+            // Optional: Lock min/max dimensions (if needed)
             settingsStage.setMinWidth(800);
             settingsStage.setMinHeight(600);
-            // Passa lo Stage al controller
+            // Pass Stage to controller
             controller.setStage(settingsStage);
 
 
-            // Mostra la finestra
+            // Show window
             settingsStage.showAndWait();
-            // Dopo la chiusura delle impostazioni, aggiorna il tema
+            // After settings close, update theme
             String newTheme = ConfigManager.getInstance().getProperty("ui.theme");
-            updateTheme(newTheme); // Aggiorna il tema selezionato
+            updateTheme(newTheme); // Update selected theme
         } catch (IOException e) {
 
-            // Puoi mostrare un alert per segnalare l'errore all'utente
+            // Show alert to notify user of error
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Unable to open Settings");
@@ -441,6 +550,11 @@ public class FormController {
         }
     }
 
+    /**
+     * Updates the colors of all Text nodes within the specified TextFlow.
+     *
+     * @param textFlow the TextFlow object containing Text nodes whose colors will be updated
+     */
     private void updateTextFlowColors(TextFlow textFlow) {
         for (Node node : textFlow.getChildren()) {
             if (node instanceof Text) {
@@ -449,10 +563,16 @@ public class FormController {
         }
     }
 
+    /**
+     * Toggles the disable state of the structureComboBox based on the selected state of selectStructureRadio.
+     */
     public void radioPressed() {
         structureComboBox.setDisable(!selectStructureRadio.isSelected());
     }
 
+    /**
+     * Enables or disables UI components related to toxicity filtering based on the state of the `toxicityLevels` toggle.
+     */
     public void toxicityPressed() {
         toxicityBar.setDisable(!toxicityLevels.isSelected());
         profanityBar.setDisable(!toxicityLevels.isSelected());
@@ -461,6 +581,12 @@ public class FormController {
         politicsBar.setDisable(!toxicityLevels.isSelected());
     }
 
+    /**
+     * Generates a color string based on the provided value, transitioning from green to red.
+     *
+     * @param value The input value (range: 0.0 to 1.0) determining the color intensity.
+     * @return A CSS color string representing the calculated color in "-fx-accent: rgb(R, G, 0);" format.
+     */
     private String getColorForValue(double value) {
         int red = (int) (255 * value);
         int green = (int) (255 * (1 - value));
@@ -468,16 +594,18 @@ public class FormController {
     }
 
 
+    /**
+     * Loads syntax tags from a properties file and maps them to a key-value pair.
+     *
+     * @param filePath The file path to the properties file containing syntax tags.
+     * @return A map containing the syntax tags loaded from the file, or an empty map if an error occurs.
+     */
     private Map<String, String> loadSyntaxTags(String filePath) {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(Paths.get(filePath).toFile())) {
             properties.load(fis); // Load the .properties file
             // Convert Properties to Map<String, String>
-            return properties.entrySet().stream()
-                    .collect(Collectors.toMap(
-                            e -> e.getKey().toString(),
-                            e -> e.getValue().toString()
-                    ));
+            return properties.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().toString()));
         } catch (IOException e) {
             System.err.println("Error loading properties file: " + filePath);
             e.printStackTrace();
@@ -485,16 +613,36 @@ public class FormController {
         }
     }
 
+    /**
+     * Retrieves the file path for syntax tags configuration.
+     *
+     * @return The file path of the "syntax_tags.properties" configuration.
+     */
     private String getFilePathTags() {
         return ConfigManager.getInstance().getProperty("syntax_tags.properties");
 
     }
 
 
+    /**
+     * Generates a formatted visual representation of a tree structure as a string,
+     * starting from the root.
+     *
+     * @param tree The root node of the tree to be formatted.
+     * @return A string that represents the tree in a visually readable format.
+     */
     private String prettyTree(Tree tree) {
         return "\nTREE\n" + prettyTreeHelper(tree.children()[0], "", true);
     }
 
+    /**
+     * Recursively constructs a string representation of a tree structure with appropriate visual indentation.
+     *
+     * @param tree   The tree node to be processed.
+     * @param prefix The prefix string used for indentation and visual alignment of tree levels.
+     * @param isLast A boolean flag indicating whether the current tree node is the last child of its parent.
+     * @return A string representing the hierarchical structure of the tree.
+     */
     private String prettyTreeHelper(Tree tree, String prefix, boolean isLast) {
         StringBuilder builder = new StringBuilder();
 
@@ -514,40 +662,51 @@ public class FormController {
         return builder.toString();
     }
 
+    /**
+     * Opens a new window to manage vocabulary input.
+     *
+     * <p>This method is responsible for:
+     * - Loading the Vocabulary interface from the specified FXML file.
+     * - Setting up a modal stage and binding it to the primary application stage.
+     * - Configuring scene properties, including minimum window dimensions.
+     * - Passing the created stage to the associated VocabularyController instance.
+     * - Presenting the Vocabulary window to the user in a blocking manner (showAndWait).
+     * - Handling exceptions and user notification in case of errors while opening the window.
+     */
     public void vocabularyForm() {
-        logger.info("Open vacabulary button clicked");
+        logger.info("Open vocabulary button clicked");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vocabulary.fxml"));
             Parent vocabularyRoot = loader.load();
 
-            // Ottieni istanza del controller associato
+            // Get instance of associated controller
             VocabularyController controller = loader.getController();
 
-            // Crea la finestra dello Stage
+            // Create Stage window
             Stage vocabularyStage = new Stage();
             vocabularyStage.setTitle("Vocabulary");
-            vocabularyStage.initModality(Modality.WINDOW_MODAL); // Finestre modali
+            vocabularyStage.initModality(Modality.WINDOW_MODAL); // Modal windows
             vocabularyStage.initOwner(primaryStage);
             vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary")));
 
-// Imposta la scena con il root (settingsRoot) e dimensioni iniziali
-            Scene scene = new Scene(vocabularyRoot); // <-- Dimensioni nella scena
+            // Set scene with root (settingsRoot) and initial dimensions
+            Scene scene = new Scene(vocabularyRoot); // <-- Scene dimensions
             vocabularyStage.setScene(scene);
 
-// Opzionale: Blocca dimensioni minime/massime (se necessario)
+            // Optional: Lock min/max dimensions (if needed)
             vocabularyStage.setMinWidth(450);
             vocabularyStage.setMinHeight(450);
 
-            // Passa lo Stage al controller
+            // Pass Stage to controller
             controller.setStage(vocabularyStage);
 
 
-            // Mostra la finestra
+            // Show window
             vocabularyStage.showAndWait();
-            // Dopo la chiusura delle impostazioni, aggiorna il tema
+            // After settings close, update theme
         } catch (IOException e) {
 
-            // Puoi mostrare un alert per segnalare l'errore all'utente
+            // Show alert to notify user of error
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Unable to open Settings");
@@ -556,6 +715,12 @@ public class FormController {
         }
     }
 
+    /**
+     * Animates a progress bar's progress and updates its color dynamically using specific easing and duration.
+     *
+     * @param bar the ProgressBar instance that will be animated
+     * @param targetValue the desired progress value to animate to, transformed for visual smoothness
+     */
     private void animateProgressBar(ProgressBar bar, double targetValue) {
         double transformed = Math.pow(targetValue, 0.5);
 
@@ -564,13 +729,19 @@ public class FormController {
         Timeline timeline = new Timeline(kf);
         timeline.play();
 
-        // Cambia anche colore dinamicamente
+        // Also change color dynamically
         bar.setStyle(getColorForValue(targetValue));
     }
 
+    /**
+     * Triggers an action when the "use generated" button is clicked.
+     *
+     * Updates the input text field with the generated output sentence,
+     * if available from the application manager's output.
+     */
     public void useGenerated() {
         logger.info("Use generated button clicked");
-        if(appManager.getOutputSentence() != null) {
+        if (appManager.getOutputSentence() != null) {
             inputText.setText(appManager.getOutputSentence().getSentence().toString());
         }
     }

@@ -13,21 +13,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Manages the execution of asynchronous tasks with centralized lifecycle management, logging, and error handling functionality.
+ *
+ * <p>Responsibilities:</p>
+ * - Executes asynchronous tasks and monitors their lifecycle.
+ * - Logs task events such as completion, failure, and cancellation.
+ * - Provides error dialogs for failed tasks.
+ * - Allows cancellation of all running tasks.
+ *
+ * <p>Design Pattern:</p>
+ * - Implements the Singleton design pattern for logger management.
+ */
 public class TaskManager {
+    /**
+     * Logger instance for monitoring and debugging TaskManager operations.
+     * Provides centralized logging for the class.
+     */
     private static final Logger logger = LoggerManager.getInstance().getLogger(TaskManager.class);
+    /**
+     * Stores the list of tasks currently being executed in the application.
+     */
     private static final List<Task<?>> runningTasks = new ArrayList<>();
 
+    /**
+     * Executes a given task in a new thread and manages its success, failure,
+     * or cancellation events.
+     *
+     * @param <T>       The type of the task's result.
+     * @param task      The task to be executed.
+     * @param onSuccess A consumer to handle the task's result upon successful completion.
+     */
     public static <T> void execute(Task<T> task, Consumer<T> onSuccess) {
         synchronized (runningTasks) {
             runningTasks.add(task);
         }
         task.setOnSucceeded(e -> {
-            // Rimuovi task dall'elenco quando è completata
+            // Remove task from list when completed
             removeTask(task);
             onSuccess.accept(task.getValue());
-        });        // Gestisci task falliti
+        });        // Handle failed tasks
         task.setOnFailed(e -> {
-            // Rimuovi task dall'elenco in caso di errore
+            // Remove task from list in case of error
             removeTask(task);
             Throwable ex = task.getException();
             String errorMessage = (ex != null) ? ex.getMessage() : "Unknown error occurred";
@@ -37,70 +64,92 @@ public class TaskManager {
         });
 
         task.setOnCancelled(e -> {
-            // Rimuovi task dall'elenco quando è annullata
+            // Remove task from list when canceled
             removeTask(task);
             logger.info("Task was cancelled.");
         });
 
-        // Esegui il task su un nuovo thread
+        // Execute task on new thread
         new Thread(task).start();
     }
 
-    // Annulla tutte le task attive
+    /**
+     * Cancels all currently running tasks managed by the system.
+     * <p>
+     * This method iterates through the list of active tasks, identifies tasks
+     * that are still running, and cancels them. After canceling, the list of
+     * tasks is cleared. A log message is generated to indicate that all tasks
+     * have been canceled.
+     */
     public static void cancelAllTasks() {
         synchronized (runningTasks) {
             for (Task<?> task : runningTasks) {
                 if (task.isRunning()) {
-                    task.cancel(); // Annulla la task
+                    task.cancel(); // Cancel the task
                 }
             }
-            runningTasks.clear(); // Pulisce la lista
+            runningTasks.clear(); // Clear the list
         }
         logger.info("All tasks have been cancelled.");
     }
 
-    // Rimuovi una task dall'elenco
+    /**
+     * <p>
+     * TaskManager class responsibilities:
+     * - Manages the execution, cancellation, and removal of tasks.
+     * - Implements synchronization for thread-safe operations.
+     * <p>
+     * Design Pattern:
+     * - Uses the Singleton-like design for managing a shared task list via static methods and fields.
+     */
+    // Remove a task from the list
     private static void removeTask(Task<?> task) {
         synchronized (runningTasks) {
             runningTasks.remove(task);
         }
     }
 
-    // Helper per mostrare la finestra di dialogo dell'errore
+    /**
+     * Displays an error dialog with a given error class and message content.
+     *
+     * @param errorClass   The class or category of the error, displayed as the header of the dialog.
+     * @param errorMessage The specific error message, displayed prominently in the dialog content.
+     */
+    // Helper to show error dialog
     public static void showErrorDialog(String errorClass, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("WATCH OUT!");
         alert.setHeaderText(errorClass);
 
-        // Testo iniziale (informativo)
+        // Initial text (informative)
         Text generalText = new Text("A problem occurred during the execution of the task.\n\n");
 
-        // Testo per il messaggio d'errore (grassetto e rosso)
+        // Error message text (bold and red)
         Text errorText = new Text(errorMessage);
-        errorText.setStyle("-fx-fill: red; -fx-font-weight: bold;"); // Stile (rosso e grassetto)
+        errorText.setStyle("-fx-fill: red; -fx-font-weight: bold;"); // Style (red and bold)
 
-        // TextFlow per combinare i due messaggi
+        // TextFlow to combine both messages
         TextFlow textFlow = new TextFlow(generalText, errorText);
 
-        // Imposta una larghezza massima per il TextFlow (il testo andrà a capo se supera questa larghezza)
-        textFlow.setPrefWidth(400); // Cambia il valore per regolare la larghezza desiderata
+        // Set maximum width for TextFlow (text will wrap if it exceeds this width)
+        textFlow.setPrefWidth(400); // Change value to adjust desired width
         textFlow.setMaxWidth(400);
-        textFlow.setMaxHeight(Region.USE_PREF_SIZE); // Comportamento fisso per l'altezza
+        textFlow.setMaxHeight(Region.USE_PREF_SIZE); // Fixed behavior for height
 
-        // Abilita il wrapping del testo (per andare a capo)
-        generalText.wrappingWidthProperty().set(380); // Deve essere inferiore alla larghezza del TextFlow
+        // Enable text wrapping
+        generalText.wrappingWidthProperty().set(380); // Must be less than TextFlow width
         errorText.wrappingWidthProperty().set(380);
 
-        // Imposta il TextFlow come contenuto del DialogPane
+        // Set TextFlow as DialogPane content
         alert.getDialogPane().setContent(textFlow);
 
-        // Imposta una dimensione fissa per il DialogPane
+        // Set fixed size for DialogPane
         alert.getDialogPane().setPrefWidth(450);
         alert.getDialogPane().setPrefHeight(200);
-        alert.getDialogPane().setMaxWidth(450); // Massima larghezza
-        alert.getDialogPane().setMaxHeight(200); // Massima altezza
+        alert.getDialogPane().setMaxWidth(450); // Maximum width
+        alert.getDialogPane().setMaxHeight(200); // Maximum height
 
-        // Mostra la finestra di dialogo
+        // Show dialog window
         alert.showAndWait();
     }
 }

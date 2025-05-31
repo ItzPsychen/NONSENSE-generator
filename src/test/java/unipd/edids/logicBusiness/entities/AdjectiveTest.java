@@ -13,9 +13,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AdjectiveTest {
 
     private File tempFile;
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        System.out.println("Starting AdjectiveTest");
+    }
 
     @BeforeEach
     void createTempFile() throws IOException {
+        testNumber++;
+        System.out.println("Starting test #" + testNumber);
+
         tempFile = File.createTempFile("adjective_test", ".txt");
         tempFile.deleteOnExit();
 
@@ -53,7 +62,7 @@ public class AdjectiveTest {
             fileWriter.write("fast\nslow\nbright");
         }
 
-        ConfigManager.getInstance().setProperty("adjective.file", newTempFile.getAbsolutePath());
+//        ConfigManager.getInstance().setProperty("adjective.file", newTempFile.getAbsolutePath());
 
         assertEquals(newTempFile.getAbsolutePath(), instance.getFilePath(), "Expected filePath to be updated after config change.");
         assertFalse(instance.words.isEmpty(), "Expected words list to be updated after config change.");
@@ -62,11 +71,10 @@ public class AdjectiveTest {
 
     @AfterEach
     void tearDown() throws IOException {
-        ConfigManager.getInstance().resetDefault(ConfigManager.getInstance().getProperty("api.key.file"));
     }
 
     @AfterAll
-    void cleanUp() {
+    void cleanUp() throws IOException {
         if (tempFile.exists()) {
             assertTrue(tempFile.delete(), "Failed to delete the temporary file.");
         }
