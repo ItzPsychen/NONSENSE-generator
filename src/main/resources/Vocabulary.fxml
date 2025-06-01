@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="wordInputPane" prefHeight="380.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.userInterface.VocabularyController">
+<BorderPane fx:id="wordInputPane" prefHeight="380.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unipd.edids.userInterface.VocabularyController">
 
     <!-- Top bar -->
     <top>
