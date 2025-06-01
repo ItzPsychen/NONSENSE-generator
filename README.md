@@ -301,12 +301,12 @@ Enables unit and integration testing, ensuring the application's codebase remain
 
 The following deliverables have been produced for this project:
 
-- [**User Manual**](https://github.com/link-to-manual)
-- [**User Stories**](https://jira.com/link-to-user-stories)
-- [**Design Document**](https://github.com/link-to-design-document)
-- [**Source Code**](https://github.com/link-to-code)
-- [**System Test Document**](https://github.com/link-to-system-test)
-- [**Unit Test Report**](https://github.com/link-to-unit-test-report)
+- [**User Manual**](documentation/Manual%20of%20usage%20-%20NONSENSE%20generator.pdf)
+- [**User Stories**](https://randomgenerator.atlassian.net/jira/software/projects/SCRUM/boards/1) 
+- [**Design Document**](documentation/Design%20Document.pdf) - [Individual graphs and charts can be viewed here](documentation/graphs)
+- [**Source Code**](https://github.com/ItzPsychen/NONSENSE-generator)
+- [**System Test Document**](documentation/System%20Test%20Report.pdf)
+- [**Unit Test Report**](https://itzpsychen.github.io/NONSENSE-generator/surefire-reports/surefire-report.html)
 
 ## Documentation
 
@@ -329,4 +329,4 @@ Detailed documentation of the codebase is available online. This documentation i
 
 The documentation is generated automatically from code comments and is regularly updated to reflect the current state of the codebase.
 
-[**View Code Documentation**](https://docs.example.com/nonsense-generator/)
+[**View Code Documentation**](https://itzpsychen.github.io/NONSENSE-generator/)
