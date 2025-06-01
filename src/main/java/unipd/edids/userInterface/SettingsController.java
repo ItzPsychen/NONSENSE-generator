@@ -353,9 +353,7 @@ public class SettingsController {
      * @throws IOException if an error occurs during the reset process.
      */
     public void resetToDefault() throws IOException {
-        String apiKeyFile = configManager.getProperty("api.key.file");
         try {
-//fix
             configManager.resetDefault();
             loadItems(); // Reinitialize interface with updated values
 
