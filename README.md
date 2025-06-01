@@ -307,3 +307,26 @@ The following deliverables have been produced for this project:
 - [**Source Code**](https://github.com/link-to-code)
 - [**System Test Document**](https://github.com/link-to-system-test)
 - [**Unit Test Report**](https://github.com/link-to-unit-test-report)
+
+## Documentation
+
+### User Manual
+
+A comprehensive user manual has been created to help you understand and use all the features of the NONSENSE-generator application. The manual includes step-by-step instructions, screenshots, and troubleshooting tips to ensure a smooth user experience.
+
+[**Download User Manual (PDF)**](https://example.com/nonsense-generator-manual.pdf)
+
+### Code Documentation
+
+Detailed documentation of the codebase is available online. This documentation includes:
+
+- Class hierarchies and relationships
+- Design patterns implementation details
+- API documentation
+- Package structure
+- Sequence diagrams
+- Developer guidelines
+
+The documentation is generated automatically from code comments and is regularly updated to reflect the current state of the codebase.
+
+[**View Code Documentation**](https://docs.example.com/nonsense-generator/)
