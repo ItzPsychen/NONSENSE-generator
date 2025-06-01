@@ -19,6 +19,7 @@ import unipd.edids.userInterface.SettingsController;
 import unipd.edids.userInterface.TaskManager;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 import static unipd.edids.userInterface.TaskManager.showErrorDialog;

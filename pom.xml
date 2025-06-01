@@ -116,6 +116,16 @@
 
     <!-- Build configuration -->
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <targetPath>.</targetPath>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Maven compiler plugin configuration -->
             <plugin>
