@@ -79,11 +79,11 @@ The following section provides a detailed breakdown of the Application, so that 
 Before using this program, make sure your device meets the following requirements:
 
 - **Java Development Kit (JDK) version 21** must be installed.
+- A valid **Google API Key** is required to access the application's services.
   
-- **Google API Key**  
-  You must have a valid Google API key to use this application.
-  
-After that, you may proceed with the installation of the project on your local machine.
+## Installation
+
+After verifying the requirements, proceed with the installation of the project on your local machine.
 
 Once the installation is complete, you can start the program using one of the following methods:
 
