@@ -1,8 +1,9 @@
 package unipd.edids.logicBusiness.entities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.managers.ConfigManager;
-import unipd.edids.logicBusiness.managers.FileManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,28 +15,37 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SentenceStructureTest {
 
+    private static final Logger logger = LogManager.getLogger(SentenceStructureTest.class);
     private File tempFile;
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: SentenceStructureTest");
+        try {
+            tempFile = File.createTempFile("sentence_structures", ".txt");
+            tempFile.deleteOnExit();
+
+
+        } catch (IOException e) {
+            logger.error("Failed to create temporary file for SentenceStructureTest", e);
+            fail("Failed to write to temporary file for SentenceStructureTest");
+        }
+        ConfigManager.getInstance().setProperty("sentence.structures", tempFile.getAbsolutePath());
+    }
 
     @BeforeEach
-    void setup() throws IOException {
-        // Crea un file temporaneo per simulare la lettura delle strutture
-        tempFile = File.createTempFile("sentence_structures", ".txt");
-        tempFile.deleteOnExit();
+    void createTempFile() {
         try (FileWriter writer = new FileWriter(tempFile)) {
             writer.write("[NOUN] [VERB]\n");
             writer.write("[ADJECTIVE] [NOUN]\n");
             writer.write("[VERB] [NOUN] [ADJECTIVE]\n");
+        } catch (IOException e) {
+            logger.error("Failed to write to temporary file for SentenceStructureTest", e);
+            fail("Failed to write to temporary file for SentenceStructureTest");
         }
-        // Configura il ConfigManager con il percorso del file temporaneo
-        ConfigManager.getInstance().setProperty("sentence.structures", tempFile.getAbsolutePath());
-    }
-
-    @AfterEach
-    void tearDown() throws IOException {
-        if (tempFile.exists()) {
-            assertTrue(tempFile.delete(), "Il file temporaneo non è stato eliminato correttamente.");
-        }
-        ConfigManager.getInstance().resetDefault(ConfigManager.getInstance().getProperty("api.key.file"));
+        testNumber++;
+        logger.info("Starting test #{}", testNumber);
     }
 
     @Test
@@ -43,8 +53,8 @@ public class SentenceStructureTest {
         SentenceStructure instance1 = SentenceStructure.getInstance();
         SentenceStructure instance2 = SentenceStructure.getInstance();
 
-        assertNotNull(instance1, "L'istanza non dovrebbe essere null.");
-        assertSame(instance1, instance2, "Le due istanze dovrebbero essere identiche (singletone).");
+        assertNotNull(instance1, "The instance should not be null.");
+        assertSame(instance1, instance2, "The two instances should be identical (singleton).");
     }
 
     @Test
@@ -52,36 +62,33 @@ public class SentenceStructureTest {
         SentenceStructure instance = SentenceStructure.getInstance();
         String randomStructure = instance.getRandomStructure();
 
-        // Controlla che la struttura casuale sia tra quelle caricate
         List<String> expectedStructures = List.of(
                 "[NOUN] [VERB]",
                 "[ADJECTIVE] [NOUN]",
                 "[VERB] [NOUN] [ADJECTIVE]"
         );
-        assertNotNull(randomStructure, "La struttura casuale non dovrebbe essere null.");
+        assertNotNull(randomStructure, "The random structure should not be null.");
         assertTrue(expectedStructures.contains(randomStructure),
-                "La struttura casuale dovrebbe essere una tra quelle caricate.");
+                "The random structure should be one of the loaded structures.");
     }
 
     @Test
     void testDefaultStructureWhenNoFile() throws IOException {
-        // Modifica la configurazione con un file vuoto
-        File emptyFile = File.createTempFile("empty_structures", ".txt");
-        emptyFile.deleteOnExit();
+        File emptyTempFile = File.createTempFile("empty_structures", ".txt");
+        emptyTempFile.deleteOnExit();
 
-        ConfigManager.getInstance().setProperty("sentence.structures", emptyFile.getAbsolutePath());
-        SentenceStructure.getInstance().onConfigChange("sentence.structures", emptyFile.getAbsolutePath());
+        ConfigManager.getInstance().setProperty("sentence.structures", emptyTempFile.getAbsolutePath());
+        SentenceStructure.getInstance().onConfigChange("sentence.structures", emptyTempFile.getAbsolutePath());
 
         String randomStructure = SentenceStructure.getInstance().getRandomStructure();
         assertEquals("[NOUN] [VERB] [NOUN]", randomStructure,
-                "Dovrebbe restituire la struttura predefinita quando non ci sono strutture disponibili.");
+                "Should return the default structure when no structures are available.");
 
-        assertTrue(emptyFile.delete(), "Il file vuoto non è stato eliminato correttamente.");
+        assertTrue(emptyTempFile.delete(), "The empty file was not deleted correctly.");
     }
 
     @Test
     void testOnConfigChangeReloadsStructures() throws IOException {
-        // Crea un nuovo file di configurazione
         File newTempFile = File.createTempFile("new_sentence_structures", ".txt");
         newTempFile.deleteOnExit();
 
@@ -95,12 +102,12 @@ public class SentenceStructureTest {
         instance.onConfigChange("sentence.structures", newTempFile.getAbsolutePath());
 
         List<String> newStructures = instance.getStructures();
-        assertNotNull(newStructures, "Le strutture aggiornate non dovrebbero essere null.");
-        assertEquals(2, newStructures.size(), "Dovrebbero essere caricate due nuove strutture.");
+        assertNotNull(newStructures, "The updated structures should not be null.");
+        assertEquals(2, newStructures.size(), "Two new structures should be loaded.");
         assertTrue(newStructures.contains("[ADJECTIVE] [ADJECTIVE] [NOUN]"),
-                "Le nuove strutture dovrebbero includere quella aggiornata.");
+                "The new structures should include the updated one.");
         assertTrue(newStructures.contains("[VERB] [NOUN]"),
-                "Le nuove strutture dovrebbero includere quella aggiornata.");
+                "The new structures should include the updated one.");
     }
 
     @Test
@@ -108,9 +115,23 @@ public class SentenceStructureTest {
         SentenceStructure instance = SentenceStructure.getInstance();
 
         List<String> structures = instance.getStructures();
-        assertNotNull(structures, "La lista delle strutture non dovrebbe essere null.");
-        assertFalse(structures.isEmpty(), "La lista delle strutture non dovrebbe essere vuota.");
+        assertNotNull(structures, "The list of structures should not be null.");
+        assertFalse(structures.isEmpty(), "The list of structures should not be empty.");
         assertTrue(structures.contains("[NOUN] [VERB]"),
-                "Le strutture dovrebbero contenere tutte quelle definite nel file.");
+                "The structures should include all those defined in the file.");
+    }
+
+    @AfterEach
+    void tearDown()  {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() throws IOException {
+        logger.info("Finished test suite: SentenceStructureTest");
+        ConfigManager.getInstance().resetDefault();
+        if (tempFile.exists()) {
+            assertTrue(tempFile.delete(), "Failed to delete the temporary file.");
+        }
     }
 }

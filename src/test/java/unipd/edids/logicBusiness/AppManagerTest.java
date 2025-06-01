@@ -1,26 +1,36 @@
 package unipd.edids.logicBusiness;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.exceptions.AnalyzeException;
 import unipd.edids.logicBusiness.exceptions.GenerateException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
 
 public class AppManagerTest {
 
     private ConfigManager configManager;
     private AppManager appManager;
+    private int testNumber = 0;
+
+    @BeforeAll
+    public static void startTesting() {
+        System.out.println("Starting testing for AppManagerTest");
+    }
+
+    @AfterAll
+    public static void endTesting() {
+        System.out.println("Completed testing for AppManagerTest");
+    }
 
     @BeforeEach
     public void setUp() {
+        testNumber++;
+        System.out.println("Starting test #" + testNumber);
         configManager = ConfigManager.getInstance();
         appManager = new AppManager(configManager);
 
@@ -29,13 +39,16 @@ public class AppManagerTest {
         configManager.setProperty("generated.save.file", "testFile.txt");
     }
 
+
     @AfterEach
     public void tearDown() {
+        System.out.println("Test #" + testNumber + " completed");
         File file = new File("testFile.txt");
         if (file.exists()) {
             file.delete();
         }
     }
+    
     @Test
     public void testAnalyzeSentence_SuccessCase() {
         Sentence analyzedSentence = appManager.analyzeSentence("This is a valid test sentence.", false);
@@ -43,7 +56,6 @@ public class AppManagerTest {
         assertNotNull(analyzedSentence, "Analyzed sentence should not be null.");
         assertEquals("This is a valid test sentence.", analyzedSentence.getSentence().toString(), "Sentences should match the input text.");
     }
-
 
     @Test
     public void testAnalyzeSentence_SaveToFile() throws IOException {
@@ -61,8 +73,7 @@ public class AppManagerTest {
 
     @Test
     public void testAnalyzeSentence_InvalidInput() {
-        Exception exception = assertThrows(AnalyzeException.class, () -> appManager.analyzeSentence("", false),
-            "Empty input should throw an AnalyzeException.");
+        Exception exception = assertThrows(AnalyzeException.class, () -> appManager.analyzeSentence("", false), "Empty input should throw an AnalyzeException.");
 
         assertTrue(exception.getMessage().contains("Sentence analysis failed"), "Exception message should contain descriptive text.");
     }
@@ -84,9 +95,8 @@ public class AppManagerTest {
         assertTrue(tempFile.length() > 0, "File for saving generated sentence should not be empty.");
     }
 
-
     @Test
-    public void testGenerateSentence_RandomStrategy()  {
+    public void testGenerateSentence_RandomStrategy() {
 
 
         // Mock a valid input sentence
@@ -95,7 +105,7 @@ public class AppManagerTest {
         Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", false, false, false, false);
 
         assertNotNull(generatedSentence, "Generated sentence with random-strategy should not be null.");
-       }
+    }
 
     @Test
     public void testGenerateSentence_SameStrategy() throws IOException {
@@ -107,7 +117,7 @@ public class AppManagerTest {
         Sentence generatedSentence = appManager.generateSentence("SAME", "simple", false, false, false, false);
 
         assertNotNull(generatedSentence, "Generated sentence with same-strategy should not be null.");
-           }
+    }
 
     @Test
     public void testGenerateSentence_SelectedStrategy() throws IOException {
@@ -119,30 +129,26 @@ public class AppManagerTest {
         Sentence generatedSentence = appManager.generateSentence("SELECTED", "simple", false, false, false, false);
 
         assertNotNull(generatedSentence, "Generated sentence with selected-strategy should not be null.");
-       }
+    }
+
     @Test
     public void testGenerateSentence_NullStrategy() {
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
-        Exception exception = assertThrows(GenerateException.class,
-                () -> appManager.generateSentence(null, "simple", false, false, false, false),
-                "Null strategy should throw a GenerateException.");
+        Exception exception = assertThrows(GenerateException.class, () -> appManager.generateSentence(null, "simple", false, false, false, false), "Null strategy should throw a GenerateException.");
 
-        assertTrue(exception.getMessage().contains("Sentence generation failed"),
-                "Exception message should indicate the cause due to null strategy.");
+        assertTrue(exception.getMessage().contains("Sentence generation failed"), "Exception message should indicate the cause due to null strategy.");
     }
+
     @Test
     public void testGenerateSentence_NullStructureStrategy() {
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
-        Exception exception = assertThrows(GenerateException.class,
-                () -> appManager.generateSentence("SELECTED", null, false, false, false, false),
-                "Null structure should throw a GenerateException.");
+        Exception exception = assertThrows(GenerateException.class, () -> appManager.generateSentence("SELECTED", null, false, false, false, false), "Null structure should throw a GenerateException.");
 
-        assertTrue(exception.getMessage().contains("Sentence generation failed"),
-                "Exception message should indicate the cause due to null strategy.");
+        assertTrue(exception.getMessage().contains("Sentence generation failed"), "Exception message should indicate the cause due to null strategy.");
     }
 
     @Test
@@ -150,18 +156,14 @@ public class AppManagerTest {
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
-        Exception exception = assertThrows(GenerateException.class,
-            () -> appManager.generateSentence("INVALID", "", false, false, false, false),
-            "Invalid strategy name should throw a GenerateException.");
+        Exception exception = assertThrows(GenerateException.class, () -> appManager.generateSentence("INVALID", "", false, false, false, false), "Invalid strategy name should throw a GenerateException.");
 
         assertTrue(exception.getMessage().contains("Sentence generation failed"), "Exception message should contain descriptive text.");
     }
 
     @Test
     public void testGenerateSentence_InputNotSetted() {
-        Exception exception = assertThrows(GenerateException.class,
-                () -> appManager.generateSentence("RANDOM", "", true, false, false, false),
-                "Input Sentence not set throw a GenerateException.");
+        Exception exception = assertThrows(GenerateException.class, () -> appManager.generateSentence("RANDOM", "", true, false, false, false), "Input Sentence not set throw a GenerateException.");
 
         assertTrue(exception.getMessage().contains("Sentence generation failed"), "Exception message should contain descriptive text.");
     }
@@ -170,12 +172,9 @@ public class AppManagerTest {
     public void testGenerateSentence_WithoutInputSentenceAndNoNewWords() {
         // Do not analyze any sentence before generating
 
-        Exception exception = assertThrows(GenerateException.class,
-                () -> appManager.generateSentence("RANDOM", "simple", false, false, false, false),
-                "Generating sentence without analyzing or new words should throw an IllegalArgumentException.");
+        Exception exception = assertThrows(GenerateException.class, () -> appManager.generateSentence("RANDOM", "simple", false, false, false, false), "Generating sentence without analyzing or new words should throw an IllegalArgumentException.");
 
-        assertTrue(exception.getMessage().contains("Input sentence cannot be null"),
-                "Exception message should indicate missing input sentence.");
+        assertTrue(exception.getMessage().contains("Input sentence cannot be null"), "Exception message should indicate missing input sentence.");
     }
 
     @Test
@@ -219,7 +218,6 @@ public class AppManagerTest {
         assertTrue(tempFile2.length() > 0, "Generated file with newWords should not be empty.");
     }
 
-
     @Test
     public void testGenerateSentence_WithFutureTense() throws IOException {
         appManager.analyzeSentence("This is a valid input sentence.", false);
@@ -234,6 +232,7 @@ public class AppManagerTest {
         assertTrue(tempFile.exists(), "File for sentence with future tense should exist.");
         assertTrue(tempFile.length() > 0, "File for sentence with future tense should not be empty.");
     }
+
     @Test
     public void testGenerateSentence_NoInputSentence_RandomStrategy_NewWordsEnabled() throws IOException {
 
@@ -256,8 +255,6 @@ public class AppManagerTest {
         assertNull(appManager.getOutputSentence(), "Output sentence should be null after clearing.");
     }
 
-
-
     @Test
     public void testGetOutputSentence() {
         // Analyze and generate sentences
@@ -267,4 +264,7 @@ public class AppManagerTest {
         // Verify the last generated output
         assertEquals(generatedSentence, appManager.getOutputSentence(), "getOutputSentence should return the last generated sentence.");
     }
+
+
+
 }

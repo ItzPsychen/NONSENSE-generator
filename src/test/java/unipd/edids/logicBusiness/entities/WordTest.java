@@ -1,5 +1,7 @@
 package unipd.edids.logicBusiness.entities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 
@@ -8,15 +10,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class WordTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class WordTest {
 
-    private static final String TEMP_FILE_PREFIX = "test_words";
-    private static final String TEMP_FILE_SUFFIX = ".txt";
-
-    static File tempFile;
+    private static final Logger logger = LogManager.getLogger(WordTest.class);
+    private File tempFile;
+    private int testNumber = 0;
 
     static class TestWord extends Word {
         public TestWord(String filePath) {
@@ -24,26 +25,33 @@ class WordTest {
         }
     }
 
-    @BeforeEach
-    void setUpAll() throws IOException {
-        tempFile = File.createTempFile(TEMP_FILE_PREFIX, TEMP_FILE_SUFFIX);
-        tempFile.deleteOnExit();
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: WordTest");
+        try {
+            tempFile = File.createTempFile("word_test", ".txt");
+            tempFile.deleteOnExit();
 
-        FileWriter writer = new FileWriter(tempFile);
-        writer.write("apple\nbanana\ncherry");
-        writer.close();
 
-    }
-
-    @AfterEach
-    void tearDownAll() {
-        if (tempFile.exists()) {
-            tempFile.delete();
+        } catch (IOException e) {
+            logger.error("Failed to create temporary file for WordTest", e);
+            fail("Failed to write to temporary file for WordTest");
         }
     }
 
+    @BeforeEach
+    void createTempFile() {
+        try (FileWriter fileWriter = new FileWriter(tempFile)) {
+            fileWriter.write("apple\nbanana\ncherry");
+        }catch (IOException e) {
+            logger.error("Failed to write to temporary file for WordTest", e);
+            fail("Failed to write to temporary file for WordTest");
+        }
+        testNumber++;
+        logger.info("Starting test #{}", testNumber);
+    }
+
     @Test
-    @DisplayName("Test getRandomWord returns a word from the list")
     void testGetRandomWordFromList() {
         Word word = new TestWord(tempFile.getAbsolutePath());
         for (int i = 0; i < 100; i++) { // Test multiple times for randomness
@@ -54,7 +62,6 @@ class WordTest {
     }
 
     @Test
-    @DisplayName("Test getRandomWord returns 'undefined' when no words are loaded")
     void testGetRandomWordUndefinedForEmptyList() throws IOException {
         File emptyTempFile = File.createTempFile("test_empty", ".txt");
         emptyTempFile.deleteOnExit();
@@ -65,7 +72,6 @@ class WordTest {
     }
 
     @Test
-    @DisplayName("Test getFilePath returns the correct path")
     void testGetFilePath() {
         Word word = new TestWord(tempFile.getAbsolutePath());
         assertEquals(tempFile.getAbsolutePath(), word.getFilePath(),
@@ -73,16 +79,15 @@ class WordTest {
     }
 
     @Test
-    @DisplayName("Test onFileChanged reloads updated words")
     void testOnFileChangedReloadsWords() throws IOException {
         Word word = new TestWord(tempFile.getAbsolutePath());
         assertTrue(List.of("apple", "banana", "cherry").contains(word.getRandomWord()),
                 "Random word should initially come from the original file");
 
         // Update the tempFile content
-        FileWriter writer = new FileWriter(tempFile);
-        writer.write("dog\nelephant\nfish");
-        writer.close();
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write("dog\nelephant\nfish");
+        }
 
         word.onFileChanged(tempFile.getAbsolutePath());
         for (int i = 0; i < 100; i++) { // Test again for randomness
@@ -91,4 +96,18 @@ class WordTest {
                     "getRandomWord() should return a word from the updated file but returned: " + randomWord);
         }
     }
+
+    @AfterEach
+    void tearDown()  {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: WordTest");
+        if (tempFile.exists()) {
+            assertTrue(tempFile.delete(), "Failed to delete the temporary file.");
+        }
+    }
 }
+

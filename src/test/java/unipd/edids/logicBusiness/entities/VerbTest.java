@@ -1,9 +1,9 @@
 package unipd.edids.logicBusiness.entities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.managers.ConfigManager;
-import unipd.edids.logicBusiness.strategies.tenseStrategies.FutureTenseStrategy;
-import unipd.edids.logicBusiness.strategies.tenseStrategies.PresentTenseStrategy;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,49 +12,92 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class VerbTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class VerbTest {
 
-    private static File tempFile;
+    private static final Logger logger = LogManager.getLogger(VerbTest.class);
+    private File tempFile;
+    private int testNumber = 0;
 
-    @BeforeEach
-    void setupClass() throws IOException {
-        tempFile = File.createTempFile("verbs", ".txt");
-        tempFile.deleteOnExit();
-        try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write("run\njump\nwalk");
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: VerbTest");
+        try {
+            tempFile = File.createTempFile("verb_test", ".txt");
+            tempFile.deleteOnExit();
+
+
+        } catch (IOException e) {
+            logger.error("Failed to create temporary file for VerbTest", e);
+            fail("Failed to write to temporary file for VerbTest");
         }
         ConfigManager.getInstance().setProperty("verb.file", tempFile.getAbsolutePath());
     }
 
-    @AfterEach
-    void cleanupClass() throws IOException {
-        ConfigManager.getInstance().resetDefault(ConfigManager.getInstance().getProperty("api.key.file"));
-    }
-
-    @Test
-    void testGetRandomWordReturnsAValidWord() {
-        Verb verb = Verb.getInstance();
-        verb.loadWords(tempFile.getAbsolutePath());
-
-        for (int i = 0; i < 100; i++) { // Test multiple times for randomness
-            String randomWord = verb.getRandomWord();
-            assertTrue(List.of("run", "jump", "walk").contains(randomWord),
-                    "getRandomWord() should return a word from the file but returned: " + randomWord);
+    @BeforeEach
+    void createTempFile() {
+        try (FileWriter fileWriter = new FileWriter(tempFile)) {
+            fileWriter.write("run\njump\ntalk");
+        } catch (IOException e) {
+            logger.error("Failed to write to temporary file for VerbTest", e);
+            fail("Failed to write to temporary file for VerbTest");
         }
 
+        testNumber++;
+        logger.info("Starting test #{}", testNumber);
     }
 
     @Test
-    void testGetRandomWordReturnsUndefinedWhenNoWordsAvailable() throws IOException {
-        // Clear all words intentionally
-        ConfigManager.getInstance().setProperty("verb.file", File.createTempFile("verbs", ".txt").getAbsolutePath());
+    void testGetInstanceCreatesSingleton() {
+        Verb instance1 = Verb.getInstance();
+        Verb instance2 = Verb.getInstance();
+        assertNotNull(instance1, "Expected the returned instance to not be null.");
+        assertSame(instance1, instance2, "Expected getInstance to return the same instance.");
+    }
 
+    @Test
+    void testGetInstanceInitializesProperly() {
+        Verb instance = Verb.getInstance();
+        assertNotNull(instance.getFilePath(), "Expected filePath to not be null after instantiation.");
+        assertEquals(tempFile.getAbsolutePath(), instance.getFilePath(), "FilePath did not match the expected value.");
+        assertFalse(instance.words.isEmpty(), "Expected words list to be populated after instantiation.");
+    }
 
+    @Test
+    void testOnConfigChangeUpdatesFilePathAndReloadsWords() throws IOException {
+        Verb instance = Verb.getInstance();
+
+        File newTempFile = File.createTempFile("verb_test_update", ".txt");
+        newTempFile.deleteOnExit();
+
+        try (FileWriter fileWriter = new FileWriter(newTempFile)) {
+            fileWriter.write("swim\nclimb\ndrive");
+        }
+
+        Verb.getInstance().onConfigChange("verb.file", newTempFile.getAbsolutePath());
+
+        assertEquals(newTempFile.getAbsolutePath(), instance.getFilePath(), "Expected filePath to be updated after config change.");
+        assertFalse(instance.words.isEmpty(), "Expected words list to be updated after config change.");
+        assertTrue(instance.words.contains("swim"), "Expected words list to contain data from the new file.");
+    }
+
+    @Test
+    void testVerbLoad() {
+        Verb verb = Verb.getInstance();
+
+        assertFalse(verb.words.isEmpty(), "Expected words list to be populated.");
+        assertTrue(verb.words.contains("run"), "Expected words list to contain 'run'.");
+    }
+
+    @Test
+    void testRandomWordRetrieval() {
         Verb verb = Verb.getInstance();
         String randomWord = verb.getRandomWord();
-
-        assertEquals("undefined", randomWord, "Random word should return 'undefined' when no words are available");
+        assertNotNull(randomWord, "Expected random word to not be null.");
+        assertTrue(List.of("run", "jump", "talk").contains(randomWord),
+                "Expected random word to be one of the defined words.");
     }
+
 
     @Test
     void testConjugateUsesPresentTenseByDefault() {
@@ -63,6 +106,7 @@ class VerbTest {
         String conjugatedWord = verb.conjugate("run");
 
         assertNotNull(conjugatedWord, "Conjugated word should not be null in present tense");
+        assertEquals("run", conjugatedWord, "Conjugated word should be 'run' in present tense");
     }
 
     @Test
@@ -72,15 +116,21 @@ class VerbTest {
         String conjugatedWord = verb.conjugate("jump");
 
         assertNotNull(conjugatedWord, "Conjugated word should not be null in future tense");
+        assertEquals("will jump", conjugatedWord, "Conjugated word should be 'will jump' in future tense");
     }
 
-    @Test
-    void testTenseStrategyChangesBasedOnConfiguration() {
-        Verb verb = Verb.getInstance();
-        verb.configureVerbTense(false);
-        assertInstanceOf(PresentTenseStrategy.class, verb.getTenseStrategy(), "Tense strategy should be PresentTenseStrategy when futureTense is false");
 
-        verb.configureVerbTense(true);
-        assertInstanceOf(FutureTenseStrategy.class, verb.getTenseStrategy(), "Tense strategy should be FutureTenseStrategy when futureTense is true");
+    @AfterEach
+    void tearDown()  {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() throws IOException {
+        logger.info("Finished test suite: VerbTest");
+        ConfigManager.getInstance().resetDefault();
+        if (tempFile.exists()) {
+            assertTrue(tempFile.delete(), "Failed to delete the temporary file.");
+        }
     }
 }

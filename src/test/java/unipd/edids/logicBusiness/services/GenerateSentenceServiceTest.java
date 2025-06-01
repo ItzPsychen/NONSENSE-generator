@@ -27,7 +27,7 @@ class GenerateSentenceServiceTest {
 
     @AfterEach
     public void tearDown() throws IOException {
-        configManager.resetDefault(configManager.getProperty("api.key.file"));
+        configManager.resetDefault();
         File file = new File("testFile.txt");
         if (file.exists()) {
             file.delete();

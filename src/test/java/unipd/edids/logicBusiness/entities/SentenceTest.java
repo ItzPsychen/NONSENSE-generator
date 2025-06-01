@@ -1,14 +1,30 @@
 package unipd.edids.logicBusiness.entities;
 
 import edu.stanford.nlp.trees.Tree;
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SentenceTest {
+    private static final Logger logger = LogManager.getLogger(SentenceTest.class);
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: SentenceTest");
+    }
+
+    @BeforeEach
+    void createTempFile() {
+        testNumber++;
+        logger.info("Starting test #{}", testNumber);
+    }
 
     @Test
     void testConstructorDefault() {
@@ -148,5 +164,17 @@ class SentenceTest {
         assertEquals(structure.toString(), sentence.getStructure().toString(), "Structure text should match");
 
         assertThrows(IllegalArgumentException.class, () -> sentence.setStructure(null), "Should throw exception if structure is null");
+    }
+
+
+
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: SentenceTest");
     }
 }

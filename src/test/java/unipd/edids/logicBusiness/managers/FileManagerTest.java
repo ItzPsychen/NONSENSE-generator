@@ -1,8 +1,8 @@
 package unipd.edids.logicBusiness.managers;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,24 +10,29 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FileManagerTest {
 
+    private static final Logger logger = LogManager.getLogger(FileManagerTest.class);
     private static final String TEST_FILE_PATH = "test_vocabulary_file.txt";
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: FileManagerTest");
+    }
 
     @BeforeEach
     void setUp() throws IOException {
+        logger.info("Running test #{}", ++testNumber);
+
         // Create an empty test file before each test
         File testFile = new File(TEST_FILE_PATH);
-        if (!testFile.exists()) {
-            testFile.createNewFile();
+        if (!testFile.exists() && !testFile.createNewFile()) {
+            fail("Failed to create test file");
         }
     }
 
-    @AfterEach
-    void tearDown() throws IOException {
-        // Clean up and delete test file after each test
-        FileManager.deleteFile(TEST_FILE_PATH);
-    }
 
     @Test
     void testAppendLineToVocabularyFile_WhenFileExists() throws IOException {
@@ -40,7 +45,7 @@ class FileManagerTest {
         // Assert
         List<String> lines = FileManager.readFile(TEST_FILE_PATH);
         assertEquals(1, lines.size(), "File should contain one line after appending");
-        assertEquals(lineToAppend, lines.get(0), "The appended line does not match expected content");
+        assertEquals(lineToAppend, lines.getFirst(), "The appended line does not match expected content");
     }
 
     @Test
@@ -56,7 +61,7 @@ class FileManagerTest {
             // Assert
             List<String> lines = FileManager.readFile(newFilePath);
             assertEquals(1, lines.size(), "File should contain one line after appending");
-            assertEquals(lineToAppend, lines.get(0), "The appended line does not match expected content");
+            assertEquals(lineToAppend, lines.getFirst(), "The appended line does not match expected content");
         } finally {
             // Clean up
             FileManager.deleteFile(newFilePath);
@@ -100,11 +105,21 @@ class FileManagerTest {
         String lineToAppend = "This should fail";
 
         // Act & Assert
-        IOException exception = assertThrows(IOException.class, () ->
-                        FileManager.appendLineToVocabularyFile(invalidFilePath, lineToAppend),
-                "An IOException should be thrown for invalid file paths"
-        );
+        IOException exception = assertThrows(IOException.class, () -> FileManager.appendLineToVocabularyFile(invalidFilePath, lineToAppend), "An IOException should be thrown for invalid file paths");
         assertNotNull(exception.getMessage(), "Exception message should not be null");
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        logger.info("Finished test #{}", testNumber);
+
+        // Clean up and delete test file after each test
+        FileManager.deleteFile(TEST_FILE_PATH);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: FileManagerTest");
     }
 
 }

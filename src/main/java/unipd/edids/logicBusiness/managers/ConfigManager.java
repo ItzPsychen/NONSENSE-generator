@@ -238,12 +238,22 @@ public class ConfigManager {
     }
 
     /**
-     * Resets the configuration to the default settings and updates the API key.
+     * Resets the configuration to its default state using the specified default configuration file.
      *
-     * @param newApiKey the new API key to be written into the configuration file
-     * @throws IOException if the default configuration file is missing, inaccessible, or an I/O error occurs during the reset process
+     * <p>This method retrieves the current API key and the default configuration file path.
+     * If the default configuration file does not exist, an error is logged and an {@link IOException} is thrown.
+     * It then invokes a helper method to reset the configuration from the default file and updates the API key.
+     *
+     * @throws IOException If the default configuration file is missing or inaccessible.
      */
-    public void resetDefault(String newApiKey) throws IOException {
+    public void resetDefault() throws IOException {
+        String oldApiKey;
+        try{
+            oldApiKey = getProperty(API_KEY_PROPERTY);
+        } catch (IllegalArgumentException e) {
+            logger.warn("Trying to reset: API key property is not defined.");
+            oldApiKey = "";
+        }
         String defaultConfigPath = getEnv(DEFAULT_CONFIG_KEY);
         File defaultConfigFile = new File(defaultConfigPath);
 
@@ -252,7 +262,7 @@ public class ConfigManager {
             throw new IOException("Default configuration file is missing or inaccessible: " + defaultConfigPath);
         }
 
-        resetConfigFromDefault(defaultConfigPath, newApiKey);
+        resetConfigFromDefault(defaultConfigPath, oldApiKey);
     }
 
     /**

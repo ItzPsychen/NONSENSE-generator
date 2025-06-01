@@ -355,8 +355,8 @@ public class SettingsController {
     public void resetToDefault() throws IOException {
         String apiKeyFile = configManager.getProperty("api.key.file");
         try {
-
-            configManager.resetDefault(apiKeyFile);
+//fix
+            configManager.resetDefault();
             loadItems(); // Reinitialize interface with updated values
 
             logger.info("Settings successfully restored to default values.");

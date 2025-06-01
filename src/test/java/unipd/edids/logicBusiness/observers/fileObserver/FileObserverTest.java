@@ -1,12 +1,19 @@
 package unipd.edids.logicBusiness.observers.fileObserver;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FileObserverTest {
+
+    private static final Logger logger = LogManager.getLogger(FileObserverTest.class);
+    private int testNumber = 0;
 
     private static class TestFileObserver implements FileObserver {
         private String lastModifiedFilePath;
@@ -24,46 +31,69 @@ public class FileObserverTest {
     private TestFileObserver fileObserver;
 
     @BeforeAll
-    public void setupAll() {
+    void startTesting() {
+        logger.info("Starting test suite: FileObserverTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
         fileObserver = new TestFileObserver();
     }
 
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: FileObserverTest");
+    }
+
     @Test
-    public void testOnFileChangedWithValidPath() throws IOException {
+    void testOnFileChangedWithValidPath() throws IOException {
+        logger.info("Testing onFileChanged() with a valid file path...");
         File tempFile = File.createTempFile("testFile", ".txt");
         tempFile.deleteOnExit();
 
-        // Simulate file change
+        // Act
         fileObserver.onFileChanged(tempFile.getAbsolutePath());
 
-        Assertions.assertEquals(tempFile.getAbsolutePath(), fileObserver.getLastModifiedFilePath(),
+        // Assert
+        assertEquals(tempFile.getAbsolutePath(), fileObserver.getLastModifiedFilePath(),
                 "The filePath reported by onFileChanged does not match the expected value.");
     }
 
     @Test
-    public void testOnFileChangedWithEmptyPath() {
+    void testOnFileChangedWithEmptyPath() {
+        logger.info("Testing onFileChanged() with an empty file path...");
         String emptyPath = "";
 
-        // Simulate file change
+        // Act
         fileObserver.onFileChanged(emptyPath);
 
-        Assertions.assertEquals(emptyPath, fileObserver.getLastModifiedFilePath(),
+        // Assert
+        assertEquals(emptyPath, fileObserver.getLastModifiedFilePath(),
                 "The filePath should be empty as provided in the onFileChanged invocation but it does not match.");
     }
 
     @Test
-    public void testOnFileChangedWithNullPath() {
+    void testOnFileChangedWithNullPath() {
+        logger.info("Testing onFileChanged() with a null file path...");
         String nullPath = null;
 
-        // Simulate file change
+        // Act
         fileObserver.onFileChanged(nullPath);
 
-        Assertions.assertNull(fileObserver.getLastModifiedFilePath(),
+        // Assert
+        assertNull(fileObserver.getLastModifiedFilePath(),
                 "The filePath should be null as provided in the onFileChanged invocation but it does not match.");
     }
 
     @Test
-    public void testOnFileChangedWithLongPath() throws IOException {
+    void testOnFileChangedWithLongPath() throws IOException {
+        logger.info("Testing onFileChanged() with a long file path...");
         File tempFile = File.createTempFile("longFilePathTest", ".txt");
         tempFile.deleteOnExit();
 
@@ -72,15 +102,11 @@ public class FileObserverTest {
             longPath.append("a"); // Create a long file path
         }
 
-        // Simulate file change
+        // Act
         fileObserver.onFileChanged(longPath.toString());
 
-        Assertions.assertEquals(longPath.toString(), fileObserver.getLastModifiedFilePath(),
+        // Assert
+        assertEquals(longPath.toString(), fileObserver.getLastModifiedFilePath(),
                 "The filePath reported by onFileChanged does not match the expected long path value.");
-    }
-
-    @AfterAll
-    public void tearDown() {
-        fileObserver = null;
     }
 }
