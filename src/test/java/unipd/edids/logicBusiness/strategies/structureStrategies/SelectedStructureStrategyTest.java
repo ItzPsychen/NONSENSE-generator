@@ -1,48 +1,48 @@
 package unipd.edids.logicBusiness.strategies.structureStrategies;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SelectedStructureStrategyTest {
 
+    private static final Logger logger = LogManager.getLogger(SelectedStructureStrategyTest.class);
+    private int testNumber = 0;
+
     @BeforeAll
-    static void setupClass() {
-        // Any global setup that might be required for the tests
-        System.out.println("Starting SelectedStructureStrategyTest...");
+    void startTesting() {
+        logger.info("Starting test suite: SelectedStructureStrategyTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
+    }
+
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
     }
 
     @AfterAll
-    static void tearDownClass() {
-        // Any global teardown after all tests execution
-        System.out.println("Finished SelectedStructureStrategyTest.");
+    void cleanUp() {
+        logger.info("Finished test suite: SelectedStructureStrategyTest");
     }
-
-    /**
-     * Test class for SelectedStructureStrategy.
-     * <p>
-     * The SelectedStructureStrategy class implements the StructureSentenceStrategy interface.
-     * It takes a string representing the selected sentence structure and provides a method to
-     * generate it as a StringBuilder.
-     * <p>
-     * Methods being tested:
-     * - generateSentenceStructure(): Returns a StringBuilder initialized with the selected structure.
-     * - SelectedStructureStrategy(): Ensures proper initialization and input validation.
-     */
 
     @Test
     void testGenerateSentenceStructureWithSpecialCharacters() {
-        // Given
+        logger.info("Testing generateSentenceStructure() with special characters...");
+        // Arrange
         String inputStructure = "@!#$%^&*()_+~`|}{[]:;?><,./-=\\";
         SelectedStructureStrategy strategy = new SelectedStructureStrategy(inputStructure);
 
-        // When
+        // Act
         StringBuilder result = strategy.generateSentenceStructure();
 
-        // Then
+        // Assert
         assertNotNull(result, "The result should not be null.");
         assertEquals(inputStructure, result.toString(),
                 "The generated sentence structure should match the input structure containing special characters.");
@@ -50,14 +50,15 @@ class SelectedStructureStrategyTest {
 
     @Test
     void testGenerateSentenceStructureWithVeryLongString() {
-        // Given
+        logger.info("Testing generateSentenceStructure() with a very long string...");
+        // Arrange
         String inputStructure = "a".repeat(10000); // 10,000 characters string
         SelectedStructureStrategy strategy = new SelectedStructureStrategy(inputStructure);
 
-        // When
+        // Act
         StringBuilder result = strategy.generateSentenceStructure();
 
-        // Then
+        // Assert
         assertNotNull(result, "The result should not be null.");
         assertEquals(inputStructure, result.toString(),
                 "The generated sentence structure should handle and match the very long input structure.");
@@ -65,14 +66,15 @@ class SelectedStructureStrategyTest {
 
     @Test
     void testGenerateSentenceStructureWithEmptyString() {
-        // Given
+        logger.info("Testing generateSentenceStructure() with an empty string...");
+        // Arrange
         String inputStructure = "";
         SelectedStructureStrategy strategy = new SelectedStructureStrategy(inputStructure);
 
-        // When
+        // Act
         StringBuilder result = strategy.generateSentenceStructure();
 
-        // Then
+        // Assert
         assertNotNull(result, "The result should not be null.");
         assertEquals(inputStructure, result.toString(),
                 "The generated sentence structure should match the input structure (which is an empty string).");
@@ -80,16 +82,14 @@ class SelectedStructureStrategyTest {
 
     @Test
     void testConstructorThrowsExceptionForNullInput() {
-        // Given
+        logger.info("Testing constructor with null input...");
+        // Arrange
         String inputStructure = null;
 
-
-
-        // When & Then
-        IllegalArgumentException exception =
-            org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
-                    () -> new SelectedStructureStrategy(inputStructure),
-                    "Constructor should throw IllegalArgumentException when input is null.");
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new SelectedStructureStrategy(inputStructure),
+                "Constructor should throw IllegalArgumentException when input is null.");
 
         assertEquals("The selected structure cannot be null.", exception.getMessage(),
                 "Exception message should indicate that null input is not allowed.");

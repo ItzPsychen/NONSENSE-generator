@@ -31,7 +31,6 @@ public class SentenceStructureTest {
             logger.error("Failed to create temporary file for SentenceStructureTest", e);
             fail("Failed to write to temporary file for SentenceStructureTest");
         }
-        ConfigManager.getInstance().setProperty("sentence.structures", tempFile.getAbsolutePath());
     }
 
     @BeforeEach
@@ -44,6 +43,8 @@ public class SentenceStructureTest {
             logger.error("Failed to write to temporary file for SentenceStructureTest", e);
             fail("Failed to write to temporary file for SentenceStructureTest");
         }
+        ConfigManager.getInstance().setProperty("sentence.structures", tempFile.getAbsolutePath());
+
         testNumber++;
         logger.info("Starting test #{}", testNumber);
     }

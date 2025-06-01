@@ -31,7 +31,6 @@ public class VerbTest {
             logger.error("Failed to create temporary file for VerbTest", e);
             fail("Failed to write to temporary file for VerbTest");
         }
-        ConfigManager.getInstance().setProperty("verb.file", tempFile.getAbsolutePath());
     }
 
     @BeforeEach
@@ -42,6 +41,7 @@ public class VerbTest {
             logger.error("Failed to write to temporary file for VerbTest", e);
             fail("Failed to write to temporary file for VerbTest");
         }
+        ConfigManager.getInstance().setProperty("verb.file", tempFile.getAbsolutePath());
 
         testNumber++;
         logger.info("Starting test #{}", testNumber);

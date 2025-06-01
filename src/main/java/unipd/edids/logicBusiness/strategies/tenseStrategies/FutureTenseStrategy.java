@@ -25,6 +25,8 @@ public class FutureTenseStrategy implements TenseStrategy {
             throw new IllegalArgumentException("The verb cannot be null.");
         if(verb.equals("is") || verb.equals("am") || verb.equals("are"))
             return "will be";
+        if(verb.equals("has"))
+            return "will have";
         return "will " + verb;
     }
 }

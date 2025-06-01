@@ -30,7 +30,6 @@ public class AdjectiveTest {
             logger.error("Failed to create temporary file for AdjectiveTest", e);
             fail("Failed to write to temporary file for AdjectiveTest");
         }
-        ConfigManager.getInstance().setProperty("adjective.file", tempFile.getAbsolutePath());
     }
 
     @BeforeEach
@@ -41,6 +40,8 @@ public class AdjectiveTest {
             logger.error("Failed to write to temporary file for AdjectiveTest", e);
             fail("Failed to write to temporary file for AdjectiveTest");
         }
+        ConfigManager.getInstance().setProperty("adjective.file", tempFile.getAbsolutePath());
+
         testNumber++;
         logger.info("Starting test #{}", testNumber);
 

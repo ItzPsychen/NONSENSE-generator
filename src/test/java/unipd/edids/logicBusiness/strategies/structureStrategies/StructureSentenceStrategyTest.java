@@ -1,23 +1,41 @@
 package unipd.edids.logicBusiness.strategies.structureStrategies;
 
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StructureSentenceStrategyTest {
 
-    /**
-     * This test class tests the functionality of the `generateSentenceStructure` method
-     * in classes implementing the `StructureSentenceStrategy` interface. The purpose of the
-     * method is to generate and return a sentence structure as a StringBuilder object.
-     * <p>
-     * Each test case will cover individual scenarios to ensure the method behaves as expected.
-     */
+    private static final Logger logger = LogManager.getLogger(StructureSentenceStrategyTest.class);
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: StructureSentenceStrategyTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
+    }
+
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: StructureSentenceStrategyTest");
+    }
 
     @Test
     void testGenerateSentenceStructureForDefaultImplementation() {
-        // Arrange: Using an anonymous implementation of StructureSentenceStrategy
+        logger.info("Testing generateSentenceStructure() for a default implementation...");
+        // Arrange
         StructureSentenceStrategy strategy = new StructureSentenceStrategy() {
             @Override
             public StringBuilder generateSentenceStructure() {
@@ -36,7 +54,8 @@ class StructureSentenceStrategyTest {
 
     @Test
     void testGenerateSentenceStructureForEmptyStructure() {
-        // Arrange: Using an anonymous implementation with an empty structure
+        logger.info("Testing generateSentenceStructure() for an empty structure...");
+        // Arrange
         StructureSentenceStrategy emptyStrategy = new StructureSentenceStrategy() {
             @Override
             public StringBuilder generateSentenceStructure() {
@@ -49,12 +68,14 @@ class StructureSentenceStrategyTest {
 
         // Assert
         assertNotNull(result, "Resulting StringBuilder should not be null even for an empty structure");
-        assertEquals("", result.toString(), "Expected an empty sentence structure but got a different result");
+        assertEquals("", result.toString(),
+                "The returned sentence structure should be an empty string");
     }
 
     @Test
     void testGenerateSentenceStructureForCustomStructure() {
-        // Arrange: Using an anonymous implementation with a custom structure
+        logger.info("Testing generateSentenceStructure() for a custom structure...");
+        // Arrange
         StructureSentenceStrategy customStrategy = new StructureSentenceStrategy() {
             @Override
             public StringBuilder generateSentenceStructure() {

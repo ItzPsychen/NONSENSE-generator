@@ -1,17 +1,46 @@
 package unipd.edids.logicBusiness.strategies.tenseStrategies;
 
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FutureTenseStrategyTest {
+
+    private static final Logger logger = LogManager.getLogger(FutureTenseStrategyTest.class);
+    private FutureTenseStrategy futureTenseStrategy;
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: FutureTenseStrategyTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
+        futureTenseStrategy = new FutureTenseStrategy();
+    }
+
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+        futureTenseStrategy = null;
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: FutureTenseStrategyTest");
+    }
 
     @Test
     void testConjugateWithNullInput() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> strategy.conjugate(null),
+        logger.info("Testing conjugate() with null input...");
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> futureTenseStrategy.conjugate(null),
                 "Expected IllegalArgumentException when providing a null verb");
         assertEquals("The verb cannot be null.", exception.getMessage(),
                 "Expected exception message to be 'The verb cannot be null.'");
@@ -19,49 +48,73 @@ class FutureTenseStrategyTest {
 
     @Test
     void testConjugateWithSpecialCaseVerbIs() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("is");
-        assertEquals("will be", result,
-                "Conjugation for 'is' is incorrect, expected 'will be'.");
+        logger.info("Testing conjugate() with special case verb 'is'...");
+        // Act
+        String result = futureTenseStrategy.conjugate("is");
+
+        // Assert
+        assertEquals("will be", result, "Conjugation for 'is' is incorrect, expected 'will be'.");
     }
 
     @Test
     void testConjugateWithSpecialCaseVerbAm() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("am");
-        assertEquals("will be", result,
-                "Conjugation for 'am' is incorrect, expected 'will be'.");
+        logger.info("Testing conjugate() with special case verb 'am'...");
+        // Act
+        String result = futureTenseStrategy.conjugate("am");
+
+        // Assert
+        assertEquals("will be", result, "Conjugation for 'am' is incorrect, expected 'will be'.");
     }
+
+
 
     @Test
     void testConjugateWithSpecialCaseVerbAre() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("are");
-        assertEquals("will be", result,
-                "Conjugation for 'are' is incorrect, expected 'will be'.");
+        logger.info("Testing conjugate() with special case verb 'are'...");
+        // Act
+        String result = futureTenseStrategy.conjugate("are");
+
+        // Assert
+        assertEquals("will be", result, "Conjugation for 'are' is incorrect, expected 'will be'.");
+    }
+    @Test
+    void testConjugateWithSpecialCaseVerbHas() {
+        logger.info("Testing conjugate() with special case verb 'has'...");
+        // Act
+        String result = futureTenseStrategy.conjugate("has");
+
+        // Assert
+        assertEquals("will have", result, "Conjugation for 'has' is incorrect, expected 'will have'.");
     }
 
     @Test
     void testConjugateWithRegularVerb() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("run");
-        assertEquals("will run", result,
-                "Conjugation for 'run' is incorrect, expected 'will run'.");
+        logger.info("Testing conjugate() with a regular verb...");
+        // Act
+        String result = futureTenseStrategy.conjugate("run");
+
+        // Assert
+        assertEquals("will run", result, "Conjugation for 'run' is incorrect, expected 'will run'.");
     }
+
 
     @Test
     void testConjugateWithEmptyString() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("");
-        assertEquals("will ", result,
-                "Conjugation for an empty string is incorrect, expected 'will '.");
+        logger.info("Testing conjugate() with an empty string...");
+        // Act
+        String result = futureTenseStrategy.conjugate("");
+
+        // Assert
+        assertEquals("will ", result, "Conjugation for an empty string is incorrect, expected 'will '.");
     }
 
     @Test
     void testConjugateWithCapitalizedVerb() {
-        FutureTenseStrategy strategy = new FutureTenseStrategy();
-        String result = strategy.conjugate("Walk");
-        assertEquals("will Walk", result,
-                "Conjugation for 'Walk' is incorrect, expected 'will Walk'.");
+        logger.info("Testing conjugate() with a capitalized verb...");
+        // Act
+        String result = futureTenseStrategy.conjugate("Walk");
+
+        // Assert
+        assertEquals("will Walk", result, "Conjugation for 'Walk' is incorrect, expected 'will Walk'.");
     }
 }

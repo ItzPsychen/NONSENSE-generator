@@ -30,7 +30,6 @@ public class NounTest {
         } catch (IOException e) {
             logger.error("Failed to create temporary file for NounTest", e);
         }
-        ConfigManager.getInstance().setProperty("noun.file", tempFile.getAbsolutePath());
     }
 
     @BeforeEach
@@ -41,6 +40,8 @@ public class NounTest {
             logger.error("Failed to write to temporary file for NounTest", e);
             fail("Failed to write to temporary file for NounTest");
         }
+        ConfigManager.getInstance().setProperty("noun.file", tempFile.getAbsolutePath());
+
         testNumber++;
         logger.info("Starting test #{}", testNumber);
     }

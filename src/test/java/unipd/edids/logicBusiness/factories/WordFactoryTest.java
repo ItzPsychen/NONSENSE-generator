@@ -37,9 +37,6 @@ public class WordFactoryTest {
             tempVerbFile.deleteOnExit();
 
 
-            ConfigManager.getInstance().setProperty("noun.file", tempNounFile.getAbsolutePath());
-            ConfigManager.getInstance().setProperty("adjective.file", tempAdjectiveFile.getAbsolutePath());
-            ConfigManager.getInstance().setProperty("verb.file", tempVerbFile.getAbsolutePath());
 
             // Inizializza le istanze singleton
             Noun.getInstance();
@@ -64,6 +61,10 @@ public class WordFactoryTest {
             logger.error("Failed to reset temporary files for WordFactoryTest", e);
             fail("Failed to reset temporary files for WordFactoryTest");
         }
+        ConfigManager.getInstance().setProperty("noun.file", tempNounFile.getAbsolutePath());
+        ConfigManager.getInstance().setProperty("adjective.file", tempAdjectiveFile.getAbsolutePath());
+        ConfigManager.getInstance().setProperty("verb.file", tempVerbFile.getAbsolutePath());
+
         testNumber++;
         logger.info("Starting test #{}", testNumber);
     }
