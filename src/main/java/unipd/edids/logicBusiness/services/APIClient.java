@@ -3,6 +3,7 @@ package unipd.edids.logicBusiness.services;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1.*;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.managers.LoggerManager;
 import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
@@ -37,7 +38,7 @@ public class APIClient<T> implements ConfigObserver {
     /**
      * Stores the file path for API credentials retrieved from configuration properties.
      */
-    private static String credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file");
+    private static String credentialsFilePath;
     /**
      * Singleton instance of the LanguageServiceClient for managing language analysis operations.
      * Ensures thread-safe lazy instantiation using double-checked locking.
@@ -61,6 +62,13 @@ public class APIClient<T> implements ConfigObserver {
      */
     public APIClient() {
         ConfigManager.getInstance().addObserver(this);
+        try {
+            credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file");
+        }catch (MissingApiKeyException e){
+            logger.error("Impossible to initialize APIClient: {}", e.getMessage());
+            throw new MissingApiKeyException("Impossible to initialize APIClient: " + e.getMessage());
+        }
+
     }
 
     /**
@@ -95,7 +103,7 @@ public class APIClient<T> implements ConfigObserver {
         if (credentialsFilePath == null || credentialsFilePath.isBlank()) {
             String errorMsg = "API key path is not configured! Please configure it via File > Settings.";
             logger.error(errorMsg);
-            throw new IllegalStateException(errorMsg);
+            throw new MissingApiKeyException(errorMsg);
         }
 
         try {

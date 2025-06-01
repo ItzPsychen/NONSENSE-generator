@@ -102,7 +102,7 @@ public class AdjectiveTest {
     }
 
     @AfterEach
-    void tearDown() throws IOException {
+    void tearDown() {
         logger.info("Finished test #{}", testNumber);
     }
 

@@ -138,37 +138,37 @@ public class ModerationSentenceService {
         logger.debug("Validating text: {}", sentenceText);
 
         if (sentenceText == null || sentenceText.isEmpty()) {
-            String errorMessage = "Input text cannot be null or empty.";
+            String errorMessage = "Input text " + sentenceText +" cannot be null or empty.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (sentenceText.trim().isEmpty()) {
-            String errorMessage = "Input text cannot be empty or whitespace only.";
+            String errorMessage = "Input text " + sentenceText +" cannot be empty or whitespace only.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (!sentenceText.matches(".*[a-zA-Z]+.*")) {
-            String errorMessage = "Input text must contain at least one alphabetical character.";
+            String errorMessage = "Input text " + sentenceText +" must contain at least one alphabetical character.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (sentenceText.matches("^[^a-zA-Z0-9\\s].*")) {
-            String errorMessage = "Input text contains invalid characters at the start of the text.";
+            String errorMessage = "Input text " + sentenceText +" contains invalid characters at the start of the text.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (sentenceText.matches(".*[^a-zA-Z0-9.\\s]$")) {
-            String errorMessage = "Input text contains invalid characters at the end of the text.";
+            String errorMessage = "Input text " + sentenceText +" contains invalid characters at the end of the text.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (sentenceText.matches(".*[^a-zA-Z0-9.,:'\"\\s-].*")) {
-            String errorMessage = "Input text contains invalid characters.";
+            String errorMessage = "Input text " + sentenceText +" contains invalid characters.";
             logger.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }

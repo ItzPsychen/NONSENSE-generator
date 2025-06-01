@@ -112,9 +112,9 @@ class ConfigManagerTest {
     @Test
     void testResetDefault() throws IOException {
         logger.info("Testing resetDefault()...");
-        String nounFileValue = "nounFileTest";
-        String nounFileKey = "noun.file";
-        ConfigManager.getInstance().setProperty(nounFileKey, nounFileValue);
+        String themeKey = "ui.theme";
+        String themeValue = "dark";
+        ConfigManager.getInstance().setProperty(themeKey, themeValue);
         String oldApiKey;
         try {
             oldApiKey = ConfigManager.getInstance().getProperty("api.key.file");
@@ -123,7 +123,7 @@ class ConfigManagerTest {
             oldApiKey = "";
         }
 
-        assertEquals(nounFileValue, ConfigManager.getInstance().getProperty(nounFileKey), "resetDefault() should not change the API key");
+        assertEquals(themeValue, ConfigManager.getInstance().getProperty(themeKey), "resetDefault() should not change the API key");
 
         ConfigManager.getInstance().resetDefault();
         String newApiKey;
@@ -134,7 +134,7 @@ class ConfigManagerTest {
             newApiKey = "";
         }
         assertEquals(newApiKey, oldApiKey, "resetDefault() should update the API key with the old value");
-        assertNotEquals(nounFileValue, ConfigManager.getInstance().getProperty(nounFileKey), "resetDefault() should update the API key with the old value");
+        assertNotEquals(themeValue, ConfigManager.getInstance().getProperty(themeKey), "resetDefault() should update the API key with the old value");
 
     }
 }

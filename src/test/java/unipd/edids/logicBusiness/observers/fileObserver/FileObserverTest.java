@@ -98,9 +98,7 @@ public class FileObserverTest {
         tempFile.deleteOnExit();
 
         StringBuilder longPath = new StringBuilder(tempFile.getAbsolutePath());
-        for (int i = 0; i < 500; i++) {
-            longPath.append("a"); // Create a long file path
-        }
+        longPath.append("a".repeat(500)); // Create a long file path
 
         // Act
         fileObserver.onFileChanged(longPath.toString());

@@ -99,7 +99,7 @@ public class WordFactoryTest {
                 "The returned Word for VERB must be the same instance as Verb.getInstance().");
     }
     @AfterEach
-    void tearDown() throws IOException {
+    void tearDown() {
         logger.info("Finished test #{}", testNumber);
     }
 

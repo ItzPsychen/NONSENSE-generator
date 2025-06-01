@@ -27,10 +27,14 @@ public class VerbTest {
             tempFile.deleteOnExit();
 
 
+
+
         } catch (IOException e) {
             logger.error("Failed to create temporary file for VerbTest", e);
             fail("Failed to write to temporary file for VerbTest");
         }
+        logger.info("Property 'verb.file' configured with path: {}", tempFile.getAbsolutePath());
+
     }
 
     @BeforeEach
@@ -42,7 +46,6 @@ public class VerbTest {
             fail("Failed to write to temporary file for VerbTest");
         }
         ConfigManager.getInstance().setProperty("verb.file", tempFile.getAbsolutePath());
-
         testNumber++;
         logger.info("Starting test #{}", testNumber);
     }
@@ -57,15 +60,14 @@ public class VerbTest {
 
     @Test
     void testGetInstanceInitializesProperly() {
-        Verb instance = Verb.getInstance();
-        assertNotNull(instance.getFilePath(), "Expected filePath to not be null after instantiation.");
-        assertEquals(tempFile.getAbsolutePath(), instance.getFilePath(), "FilePath did not match the expected value.");
-        assertFalse(instance.words.isEmpty(), "Expected words list to be populated after instantiation.");
+        assertNotNull(Verb.getInstance().getFilePath(), "Expected filePath to not be null after instantiation.");
+        assertEquals(tempFile.getAbsolutePath(), Verb.getInstance().getFilePath(), "FilePath did not match the expected value.");
+        assertFalse(Verb.getInstance().words.isEmpty(), "Expected words list to be populated after instantiation.");
     }
 
     @Test
     void testOnConfigChangeUpdatesFilePathAndReloadsWords() throws IOException {
-        Verb instance = Verb.getInstance();
+
 
         File newTempFile = File.createTempFile("verb_test_update", ".txt");
         newTempFile.deleteOnExit();
@@ -73,12 +75,11 @@ public class VerbTest {
         try (FileWriter fileWriter = new FileWriter(newTempFile)) {
             fileWriter.write("swim\nclimb\ndrive");
         }
-
         Verb.getInstance().onConfigChange("verb.file", newTempFile.getAbsolutePath());
 
-        assertEquals(newTempFile.getAbsolutePath(), instance.getFilePath(), "Expected filePath to be updated after config change.");
-        assertFalse(instance.words.isEmpty(), "Expected words list to be updated after config change.");
-        assertTrue(instance.words.contains("swim"), "Expected words list to contain data from the new file.");
+        assertEquals(newTempFile.getAbsolutePath(), Verb.getInstance().getFilePath(), "Expected filePath to be updated after config change.");
+        assertFalse(Verb.getInstance().words.isEmpty(), "Expected words list to be updated after config change.");
+        assertTrue(Verb.getInstance().words.contains("swim"), "Expected words list to contain data from the new file.");
     }
 
     @Test
@@ -92,7 +93,9 @@ public class VerbTest {
     @Test
     void testRandomWordRetrieval() {
         Verb verb = Verb.getInstance();
+        verb.configureVerbTense(false); // Ensure present tense is default
         String randomWord = verb.getRandomWord();
+
         assertNotNull(randomWord, "Expected random word to not be null.");
         assertTrue(List.of("run", "jump", "talk").contains(randomWord),
                 "Expected random word to be one of the defined words.");

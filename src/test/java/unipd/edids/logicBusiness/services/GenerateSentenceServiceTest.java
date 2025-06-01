@@ -1,5 +1,7 @@
 package unipd.edids.logicBusiness.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.entities.Verb;
@@ -12,26 +14,37 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GenerateSentenceServiceTest {
 
     private ConfigManager configManager;
+    private static final Logger logger = LogManager.getLogger(GenerateSentenceServiceTest.class);
+    private int testNumber = 0;
+
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: GenerateSentenceServiceTest");
+    }
 
     @BeforeEach
-    public void setUp() {
-        configManager = ConfigManager.getInstance();
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
         Verb.getInstance().configureVerbTense(false);
-
-
     }
 
     @AfterEach
-    public void tearDown() throws IOException {
-        configManager.resetDefault();
+    void tearDown() throws IOException {
+        logger.info("Finished test #{}", testNumber);
+        ConfigManager.getInstance().resetDefault();
         File file = new File("testFile.txt");
-        if (file.exists()) {
-            file.delete();
+        if (file.exists() && !file.delete()) {
+            logger.warn("Failed to delete test file: testFile.txt");
         }
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: GenerateSentenceServiceTest");
     }
 
     @Test
@@ -43,7 +56,7 @@ class GenerateSentenceServiceTest {
         Sentence result = service.generateSentence();
 
         assertNotNull(result.getSentence().toString(), "Generated sentence should not be null.");
-        assertTrue(result.getSentence().length() > 0, "Generated sentence should not be empty.");
+        assertFalse(result.getSentence().isEmpty(), "Generated sentence should not be empty.");
     }
 
     @Test
@@ -261,7 +274,7 @@ class GenerateSentenceServiceTest {
     void testGenerateSentenceWithEmptyTemplate() {
         GenerateSentenceService service = new GenerateSentenceService();
         Sentence inputSentence = new Sentence();
-        inputSentence.setStructure(new StringBuilder(""));
+        inputSentence.setStructure(new StringBuilder());
 
         service.setStructureSentenceStrategy(StrategyType.SAME, inputSentence, null);
         service.configureWordStrategy(true, inputSentence);

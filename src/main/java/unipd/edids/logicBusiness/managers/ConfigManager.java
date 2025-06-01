@@ -3,6 +3,7 @@ package unipd.edids.logicBusiness.managers;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
 import unipd.edids.logicBusiness.observers.configObserver.ConfigObserver;
 
 import java.io.*;
@@ -159,13 +160,13 @@ public class ConfigManager {
     }
 
     /**
-     * Notifies registered observers if the value of a specific configuration property has changed.
+     * Notifies registered observers of a configuration change if the new value differs from the previous value.
      *
-     * @param key      The configuration property key being monitored.
-     * @param newValue The new value of the configuration property to compare with the old value.
+     * @param key      The identifier for the property that has been modified.
+     * @param oldValue The previous value of the property.
+     * @param newValue The updated value of the property.
      */
-    private void notifyObserversIfNeeded(String key, String newValue) {
-        String oldValue = properties.getProperty(key);
+    private void notifyObserversIfNeeded(String key, String oldValue,String newValue) {
         if (!newValue.equals(oldValue)) {
             logger.debug("Property '{}' changed from '{}' to '{}', notifying observers", key, oldValue, newValue);
             for (ConfigObserver observer : observers) {
@@ -200,10 +201,18 @@ public class ConfigManager {
      * @throws IllegalArgumentException if the property key is not defined or has a blank value
      */
     public String getProperty(String key) {
+        if (key == null || key.isBlank()) {
+            logger.error("Property key {} is not defined.", key);
+            throw new IllegalArgumentException("Property key " + key + " is not defined.");
+        }
         String value = properties.getProperty(key);
         if (value == null || value.isBlank()) {
-            logger.error("Property {} is not defined in configuration.", key);
-            throw new IllegalArgumentException("Property " + key + " is not defined.");
+            logger.error("Property {} is missing or empty in configuration.", key);
+            if (API_KEY_PROPERTY.equals(key)) {
+                throw new MissingApiKeyException();
+            } else {
+                throw new IllegalArgumentException("Property " + key + " is not defined.");
+            }
         }
         return value;
     }
@@ -212,12 +221,13 @@ public class ConfigManager {
      * Updates or adds a property identified by the specified key and notifies observers if the value changes.
      *
      * @param key   The unique identifier for the property being set.
-     * @param value The new value to assign to the specified property.
+     * @param newValue The new value to assign to the specified property.
      */
-    public void setProperty(String key, String value) {
-        logger.debug("Setting property '{}' to '{}'", key, value);
-        properties.setProperty(key, value);
-        notifyObserversIfNeeded(key, value);
+    public void setProperty(String key, String newValue) {
+        logger.debug("Setting property '{}' to '{}'", key, newValue);
+        String oldValue = properties.getProperty(key);
+        properties.setProperty(key, newValue);
+        notifyObserversIfNeeded(key, oldValue, newValue);
     }
 
     /**
@@ -250,7 +260,7 @@ public class ConfigManager {
         String oldApiKey;
         try{
             oldApiKey = getProperty(API_KEY_PROPERTY);
-        } catch (IllegalArgumentException e) {
+        } catch (MissingApiKeyException e) {
             logger.warn("Trying to reset: API key property is not defined.");
             oldApiKey = "";
         }
@@ -266,29 +276,35 @@ public class ConfigManager {
     }
 
     /**
-     * Resets the application's configuration file using a specified default configuration path and updates the API key.
+     * Resets the configuration to its default state using a specified configuration file path.
      *
      * @param defaultConfigPath The file path to the default configuration file.
-     * @param newApiKey The new API key to update in the configuration file.
-     * @throws IOException If an error occurs while reading, writing, or renaming the configuration file.
+     * @param newApiKey         The new API key to replace the existing API key.
+     *                          If null or blank, the existing API key is not replaced.
+     * @throws IOException If there are issues accessing or reading the default configuration file.
      */
     private void resetConfigFromDefault(String defaultConfigPath, String newApiKey) throws IOException {
         logger.info("Resetting configuration from default path: {}", defaultConfigPath);
-        List<String> lines = new ArrayList<>(FileManager.readFile(defaultConfigPath));
-        String newApiKeyLine = API_KEY_PROPERTY + "=" + newApiKey;
+        List<String> lines = FileManager.readFile(defaultConfigPath);
 
-        lines.removeIf(line -> line.startsWith(API_KEY_PROPERTY));
-        lines.add(newApiKeyLine);
-
-        File tempFile = new File(configFilePath + ".tmp");
+        // Update properties one at a time
         for (String line : lines) {
-            FileManager.appendLineToSavingFile(tempFile.getAbsolutePath(), line);
+            if (!line.isBlank() && line.contains("=")) {
+                String[] keyValue = line.split("=", 2);
+                String key = keyValue[0].trim();
+                String value = keyValue[1].trim();
+
+                // Use setProperty to update each property
+                setProperty(key, value);
+            }
         }
 
-        if (!tempFile.renameTo(new File(configFilePath))) {
-            throw new IOException("Failed to rename temp file to: " + configFilePath);
+        // Update the specific property for API key
+        if (newApiKey != null && !newApiKey.isBlank()) {
+            setProperty(API_KEY_PROPERTY, newApiKey);
         }
 
-        loadProperties();
+        // Save property changes to configuration file
+        saveProperties();
     }
 }

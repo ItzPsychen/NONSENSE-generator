@@ -26,7 +26,6 @@ public class NounTest {
             tempFile = File.createTempFile("noun_test", ".txt");
             tempFile.deleteOnExit();
 
-
         } catch (IOException e) {
             logger.error("Failed to create temporary file for NounTest", e);
         }
@@ -98,7 +97,7 @@ public class NounTest {
     }
 
     @AfterEach
-    void tearDown() throws IOException {
+    void tearDown() {
         logger.info("Finished test #{}", testNumber);
     }
 

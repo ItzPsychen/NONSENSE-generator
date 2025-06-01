@@ -1,10 +1,12 @@
 package unipd.edids.logicBusiness.services;
 
 import com.google.cloud.language.v1.ClassificationCategory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.entities.Sentence;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
+import unipd.edids.logicBusiness.managers.ConfigManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +21,33 @@ import static org.junit.jupiter.api.Assertions.*;
  * The class validates the behavior of the `moderateText` method and its associated private methods
  * to ensure proper handling of moderation logic and appropriate exceptions when necessary.
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ModerationSentenceServiceTest {
+    private static final Logger logger = LogManager.getLogger(ModerationSentenceServiceTest.class);
+    private int testNumber = 0;
+    private ModerationSentenceService moderationSentenceService;
 
+    @BeforeAll
+    void startTesting() {
+        logger.info("Starting test suite: ModerationSentenceServiceTest");
+    }
+
+    @BeforeEach
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
+        moderationSentenceService = new ModerationSentenceService();
+    }
+
+    @AfterEach
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+        moderationSentenceService = null;
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: ModerationSentenceServiceTest");
+    }
     @Test
     void testGetModerationConfidenceByName_FoundCategory() {
         List<ClassificationCategory> categories = new ArrayList<>();
@@ -98,6 +125,14 @@ class ModerationSentenceServiceTest {
     @Test
     void testModerateText_Success() {
         ModerationSentenceService service = new ModerationSentenceService();
+
+        try {
+            // Gets the API key; throws MissingApiKeyException if not configured.
+            ConfigManager.getInstance().getProperty("api.key.file");
+        } catch (MissingApiKeyException e) {
+            logger.warn("Skipping test due to missing API Key: {}", e.getMessage());
+            Assumptions.assumeTrue(false, "Test skipped: API Key is not configured.");
+        }
 
         // Temporary file for mocking response
         File tempFile;
@@ -201,7 +236,13 @@ class ModerationSentenceServiceTest {
     void testModerateText_ValidSentence_Success() {
         ModerationSentenceService service = new ModerationSentenceService();
         Sentence validSentence = new Sentence("This is a valid test sentence.");
-
+        try {
+            // Gets the API key; throws MissingApiKeyException if not configured.
+            ConfigManager.getInstance().getProperty("api.key.file");
+        } catch (MissingApiKeyException e) {
+            logger.warn("Skipping test due to missing API Key: {}", e.getMessage());
+            Assumptions.assumeTrue(false, "Test skipped: API Key is not configured.");
+        }
         assertDoesNotThrow(() -> service.moderateText(validSentence),
                 "moderateText should not throw an exception for valid sentences");
     }

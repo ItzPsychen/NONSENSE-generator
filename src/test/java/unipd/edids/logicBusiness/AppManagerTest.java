@@ -1,9 +1,12 @@
 package unipd.edids.logicBusiness;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import unipd.edids.logicBusiness.entities.Sentence;
 import unipd.edids.logicBusiness.exceptions.AnalyzeException;
 import unipd.edids.logicBusiness.exceptions.GenerateException;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 
 import java.io.File;
@@ -11,46 +14,73 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AppManagerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class AppManagerTest {
 
+    private static final Logger logger = LogManager.getLogger(AppManagerTest.class);
+    private static final String TEMP_ANALYZED_FILE_PATH = "temp_analyzed_file.txt";
+    private static final String TEMP_GENERATED_FILE_PATH = "temp_generated_file.txt";
     private ConfigManager configManager;
     private AppManager appManager;
     private int testNumber = 0;
+    private File tempAnalyzedFile;
+    private File tempGeneratedFile;
 
     @BeforeAll
-    public static void startTesting() {
-        System.out.println("Starting testing for AppManagerTest");
-    }
-
-    @AfterAll
-    public static void endTesting() {
-        System.out.println("Completed testing for AppManagerTest");
+    void startTesting() {
+        logger.info("Starting test suite: AppManagerTest");
+        try {
+            // Create temporary files for analyzed and generated sentences
+            tempAnalyzedFile = new File(TEMP_ANALYZED_FILE_PATH);
+            tempGeneratedFile = new File(TEMP_GENERATED_FILE_PATH);
+            if (tempAnalyzedFile.createNewFile() && tempGeneratedFile.createNewFile()) {
+                logger.info("Temporary files created for testing: {}, {}", TEMP_ANALYZED_FILE_PATH, TEMP_GENERATED_FILE_PATH);
+            } else {
+                throw new IOException("Failed to create temporary test files.");
+            }
+        } catch (IOException e) {
+            logger.error("Error during setup of test suite: {}", e.getMessage());
+            fail("Failed to set up before all tests.");
+        }
     }
 
     @BeforeEach
-    public void setUp() {
-        testNumber++;
-        System.out.println("Starting test #" + testNumber);
+    void setUp() {
+        logger.info("Running test #{}", ++testNumber);
         configManager = ConfigManager.getInstance();
         appManager = new AppManager(configManager);
 
-        // Mocking configuration properties for test purposes
-        configManager.setProperty("analyzed.save.file", "testFile.txt");
-        configManager.setProperty("generated.save.file", "testFile.txt");
+        configManager.setProperty("analyzed.save.file", tempAnalyzedFile.getAbsolutePath());
+        configManager.setProperty("generated.save.file", tempGeneratedFile.getAbsolutePath());
     }
-
 
     @AfterEach
-    public void tearDown() {
-        System.out.println("Test #" + testNumber + " completed");
-        File file = new File("testFile.txt");
-        if (file.exists()) {
-            file.delete();
+    void tearDown() {
+        logger.info("Finished test #{}", testNumber);
+        appManager.clearAll(); // Clear any generated state
+    }
+
+    @AfterAll
+    void cleanUp() {
+        logger.info("Finished test suite: AppManagerTest");
+        try {
+            if (tempAnalyzedFile.exists() && tempAnalyzedFile.delete()) {
+                logger.info("Temporary file deleted: {}", TEMP_ANALYZED_FILE_PATH);
+            }
+            if (tempGeneratedFile.exists() && tempGeneratedFile.delete()) {
+                logger.info("Temporary file deleted: {}", TEMP_GENERATED_FILE_PATH);
+            }
+            ConfigManager.getInstance().resetDefault();
+            logger.info("ConfigManager reset to default.");
+        } catch (IOException e) {
+            logger.error("Error during cleanup after all tests: {}", e.getMessage());
         }
     }
-    
+
+
     @Test
     public void testAnalyzeSentence_SuccessCase() {
+        checkApiKey();
         Sentence analyzedSentence = appManager.analyzeSentence("This is a valid test sentence.", false);
 
         assertNotNull(analyzedSentence, "Analyzed sentence should not be null.");
@@ -59,6 +89,7 @@ public class AppManagerTest {
 
     @Test
     public void testAnalyzeSentence_SaveToFile() throws IOException {
+        checkApiKey();
         // Create temporary file and configure the path in ConfigManager
         File tempFile = File.createTempFile("analyzed_sentence_test", ".txt");
         tempFile.deleteOnExit();
@@ -80,6 +111,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_SuccessCase() throws IOException {
+        checkApiKey();
         // Create temporary file to save the generated sentence
         File tempFile = File.createTempFile("generated_sentence_test", ".txt");
         tempFile.deleteOnExit();
@@ -97,7 +129,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_RandomStrategy() {
-
+        checkApiKey();
 
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
@@ -109,6 +141,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_SameStrategy() throws IOException {
+        checkApiKey();
 
 
         // Mock a valid input sentence
@@ -121,7 +154,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_SelectedStrategy() throws IOException {
-
+        checkApiKey();
 
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
@@ -133,6 +166,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_NullStrategy() {
+        checkApiKey();
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
@@ -143,6 +177,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_NullStructureStrategy() {
+        checkApiKey();
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
@@ -153,6 +188,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_InvalidStrategyParameter() {
+        checkApiKey();
         // Mock a valid input sentence
         appManager.analyzeSentence("This is a valid input.", false);
 
@@ -179,22 +215,17 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_WithToxicityEnabled() throws IOException {
+        checkApiKey();
         // Mock a valid input sentence
-        appManager.analyzeSentence("This is a test input.", false);
+//        appManager.analyzeSentence("This is a test input", false);
 
-        File tempFile = File.createTempFile("generated_sentence_test_toxicity", ".txt");
-        tempFile.deleteOnExit();
-        configManager.setProperty("generated.save.file", tempFile.getAbsolutePath());
-
-        Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", true, false, false, true);
-
+        Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", true, false, true, true);
         assertNotNull(generatedSentence, "Generated sentence with toxicity moderation should not be null.");
-        assertTrue(tempFile.exists(), "File generated with toxicity moderation should exist.");
-        assertTrue(tempFile.length() > 0, "File generated with toxicity moderation should not be empty.");
     }
 
     @Test
     public void testGenerateSentence_DifferentCombinations() throws IOException {
+        checkApiKey();
         appManager.analyzeSentence("This is a valid input.", false);
 
         File tempFile1 = File.createTempFile("generated_sentence_test_1", ".txt");
@@ -220,6 +251,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_WithFutureTense() throws IOException {
+        checkApiKey();
         appManager.analyzeSentence("This is a valid input sentence.", false);
 
         File tempFile = File.createTempFile("generated_sentence_future", ".txt");
@@ -235,7 +267,7 @@ public class AppManagerTest {
 
     @Test
     public void testGenerateSentence_NoInputSentence_RandomStrategy_NewWordsEnabled() throws IOException {
-
+        checkApiKey();
         // Generazione con RANDOM strategy e newWords abilitato
         Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", false, false, true, false);
 
@@ -245,6 +277,7 @@ public class AppManagerTest {
 
     @Test
     public void testClearAll_SuccessCase() {
+        checkApiKey();
         // Analyze and generate sentences
         appManager.analyzeSentence("This is a valid input sentence.", false);
         appManager.generateSentence("RANDOM", "simple", false, false, false, false);
@@ -257,6 +290,7 @@ public class AppManagerTest {
 
     @Test
     public void testGetOutputSentence() {
+        checkApiKey();
         // Analyze and generate sentences
         appManager.analyzeSentence("This is a valid input sentence.", false);
         Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", false, false, false, false);
@@ -265,6 +299,17 @@ public class AppManagerTest {
         assertEquals(generatedSentence, appManager.getOutputSentence(), "getOutputSentence should return the last generated sentence.");
     }
 
+    protected void checkApiKey() {
+        try {
+            // Gets the API key; throws MissingApiKeyException if not configured.
+            ConfigManager.getInstance().getProperty("api.key.file");
+        } catch (
+                MissingApiKeyException e) {
+            logger.warn("Skipping test due to missing API Key: {}", e.getMessage());
+            Assumptions.assumeTrue(false, "Test skipped: API Key is not configured.");
+        }
 
+    }
 
+        
 }

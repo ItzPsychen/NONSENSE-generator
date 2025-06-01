@@ -6,6 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.managers.LoggerManager;
 
@@ -235,8 +236,8 @@ public class SettingsController {
         try {
             // Try to get property value
             return configManager.getProperty(key);
-        } catch (IllegalArgumentException e) {
-            // If property doesn't exist, return default value
+        } catch (IllegalArgumentException | MissingApiKeyException e) {
+            // If property doesn't exist or API key is missing, return default value
             logger.warn("Property '{}' not found. Using default value '{}'.", key, defaultValue);
             return defaultValue;
         }

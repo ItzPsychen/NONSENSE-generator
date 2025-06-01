@@ -10,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Logger;
 import unipd.edids.logicBusiness.*;
+import unipd.edids.logicBusiness.exceptions.MissingApiKeyException;
 import unipd.edids.logicBusiness.managers.ConfigManager;
 import unipd.edids.logicBusiness.managers.LoggerManager;
 import unipd.edids.logicBusiness.services.APIClient;
@@ -97,7 +98,7 @@ public class App extends Application {
     private String getApiKeyFile(ConfigManager configManager) {
         try {
             return configManager.getProperty("api.key.file");
-        } catch (IllegalArgumentException e) {
+        } catch (MissingApiKeyException e) {
             logger.warn("api.key.file is not defined or is blank. Ignoring and proceeding.");
             return null;
         }

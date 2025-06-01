@@ -36,15 +36,12 @@ public class SentenceStructureTest {
     @BeforeEach
     void createTempFile() {
         try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write("[NOUN] [VERB]\n");
-            writer.write("[ADJECTIVE] [NOUN]\n");
-            writer.write("[VERB] [NOUN] [ADJECTIVE]\n");
+            writer.write("[NOUN] [VERB]\n[ADJECTIVE] [NOUN]\n[VERB] [NOUN] [ADJECTIVE]\n");
         } catch (IOException e) {
             logger.error("Failed to write to temporary file for SentenceStructureTest", e);
             fail("Failed to write to temporary file for SentenceStructureTest");
         }
         ConfigManager.getInstance().setProperty("sentence.structures", tempFile.getAbsolutePath());
-
         testNumber++;
         logger.info("Starting test #{}", testNumber);
     }
@@ -62,12 +59,12 @@ public class SentenceStructureTest {
     void testRandomStructureRetrieval() {
         SentenceStructure instance = SentenceStructure.getInstance();
         String randomStructure = instance.getRandomStructure();
-
         List<String> expectedStructures = List.of(
                 "[NOUN] [VERB]",
                 "[ADJECTIVE] [NOUN]",
                 "[VERB] [NOUN] [ADJECTIVE]"
         );
+
         assertNotNull(randomStructure, "The random structure should not be null.");
         assertTrue(expectedStructures.contains(randomStructure),
                 "The random structure should be one of the loaded structures.");
@@ -131,6 +128,7 @@ public class SentenceStructureTest {
     void cleanUp() throws IOException {
         logger.info("Finished test suite: SentenceStructureTest");
         ConfigManager.getInstance().resetDefault();
+
         if (tempFile.exists()) {
             assertTrue(tempFile.delete(), "Failed to delete the temporary file.");
         }
