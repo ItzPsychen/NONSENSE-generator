@@ -1,6 +1,11 @@
 # NONSENSE-generator
 
-<img src="src/main/resources/icons/icon.png" alt="App Preview" width="300" height="300" />
+<img src="src/main/resources/icons/icon.png" alt="NONSENSE-generator Logo" width="150" height="150" />
+
+## Table of Contents
+
+
+---
 
 ## *The Application*
 
@@ -20,7 +25,7 @@ We will ask you, user, to set your personal path of the API key inside the appro
 
 #### 2. **Get Started with the Generator**
 
-After setting all the needed information, you now have full access to the application. You can now use the generator as you wish without any problem of losing what you generated, by using the *Save* option that puts everything you do into an output file. All settings are also saved so that they don't revert to default once you close the app. 
+After setting all the needed information, you now have full access to the application. You can now use the generator as you wish without any problem of losing what you generated, by using the *Save* option that puts everything you do into an output file. All settings are also saved so that they don't revert to default once you close the app.
 
 #### 3. **Exit the Application**
 
@@ -32,125 +37,18 @@ At the top of our Generator, you can open a *Credits* section using the *"About"
 
 ---
 
-## *The All-Functions Manual*
+## Deliverables
 
-The following section provides a detailed breakdown of the Application, so that you won't get lost using it in the future.
+The following deliverables have been produced for this project:
 
-- **Analyze** button
-  
-  By entering a sentence and analyzing it, you will be provided with the structure of the sentence, along with the syntactic tree if the user wants to.
-
-- **Generate** button
-  
-  This is the main button, used to create our nonsense sentences. You, user, have at your disposal a complete menu where you can choose from multiple options how to generate the sentences.
-
-- **Menu Options** for generating
-  
-  The *Sentence Structure* section lets you choose if you want the application to choose it randomly, maintain the same one used from the input, or choose one yourself. From the settings, you can even make it *recursive*.  
-  The *Word Generation* section has two options: the first will make our Generator use new words you did not type in, while the second will make your generated result in future tense.
-
-- **Use Generated** button
-  
-  This simple button will re-use your generated sentence as a new input by writing it in the input-text section. Now the previous generation can be analyzed and used again as you wish.
-
-- **Toxicity** bars
-   
-  These five bars will help you visualize better at what level of toxicity, profanity, insult, sexual and political content your generated sentence is at. The lower the level, the more green they become; the higher they get, the more red they will be.
-
-- **Save** option
-    
-  This checkbox, if selected, will automatically take all your future generated sentences and one by one add them to a file that will never be deleted automatically by the Application. In this file, you will always have the possibility to check your previously created sentences.
-
-- **Settings**
-  
-  The Settings option, found under *File*, will open a new form where you can change the paths of many files. At the bottom, the user can change the recursion level (previously cited), disable it, set the maximum length of an input sentence and finally change the theme (light/dark).
-
-- **Vocabulary**
-  
-  This form, which you can open with the *Vocabulary* option under *Edit*, will let you add all the nouns, verbs and adjectives you want so that the Generator in the future can use the new words you provided.
-
-- **About**
-   
-  The Credits section explained as before. You can find this by going to the *Help* option and then *About*.
+- [**User Manual**](documentation/Manual%20of%20usage%20-%20NONSENSE%20generator.pdf)
+- [**User Stories**](https://randomgenerator.atlassian.net/jira/software/projects/SCRUM/boards/1)
+- [**Design Document**](documentation/Design%20Document.pdf) - [Individual graphs and charts can be viewed here](documentation/graphs)
+- [**Source Code**](https://github.com/ItzPsychen/NONSENSE-generator)
+- [**System Test Document**](documentation/System%20Test%20Report.pdf)
+- [**Unit Test Report**](https://itzpsychen.github.io/NONSENSE-generator/surefire-reports/surefire-report.html)
 
 ---
-
-## *User Manual*
-Before using this program, make sure your device meets the following requirements:
-
-- **Java Development Kit (JDK) version 21** must be installed.
-- A valid **Google API Key** is required to access the application's services.
-  
-**Installation**
-
-After verifying the requirements, proceed with the installation of the project on your local machine.
-
-Once the installation is complete, you can start the program using one of the following methods:
-
-- by launching the program from the terminal
-
-- by launching the program from the application interface
-
-
-## Design Patterns Used
-This application incorporates several well-known design patterns to ensure separation of concerns, scalability, and maintainability. Below is a detailed explanation of the patterns used:
-
-### 1. Facade Pattern
-**Main class:** The Facade pattern is centrally implemented by this class which provides a simplified interface to access different complex services. This class: `AppManager`
-- Aggregates the services `AnalyzeSentenceService`, `GenerateSentenceService`, and `ModerationSentenceService`
-- Exposes high-level methods such as `analyzeSentence()` and `generateSentence()`
-- Hides the implementation complexity of individual services
-- Manages result-saving operations through `FileManager`
-
-The class also implements an aspect of the Facade pattern, acting as an intermediary between the user interface and backend system, simplifying interactions with `AppManager`.
-
-### 2. Singleton Pattern
-**Classes implementing the pattern:**
-- `ConfigManager`: Ensures a single instance for managing application configurations
-- `LoggerManager`: Provides a centralized access point for loggers
-- `Noun`, `Verb`, `Adjective`: Implement Singleton to ensure a single reference source for respective grammatical categories
-- `SentenceStructure`: Ensures centralized management of sentence structures
-
-All these classes maintain a private static instance of themselves and provide a `getInstance()` method to access this instance.
-
-### 3. Strategy Pattern
-**Main interfaces:**
-- `StructureSentenceStrategy`: Defines the strategy for generating sentence structures
-- `WordSelectionStrategy`: Defines the strategy for word selection
-- `TenseStrategy`: Defines the strategy for verb conjugation
-
-**Concrete implementations:**
-- Sentence structures: `RandomStructureStrategy`, `SameAsAnalyzedStructureStrategy`, `SelectedStructureStrategy`
-- Word selection: `NewWordStrategy`, `OriginalWordStrategy`
-- Verb tense: `PresentTenseStrategy`, `FutureTenseStrategy`
-
-This pattern allows for dynamically interchanging sentence generation algorithms, making the system highly flexible.
-
-### 4. Observer Pattern
-**Interfaces:**
-- `ConfigObserver`: For observing configuration changes
-- `FileObserver`: For observing file changes
-
-**Classes implementing the pattern:**
-- `APIClient`: Observes changes to API configuration
-- `Noun`, `Verb`, `Adjective`, `SentenceStructure`: Implement `ConfigObserver` to react to configuration changes
-- `FileManager`: Acts as a subject to notify file changes
-- `Word` (abstract class): Implements `FileObserver` to react to file changes
-
-### 5. Factory Pattern
-**Main class:** `WordFactory`
-The `WordFactory` class implements the Factory Method Pattern, providing a method to create instances of different word-handling classes based on the requested type (`WordType.NOUN`, `WordType.VERB`, `WordType.ADJECTIVE`), centralizing creation logic.
-
-
-
-### Classes with Multiple Design Patterns
-- `ConfigManager`: Implements both Singleton and Observer (as subject)
-- `AppManager`: Implements Facade and uses Singleton (`ConfigManager`)
-- `Verb`: Implements Singleton, Observer, and Strategy (for tense management)
-- `Word`: Implements Template Method and Observer (as observer)
-- `FormController`: Implements Facade and Command
-
-This architecture rich in design patterns makes the system highly modular, extensible, and with a clear separation of responsibilities, facilitating both maintenance and software evolution.
 
 ## *Installation Guide*
 
@@ -158,7 +56,8 @@ This guide describes how to run the NONSENSE Generator application either by dow
 
 ### 1. Prerequisites
 
-Before running the application, make sure you have the following tools installed and configured:
+Before running the application, make sure you have a valid **Google API Key** and the following tools installed and configured:
+- .
 
 #### Java Development Kit (JDK) 21 or later
 - Check the version with:
@@ -229,8 +128,7 @@ You can easily run the NONSENSE Generator application directly from your IDE, su
 2. Add New Configuration > maven
 3. In the run option write `javafx:run`
 
-
-
+---
 
 ## *Execution Environment Requirements*
 
@@ -260,6 +158,7 @@ You can easily run the NONSENSE Generator application directly from your IDE, su
   - macOS
   - Linux
 
+---
 ### Environment Variables
 The application is designed to handle configuration in a secure and automated manner using predefined files and environment variables. Specifically, it relies on the `.env` file to dynamically manage key configuration paths and settings.
 
@@ -268,6 +167,7 @@ The application is designed to handle configuration in a secure and automated ma
 - **DEFAULT_CONFIG_FILE_PATH**: Indicates the fallback configuration file path.
 - **LOG_LEVEL**: Defines the verbosity level of logs generated by the application.
 
+---
 ## *Project Dependencies*
 
 The project uses Apache Maven for dependency management and builds. Maven handles the downloading and organization of the required third-party libraries, ensuring they are integrated seamlessly into the build process. Below is a list of critical dependencies and a brief explanation of their role in the project:
@@ -296,25 +196,122 @@ Manages environmental configurations securely through an external file, ensuring
 ### JUnit 5 (JUnit Jupiter)
 Enables unit and integration testing, ensuring the application's codebase remains robust, reliable, and maintainable.
 
-
-## Deliverables
-
-The following deliverables have been produced for this project:
-
-- [**User Manual**](documentation/Manual%20of%20usage%20-%20NONSENSE%20generator.pdf)
-- [**User Stories**](https://randomgenerator.atlassian.net/jira/software/projects/SCRUM/boards/1) 
-- [**Design Document**](documentation/Design%20Document.pdf) - [Individual graphs and charts can be viewed here](documentation/graphs)
-- [**Source Code**](https://github.com/ItzPsychen/NONSENSE-generator)
-- [**System Test Document**](documentation/System%20Test%20Report.pdf)
-- [**Unit Test Report**](https://itzpsychen.github.io/NONSENSE-generator/surefire-reports/surefire-report.html)
-
-## Documentation
-
+---
 ### User Manual
 
 A comprehensive user manual has been created to help you understand and use all the features of the NONSENSE-generator application. The manual includes step-by-step instructions, screenshots, and troubleshooting tips to ensure a smooth user experience.
 
 [**Download User Manual (PDF)**](documentation/Manual%20of%20usage%20-%20NONSENSE%20generator.pdf)
+
+---
+
+## *The All-Functions Manual*
+
+The following section provides a detailed breakdown of the Application, so that you won't get lost using it in the future.
+
+- **Analyze** button
+
+  By entering a sentence and analyzing it, you will be provided with the structure of the sentence, along with the syntactic tree if the user wants to.
+
+- **Generate** button
+
+  This is the main button, used to create our nonsense sentences. You, user, have at your disposal a complete menu where you can choose from multiple options how to generate the sentences.
+
+- **Menu Options** for generating
+
+  The *Sentence Structure* section lets you choose if you want the application to choose it randomly, maintain the same one used from the input, or choose one yourself. From the settings, you can even make it *recursive*.  
+  The *Word Generation* section has two options: the first will make our Generator use new words you did not type in, while the second will make your generated result in future tense.
+
+- **Use Generated** button
+
+  This simple button will re-use your generated sentence as a new input by writing it in the input-text section. Now the previous generation can be analyzed and used again as you wish.
+
+- **Toxicity** bars
+
+  These five bars will help you visualize better at what level of toxicity, profanity, insult, sexual and political content your generated sentence is at. The lower the level, the more green they become; the higher they get, the more red they will be.
+
+- **Save** option
+
+  This checkbox, if selected, will automatically take all your future generated sentences and one by one add them to a file that will never be deleted automatically by the Application. In this file, you will always have the possibility to check your previously created sentences.
+
+- **Settings**
+
+  The Settings option, found under *File*, will open a new form where you can change the paths of many files. At the bottom, the user can change the recursion level (previously cited), disable it, set the maximum length of an input sentence and finally change the theme (light/dark).
+
+- **Vocabulary**
+
+  This form, which you can open with the *Vocabulary* option under *Edit*, will let you add all the nouns, verbs and adjectives you want so that the Generator in the future can use the new words you provided.
+
+- **About**
+
+  The Credits section explained as before. You can find this by going to the *Help* option and then *About*.
+
+---
+
+
+
+## Design Patterns Used
+This application incorporates several well-known design patterns to ensure separation of concerns, scalability, and maintainability. Below is a detailed explanation of the patterns used:
+
+### 1. Facade Pattern
+**Main class:** The Facade pattern is centrally implemented by this class which provides a simplified interface to access different complex services. This class: `AppManager`
+- Aggregates the services `AnalyzeSentenceService`, `GenerateSentenceService`, and `ModerationSentenceService`
+- Exposes high-level methods such as `analyzeSentence()` and `generateSentence()`
+- Hides the implementation complexity of individual services
+- Manages result-saving operations through `FileManager`
+
+The class also implements an aspect of the Facade pattern, acting as an intermediary between the user interface and backend system, simplifying interactions with `AppManager`.
+
+### 2. Singleton Pattern
+**Classes implementing the pattern:**
+- `ConfigManager`: Ensures a single instance for managing application configurations
+- `LoggerManager`: Provides a centralized access point for loggers
+- `Noun`, `Verb`, `Adjective`: Implement Singleton to ensure a single reference source for respective grammatical categories
+- `SentenceStructure`: Ensures centralized management of sentence structures
+
+All these classes maintain a private static instance of themselves and provide a `getInstance()` method to access this instance.
+
+### 3. Strategy Pattern
+**Main interfaces:**
+- `StructureSentenceStrategy`: Defines the strategy for generating sentence structures
+- `WordSelectionStrategy`: Defines the strategy for word selection
+- `TenseStrategy`: Defines the strategy for verb conjugation
+
+**Concrete implementations:**
+- Sentence structures: `RandomStructureStrategy`, `SameAsAnalyzedStructureStrategy`, `SelectedStructureStrategy`
+- Word selection: `NewWordStrategy`, `OriginalWordStrategy`
+- Verb tense: `PresentTenseStrategy`, `FutureTenseStrategy`
+
+This pattern allows for dynamically interchanging sentence generation algorithms, making the system highly flexible.
+
+### 4. Observer Pattern
+**Interfaces:**
+- `ConfigObserver`: For observing configuration changes
+- `FileObserver`: For observing file changes
+
+**Classes implementing the pattern:**
+- `APIClient`: Observes changes to API configuration
+- `Noun`, `Verb`, `Adjective`, `SentenceStructure`: Implement `ConfigObserver` to react to configuration changes
+- `FileManager`: Acts as a subject to notify file changes
+- `Word` (abstract class): Implements `FileObserver` to react to file changes
+
+### 5. Factory Pattern
+**Main class:** `WordFactory`
+The `WordFactory` class implements the Factory Method Pattern, providing a method to create instances of different word-handling classes based on the requested type (`WordType.NOUN`, `WordType.VERB`, `WordType.ADJECTIVE`), centralizing creation logic.
+
+
+
+### Classes with Multiple Design Patterns
+- `ConfigManager`: Implements both Singleton and Observer (as subject)
+- `AppManager`: Implements Facade and uses Singleton (`ConfigManager`)
+- `Verb`: Implements Singleton, Observer, and Strategy (for tense management)
+- `Word`: Implements Template Method and Observer (as observer)
+- `FormController`: Implements Facade and Command
+
+This architecture rich in design patterns makes the system highly modular, extensible, and with a clear separation of responsibilities, facilitating both maintenance and software evolution.
+
+---
+
 
 ### Code Documentation
 
