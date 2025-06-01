@@ -314,7 +314,7 @@ The following deliverables have been produced for this project:
 
 A comprehensive user manual has been created to help you understand and use all the features of the NONSENSE-generator application. The manual includes step-by-step instructions, screenshots, and troubleshooting tips to ensure a smooth user experience.
 
-[**Download User Manual (PDF)**](https://example.com/nonsense-generator-manual.pdf)
+[**Download User Manual (PDF)**](documentation/Manual%20of%20usage%20-%20NONSENSE%20generator.pdf)
 
 ### Code Documentation
 
