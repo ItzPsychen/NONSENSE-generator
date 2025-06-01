@@ -76,4 +76,11 @@ The following section provides a detailed breakdown of the Application, so that 
 ---
 
 ## *User Manual*
+Before using this program, make sure your device meets the following requirements:
+
+- **Java Development Kit (JDK) version 21** must be installed.  
+
+- **Google API Key**  
+  You must have a valid Google API key to use this application.  
+
 
