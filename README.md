@@ -4,6 +4,17 @@
 
 ## Table of Contents
 
+- [The Application](#the-application)
+- [Deliverables](#deliverables)
+- [Installation Guide](#installation-guide)
+  - [Prerequisites](#1-prerequisites)
+  - [Running the Application](#2-running-the-application)
+- [Execution Environment Requirements](#execution-environment-requirements)
+- [Project Dependencies](#project-dependencies)
+- [User Manual](#user-manual)
+- [The All-Functions Manual](#the-all-functions-manual)
+- [Design Patterns Used](#design-patterns-used)
+- [Code Documentation](#code-documentation)
 
 ---
 
