@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class GenerateSentenceService {
     /**
      * Provides logging functionality for the GenerateSentenceService class.
-     * Utilizes the LogManager to facilitate logging operations.
+     * Uses the LogManager to facilitate logging operations.
      */
     private static final Logger logger = LogManager.getLogger(GenerateSentenceService.class);
     /**
@@ -101,7 +101,7 @@ public class GenerateSentenceService {
 
     /**
      * Configures and adjusts the structure of the current sentence based on the defined strategies and configurations.
-     * This method defines the sentence structure, applies recursive or static adjustments, and ensures proper format.
+     * This method defines the sentence structure, applies recursive or static adjustments, and ensures a proper format.
      */
     private void configureSentenceStructure() {
         logger.info("Starting sentence structure configuration...");
@@ -191,7 +191,7 @@ public class GenerateSentenceService {
      * Sets the strategy for generating the sentence structure based on the specified strategy type.
      *
      * @param strategy      The type of strategy to be set. Must be one of the values defined in StrategyType.
-     * @param inputSentence The sentence whose structure may be utilized depending on the strategy type.
+     * @param inputSentence The sentence whose structure may be used depending on the strategy type.
      * @param selStructure  The selected structure to use, applicable if the strategy type is SELECTED.
      * @throws IllegalArgumentException if the strategy type is null or invalid.
      */
@@ -218,7 +218,6 @@ public class GenerateSentenceService {
                 break;
             default:
                 String errorMessage = "Invalid strategy: " + strategy;
-                logger.error(errorMessage);
                 logger.error(errorMessage);
                 throw new IllegalArgumentException(errorMessage);
         }

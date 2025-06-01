@@ -13,7 +13,7 @@ import java.net.InetAddress;
 
 /**
  * * Represents a client for handling API interactions with flexible request types, maintaining configurations,
- * * and enabling seamless execution. Implements observer pattern to handle configuration changes.
+ * * and enabling seamless execution. Implements an observer pattern to handle configuration changes.
  *
  * <p>Class Responsibilities:
  * - Handles communication with an external language-processing API.
@@ -28,7 +28,7 @@ public class APIClient<T> implements ConfigObserver {
 
     /**
      * Static logger instance specific to the APIClient class.
-      */
+     */
     private static final Logger logger = LoggerManager.getInstance().getLogger(APIClient.class);
     /**
      * The endpoint for accessing Google's Natural Language API service.
@@ -64,7 +64,7 @@ public class APIClient<T> implements ConfigObserver {
         ConfigManager.getInstance().addObserver(this);
         try {
             credentialsFilePath = ConfigManager.getInstance().getProperty("api.key.file");
-        }catch (MissingApiKeyException e){
+        } catch (MissingApiKeyException e) {
             logger.error("Impossible to initialize APIClient: {}", e.getMessage());
             throw new MissingApiKeyException("Impossible to initialize APIClient: " + e.getMessage());
         }
@@ -95,8 +95,8 @@ public class APIClient<T> implements ConfigObserver {
      * Creates and configures an instance of {@code LanguageServiceClient}.
      *
      * @return a properly initialized instance of {@code LanguageServiceClient}.
-     * @throws IllegalStateException if the credentials file path is not configured or invalid.
-     * @throws RuntimeException if an error occurs during the creation of the {@code LanguageServiceClient}.
+     * @throws IllegalStateException if the credential file path is not configured or invalid.
+     * @throws RuntimeException      if an error occurs during the creation of the {@code LanguageServiceClient}.
      */
     private static LanguageServiceClient createLanguageServiceClient() {
 
@@ -203,7 +203,7 @@ public class APIClient<T> implements ConfigObserver {
 
         logger.debug("Created document with content length: {}", sentence.length());
 
-        // Delego la logica al metodo `execute` dell'enum
+        // Delegate logic to execute method  
         T result = (T) requestType.execute(client, document);
         logger.debug("API request executed successfully");
         return result;
@@ -262,7 +262,7 @@ public class APIClient<T> implements ConfigObserver {
         /**
          * Executes an action corresponding to the specific request type on the provided client and document.
          *
-         * @param client the LanguageServiceClient used to perform the operation.
+         * @param client   the LanguageServiceClient used to perform the operation.
          * @param document the Document instance representing the input data for the operation.
          * @return the result object of the operation, specific to the executed request type.
          */

@@ -112,7 +112,7 @@ public class AppManager {
     /**
      * Generates a sentence based on the specified strategy, input structure, and configuration options.
      *
-     * @param strategyName     The strategy for sentence structure determination (e.g., RANDOM, SAME, SELECTED).
+     * @param strategyName The strategy for sentence structure determination (e.g., RANDOM, SAME, SELECTED).
      * @param selStructure The selected structure to use when the SELECTED strategy is applied.
      * @param toxicity     Whether to moderate the generated sentence for toxicity.
      * @param futureTense  Specifies whether to configure the sentence with a future verb tense.
@@ -126,11 +126,11 @@ public class AppManager {
         try {
             StrategyType strategy = StrategyType.valueOf(strategyName.toUpperCase());
 
-            // Validazione dell'input
+            // Input validation  
             logger.debug("Validating input sentence: {}", inputSentence);
             generateSentenceService.validateInput(inputSentence, newWords, strategy);
 
-            // Imposta le strategie e genera la frase
+            // Set strategies and generate sentence
             logger.debug("Setting structure strategy: {}", strategy);
             generateSentenceService.setStructureSentenceStrategy(strategy, inputSentence, selStructure);
 
@@ -143,14 +143,14 @@ public class AppManager {
             outputSentence = generateSentenceService.generateSentence();
             logger.debug("Generated sentence: {}", outputSentence);
 
-            // Moderazione della tossicità
+            // Toxicity moderation
             if (toxicity) {
                 logger.debug("Moderating sentence for toxicity...");
                 moderationSentenceService.moderateText(outputSentence);
                 logger.info("Toxicity moderation completed.");
             }
 
-            // Salvataggio della frase
+            // Save sentence
             if (saveSelected) {
                 String savePath = configManager.getProperty("generated.save.file");
                 FileManager.appendLineToSavingFile(savePath, outputSentence.toString());

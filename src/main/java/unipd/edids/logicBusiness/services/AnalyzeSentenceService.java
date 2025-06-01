@@ -26,7 +26,7 @@ import java.util.Properties;
  * - Generate syntax trees based on the parsed input text.
  *
  * <p> Design Pattern:
- * - Singleton design pattern is employed for the StanfordCoreNLP pipeline initialization to ensure efficient resource usage.
+ * - a Singleton design pattern is employed for the StanfordCoreNLP pipeline initialization to ensure efficient resource usage.
  */
 public class AnalyzeSentenceService {
     /**

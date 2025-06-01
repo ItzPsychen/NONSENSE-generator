@@ -163,6 +163,21 @@ public class FormController {
     // Show About info
     @FXML
     private void handleAbout() {
+        Alert alert = getAlert();
+
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        try {
+            // Attempt to retrieve and add the icon
+            String iconPath = Objects.requireNonNull(getClass().getResource("/icons/about.png")).toString();
+            alertStage.getIcons().add(new Image(iconPath));
+        } catch (NullPointerException e) {
+            // Log a warning in case of a loading issue
+            logger.warn("Failed to load the application icon: the path might be missing or incorrect.");
+        }
+        alert.showAndWait();
+    }
+
+    private static Alert getAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("NONSENSE Generator");
@@ -176,10 +191,7 @@ public class FormController {
                 
                 2024/2025 Project
                 Analysis and Generation of syntactic nonsense from your Sentences!""");
-
-        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-        alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about")));
-        alert.showAndWait();
+        return alert;
     }
 
     /**
@@ -208,9 +220,9 @@ public class FormController {
     public void initialize() {
         ConfigManager configManager = ConfigManager.getInstance();
 
-        // Get configured theme
+        // Get a configured theme
         String theme = configManager.getProperty("ui.theme");
-        // Apply current theme
+        // Apply the current theme
         updateTheme(theme);
 
         structureToggleGroup = new ToggleGroup();
@@ -222,7 +234,7 @@ public class FormController {
 
         ObservableList<String> sentenceStructuresList = FXCollections.observableArrayList(SentenceStructure.getInstance().getStructures());
         structureComboBox.setItems(sentenceStructuresList);
-        structureComboBox.getSelectionModel().selectFirst(); // Set default selection to the first item
+        structureComboBox.getSelectionModel().selectFirst(); // Set the default selection to the first item
         structureComboBox.setDisable(!selectStructureRadio.isSelected());
 
         this.treeTags = loadSyntaxTags(getFilePathTags());
@@ -253,7 +265,7 @@ public class FormController {
         MenuItem copyItem = new MenuItem("Copy");
         copyItem.setOnAction(event -> copyTextFlowContentToClipboard(textFlow));
 
-        // Add option to menu
+        // Add an option to a menu
         contextMenu.getItems().add(copyItem);
 
         // Associate context menu to TextFlow
@@ -282,12 +294,12 @@ public class FormController {
     /**
      * Extracts text content from a given JavaFX Node recursively and appends it to a StringBuilder.
      *
-     * @param node     The JavaFX Node from which text is to be extracted.
+     * @param node     The JavaFX Node from which a text is to be extracted.
      *                 It can include Text or TextFlow instances.
      * @param content  The StringBuilder object where the extracted text will be appended.
      */
     private void extractTextFromNodes(javafx.scene.Node node, StringBuilder content) {
-        // Check node type
+        // Check a node type
         if (node instanceof Text) {
             // Add text from `Text` object
             content.append(((Text) node).getText());
@@ -340,11 +352,10 @@ public class FormController {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         logger.info("Analyze button clicked");
 
-        // Create background task
+        // Create a background task
         Task<Sentence> analyzeTask = new Task<>() {
             @Override
             protected Sentence call() {
-                // Simulate processing time (500ms for test)
                 logger.info("Analyze task started");
                 // Call analysis from AppManager
                 return appManager.analyzeSentence(inputText.getText(), checkSaveSentence.isSelected());
@@ -412,7 +423,7 @@ public class FormController {
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         logger.info("Generate button clicked");
 
-        // Create background task
+        // Create a background task
         Task<Sentence> generateTask = new Task<>() {
             @Override
             protected Sentence call() {
@@ -529,14 +540,20 @@ public class FormController {
             // Get instance of associated controller
             SettingsController controller = loader.getController();
 
-            // Create Stage window
+            // Create a Stage window
             Stage settingsStage = new Stage();
             settingsStage.setTitle("Settings");
             settingsStage.initModality(Modality.WINDOW_MODAL); // Modal windows
             settingsStage.initOwner(primaryStage);
-            settingsStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.settings")));
-
-            // Set scene with root (settingsRoot) and initial dimensions
+            try {
+                // Attempt to retrieve and add the icon
+                String iconPath = Objects.requireNonNull(getClass().getResource("/icons/settings.png")).toString();
+                settingsStage.getIcons().add(new Image(iconPath));
+            } catch (NullPointerException e) {
+                // Log a warning in case of a loading issue
+                logger.warn("Failed to load the application icon: the path might be missing or incorrect.");
+            }
+            // Set the scene with root (settingsRoot) and initial dimensions
             Scene scene = new Scene(settingsRoot); // <-- Scene dimensions
             settingsStage.setScene(scene);
 
@@ -549,9 +566,9 @@ public class FormController {
 
             // Show window
             settingsStage.showAndWait();
-            // After settings close, update theme
+            // After settings close, update the theme
             String newTheme = ConfigManager.getInstance().getProperty("ui.theme");
-            updateTheme(newTheme); // Update selected theme
+            updateTheme(newTheme); // Update the selected theme
         } catch (IOException e) {
 
             // Show alert to notify user of error
@@ -577,7 +594,7 @@ public class FormController {
     }
 
     /**
-     * Toggles the disable state of the structureComboBox based on the selected state of selectStructureRadio.
+     * Toggles the disabled state of the structureComboBox based on the selected state of selectStructureRadio.
      */
     public void radioPressed() {
         structureComboBox.setDisable(!selectStructureRadio.isSelected());
@@ -695,14 +712,20 @@ public class FormController {
             // Get instance of associated controller
             VocabularyController controller = loader.getController();
 
-            // Create Stage window
+            // Create a Stage window
             Stage vocabularyStage = new Stage();
             vocabularyStage.setTitle("Vocabulary");
             vocabularyStage.initModality(Modality.WINDOW_MODAL); // Modal windows
             vocabularyStage.initOwner(primaryStage);
-            vocabularyStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.vocabulary")));
-
-            // Set scene with root (settingsRoot) and initial dimensions
+            try {
+                // Attempt to retrieve and add the icon
+                String iconPath = Objects.requireNonNull(getClass().getResource("/icons/vocabulary.png")).toString();
+                vocabularyStage.getIcons().add(new Image(iconPath));
+            } catch (NullPointerException e) {
+                // Log a warning in case of a loading issue
+                logger.warn("Failed to load the application icon: the path might be missing or incorrect.");
+            }
+            // Set the scene with root (settingsRoot) and initial dimensions
             Scene scene = new Scene(vocabularyRoot); // <-- Scene dimensions
             vocabularyStage.setScene(scene);
 
@@ -716,7 +739,7 @@ public class FormController {
 
             // Show window
             vocabularyStage.showAndWait();
-            // After settings close, update theme
+            // After settings close, update the theme
         } catch (IOException e) {
 
             // Show alert to notify user of error

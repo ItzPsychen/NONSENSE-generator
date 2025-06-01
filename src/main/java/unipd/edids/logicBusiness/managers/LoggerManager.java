@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
  * Manages the creation and provision of logger instances to ensure consistent logging functionality across the application.
  *
  * <p>Responsibilities:</p>
- * - Provides a centralized mechanism for obtaining logger instances.
+ * - Provides a centralized mechanism for getting logger instances.
  * - Ensures only one instance of the logger manager exists throughout the application's lifecycle.
  *
  * <p>Design Pattern:</p>
@@ -24,15 +24,13 @@ public class LoggerManager {
      * Manages the creation and provision of logger instances to ensure consistent logging functionality across the application.
      *
      * <p>Responsibilities:</p>
-     * - Provides a centralized mechanism for obtaining logger instances.
+     * - Provides a centralized mechanism for getting logger instances.
      * - Ensures only one instance of the logger manager exists throughout the application's lifecycle.
      *
      * <p>Design Pattern:</p>
      * - Implements the Singleton design pattern to maintain a single, globally accessible LoggerManager instance.
      */
-    private LoggerManager() {
-        // Costruttore privato
-    }
+    private LoggerManager() {}
 
     /**
      * Retrieves the singleton instance of the LoggerManager class, ensuring only one instance exists.

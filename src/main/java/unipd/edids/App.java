@@ -19,11 +19,12 @@ import unipd.edids.userInterface.SettingsController;
 import unipd.edids.userInterface.TaskManager;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static unipd.edids.userInterface.TaskManager.showErrorDialog;
 
 /**
- * Main application class extending the JavaFX Application, responsible for initializing and managing the application lifecycle.
+ * The main application class extending the JavaFX Application, responsible for initializing and managing the application lifecycle.
  *
  * <p>Responsibilities:</p>
  * - Manages the application startup and shutdown process.
@@ -53,30 +54,35 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        logger.info("Starting the application");
+        try {
+            logger.info("Starting the application");
 
-        ConfigManager configManager = ConfigManager.getInstance();
-        setSystemProperties(configManager);
 
-        String apiKeyFile = getApiKeyFile(configManager);
-        if (isApiKeyFileMissing(apiKeyFile)) {
-            logger.warn("API Key file not configured. Opening settings window.");
-            try{
-                openSettingsWindow();
-            } catch (IOException e) {
-                logger.error("Error opening settings window: ", e);
-                showErrorDialog("Settings Error", "An error occurred while opening the settings window. Please try again.");
-                return;
-            }
+            ConfigManager configManager = ConfigManager.getInstance();
+            setSystemProperties(configManager);
 
-            apiKeyFile = getApiKeyFile(configManager);
+            String apiKeyFile = getApiKeyFile(configManager);
             if (isApiKeyFileMissing(apiKeyFile)) {
-                handleMissingApiKey();
-                return;
-            }
-        }
+                logger.warn("API Key file not configured. Opening settings window.");
+                try {
+                    openSettingsWindow();
+                } catch (IOException e) {
+                    logger.error("Error opening settings window: ", e);
+                    showErrorDialog("Settings Error", "An error occurred while opening the settings window. Please try again.");
+                    return;
+                }
 
-        initializeMainWindow(primaryStage, configManager);
+                apiKeyFile = getApiKeyFile(configManager);
+                if (isApiKeyFileMissing(apiKeyFile)) {
+                    handleMissingApiKey();
+                    return;
+                }
+            }
+
+            initializeMainWindow(primaryStage, configManager);
+        }catch (Exception e){
+            logger.error("Error during application startup: ", e);
+        }
     }
 
     /**
@@ -153,7 +159,7 @@ public class App extends Application {
 
     /**
      * Handles the scenario when the API Key configuration is missing.
-     *
+     * <p>
      * Logs an error indicating the mandatory requirement for the API Key configuration and prevents the application from starting.
      * Displays an error dialog prompting the user to configure the API Key in the settings.
      */
@@ -178,7 +184,15 @@ public class App extends Application {
         controller.setFacade(appManager);
         controller.setPrimaryStage(primaryStage);
 
-        primaryStage.getIcons().add(new Image(configManager.getProperty("icon.main")));
+        try {
+            // Attempt to retrieve and add the icon
+            String iconPath = Objects.requireNonNull(getClass().getResource("/icons/icon.png")).toString();
+            primaryStage.getIcons().add(new Image(iconPath));
+        } catch (NullPointerException e) {
+            // Log a warning in case of a loading issue
+            logger.warn("Failed to load the application icon: the path might be missing or incorrect.");
+        }
+
         primaryStage.setTitle("NONSENSE Generator");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(800);

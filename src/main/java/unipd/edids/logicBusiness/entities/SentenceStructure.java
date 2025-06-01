@@ -23,13 +23,13 @@ import java.util.Random;
 public class SentenceStructure implements ConfigObserver {
     /**
      * Default sentence structure used when no custom structures are provided or available.
-     *
+     * <p> <p> <p>
      * Format: "[NOUN] [VERB] [NOUN]"
      */
     private static final String DEFAULT_STRUCTURE = "[NOUN] [VERB] [NOUN]";
     /**
      * Single instance of the SentenceStructure class.
-     * Implements Singleton design pattern to ensure one global access point.
+     * Implements a Singleton design pattern to ensure one global access point.
      */
     private static SentenceStructure instance; // Single instance of the class
     /**
@@ -73,8 +73,8 @@ public class SentenceStructure implements ConfigObserver {
 
     /**
      * Loads sentence structures from a file specified in the configuration.
-     *
-     * Utilizes FileManager's readFile method to read non-empty lines from the file path
+     * <p> <p> <p>
+     * Uses FileManager's readFile method to read non-empty lines from the file path
      * retrieved using ConfigManager. Updates the internal list of sentence structures
      * with the file's contents.
      */

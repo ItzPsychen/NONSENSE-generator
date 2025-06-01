@@ -27,7 +27,7 @@ import java.util.Properties;
 public class ConfigManager {
     /**
      * Logger instance used for logging messages within the ConfigManager class.
-     *
+     * <p>
      * Responsibilities:
      * - Provides a centralized way to log information, warnings, and errors for ConfigManager.
      * - Facilitates consistent logging using Log4j2.
@@ -48,11 +48,11 @@ public class ConfigManager {
     private static ConfigManager instance;
     /**
      * List of registered ConfigObserver instances monitoring configuration changes.
-     *
+     * <p>
      * Responsibilities:
      * - Maintain observers monitoring configuration updates.
      * - Enable the Observer design pattern for dynamic notifications.
-     *
+     * <p>
      * Design Pattern:
      * - Observer Pattern: Acts as the Subject, notifying observers of configuration changes.
      */
@@ -281,9 +281,8 @@ public class ConfigManager {
      * @param defaultConfigPath The file path to the default configuration file.
      * @param newApiKey         The new API key to replace the existing API key.
      *                          If null or blank, the existing API key is not replaced.
-     * @throws IOException If there are issues accessing or reading the default configuration file.
      */
-    private void resetConfigFromDefault(String defaultConfigPath, String newApiKey) throws IOException {
+    private void resetConfigFromDefault(String defaultConfigPath, String newApiKey) {
         logger.info("Resetting configuration from default path: {}", defaultConfigPath);
         List<String> lines = FileManager.readFile(defaultConfigPath);
 
@@ -299,12 +298,12 @@ public class ConfigManager {
             }
         }
 
-        // Update the specific property for API key
+        // Update the specific property for an API key
         if (newApiKey != null && !newApiKey.isBlank()) {
             setProperty(API_KEY_PROPERTY, newApiKey);
         }
 
-        // Save property changes to configuration file
+        // Save property changes to a configuration file
         saveProperties();
     }
 }

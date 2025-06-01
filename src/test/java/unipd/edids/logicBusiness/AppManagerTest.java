@@ -140,7 +140,7 @@ class AppManagerTest {
     }
 
     @Test
-    public void testGenerateSentence_SameStrategy() throws IOException {
+    public void testGenerateSentence_SameStrategy() {
         checkApiKey();
 
 
@@ -153,7 +153,7 @@ class AppManagerTest {
     }
 
     @Test
-    public void testGenerateSentence_SelectedStrategy() throws IOException {
+    public void testGenerateSentence_SelectedStrategy() {
         checkApiKey();
 
         // Mock a valid input sentence
@@ -214,7 +214,7 @@ class AppManagerTest {
     }
 
     @Test
-    public void testGenerateSentence_WithToxicityEnabled() throws IOException {
+    public void testGenerateSentence_WithToxicityEnabled() {
         checkApiKey();
         // Mock a valid input sentence
 //        appManager.analyzeSentence("This is a test input", false);
@@ -266,7 +266,7 @@ class AppManagerTest {
     }
 
     @Test
-    public void testGenerateSentence_NoInputSentence_RandomStrategy_NewWordsEnabled() throws IOException {
+    public void testGenerateSentence_NoInputSentence_RandomStrategy_NewWordsEnabled() {
         checkApiKey();
         // Generazione con RANDOM strategy e newWords abilitato
         Sentence generatedSentence = appManager.generateSentence("RANDOM", "simple", false, false, true, false);

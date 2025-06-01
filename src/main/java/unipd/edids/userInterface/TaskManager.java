@@ -49,12 +49,12 @@ public class TaskManager {
             runningTasks.add(task);
         }
         task.setOnSucceeded(e -> {
-            // Remove task from list when completed
+            // Remove a task from a list when completed
             removeTask(task);
             onSuccess.accept(task.getValue());
         });        // Handle failed tasks
         task.setOnFailed(e -> {
-            // Remove task from list in case of error
+            // Remove a task from a list in case of error
             removeTask(task);
             Throwable ex = task.getException();
             String errorMessage = (ex != null) ? ex.getMessage() : "Unknown error occurred";
@@ -64,7 +64,7 @@ public class TaskManager {
         });
 
         task.setOnCancelled(e -> {
-            // Remove task from list when canceled
+            // Remove a task from a list when canceled
             removeTask(task);
             logger.info("Task was cancelled.");
         });
@@ -131,8 +131,8 @@ public class TaskManager {
         // TextFlow to combine both messages
         TextFlow textFlow = new TextFlow(generalText, errorText);
 
-        // Set maximum width for TextFlow (text will wrap if it exceeds this width)
-        textFlow.setPrefWidth(400); // Change value to adjust desired width
+        // Set the maximum width for TextFlow (text will wrap if it exceeds this width)
+        textFlow.setPrefWidth(400); // Change value to adjust the desired width
         textFlow.setMaxWidth(400);
         textFlow.setMaxHeight(Region.USE_PREF_SIZE); // Fixed behavior for height
 
@@ -149,7 +149,7 @@ public class TaskManager {
         alert.getDialogPane().setMaxWidth(450); // Maximum width
         alert.getDialogPane().setMaxHeight(200); // Maximum height
 
-        // Show dialog window
+        // Show a dialog window
         alert.showAndWait();
     }
 }

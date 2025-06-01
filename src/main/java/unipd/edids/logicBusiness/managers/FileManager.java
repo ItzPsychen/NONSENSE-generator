@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +35,14 @@ public class FileManager {
      * <p>Design Pattern:
      * - Observer Pattern: Acts as the Subject component, notifying observers of file changes.
      */
-    // Lista degli observer registrati (statica)
+    // List of registered observers (static)
     private static final List<FileObserver> observers = new ArrayList<>();
 
     /**
      * Private constructor to prevent instantiation of this utility class.
      */
-    private FileManager() {}
+    private FileManager() {
+    }
 
     /**
      * Appends a new line to a vocabulary file. If the file does not exist, it is created.
@@ -51,16 +53,17 @@ public class FileManager {
      * @throws IOException if an I/O error occurs while writing to the file
      */
     public static void appendLineToVocabularyFile(String filePath, String newLine) throws IOException {
-        // Verifica se il file non esiste e, in tal caso, crealo
-        if (Files.notExists(Paths.get(filePath))) {
-            Files.createFile(Paths.get(filePath));
+        // Check if a file doesn't exist and if so, create it
+        Path path = Paths.get(filePath);
+        if (Files.notExists(path)) {
+            Files.createFile(path);
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
+            writer.newLine(); // Ensure a new line is always added
             writer.write(newLine);
         }
-        // Notifica gli observer del cambiamento
+        // Notify observers of the change
         notifyObservers(filePath);
     }
 
@@ -72,13 +75,14 @@ public class FileManager {
      */
     public static void appendLineToSavingFile(String filePath, String newLine) {
         try {
-            // Verifica se il file non esiste e, in tal caso, crealo
-            if (Files.notExists(Paths.get(filePath))) {
-                Files.createFile(Paths.get(filePath));
+            // Check if a file doesn't exist and if so, create it
+            Path path = Paths.get(filePath);
+            if (Files.notExists(path)) {
+                Files.createFile(path);
             }
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                writer.newLine(); // Assicura che si aggiunga sempre una nuova linea
+                writer.newLine(); // Ensure a new line is always added
                 writer.write(newLine);
             }
         } catch (IOException e) {
@@ -99,7 +103,7 @@ public class FileManager {
                     .filter(line -> !line.trim().isEmpty())
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException("Errore durante la lettura del file: " + filePath, e);
+            throw new RuntimeException("Error while reading file: " + filePath, e);
         }
     }
 
@@ -110,15 +114,6 @@ public class FileManager {
      */
     public static void addObserver(FileObserver observer) {
         observers.add(observer);
-    }
-
-    /**
-     * Removes a registered file observer from the list of observers.
-     *
-     * @param observer The instance of FileObserver to be removed.
-     */
-    public static void removeObserver(FileObserver observer) {
-        observers.remove(observer);
     }
 
     /**
@@ -133,7 +128,7 @@ public class FileManager {
     }
 
     /**
-     * Deletes a file at the specified path, if it exists.
+     * Deletes a file at the specified path if it exists.
      * Throws an exception if deletion fails or the file does not exist.
      *
      * @param filePath the path of the file to delete
@@ -141,10 +136,9 @@ public class FileManager {
      */
     public static void deleteFile(String filePath) throws IOException {
         if (!Files.deleteIfExists(Paths.get(filePath))) {
-            throw new IOException("Eliminazione del file fallita o il file non esiste: " + filePath);
+            throw new IOException("File deletion failed or file does not exist: " + filePath);
         }
     }
-    
-    
+
 
 }

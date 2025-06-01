@@ -100,7 +100,7 @@ class AnalyzeSentenceServiceTest {
     }
 
     @Test
-    void testAnalyzeSyntax_exceedsMaxLength() throws IOException {
+    void testAnalyzeSyntax_exceedsMaxLength() {
         logger.info("Testing analyzeSyntax() for input exceeding max length...");
         // Arrange
         ConfigManager.getInstance().setProperty("max.sentence.length", "10");

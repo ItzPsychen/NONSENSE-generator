@@ -45,9 +45,9 @@ public class VocabularyController {
     /**
      * Adds a verb input by the user into the configured vocabulary file.
      *
-     * <p>This method validates the user's input, splits it into distinct verbs if multiple are provided,
+     * <p>This method validates the user's input, splits it into distinct verbs if multiple is provided,
      * and appends them as separate lines in the vocabulary file specified in the application's configuration.
-     * The input field is cleared and its style is reset after successful operation.
+     * The input field is cleared and its style is reset after a successful operation.
      *
      * <p>Throws:
      * - IOException if an error occurs while appending to the vocabulary file.

@@ -50,7 +50,7 @@ public class Sentence {
      */
     private double sexual;
     /**
-     * Represents the degree to which a sentence is associated with political content.
+     * Represents the degree with which a sentence is associated with political content.
      */
     private double politics;
 
@@ -59,7 +59,7 @@ public class Sentence {
      */
     private List<String> nouns;
     /**
-     * Represents a list of verbs extracted or utilized in the sentence structure.
+     * Represents a list of verbs extracted or used in the sentence structure.
      */
     private List<String> verbs;
     /**

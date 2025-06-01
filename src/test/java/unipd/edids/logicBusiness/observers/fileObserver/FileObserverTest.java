@@ -81,10 +81,9 @@ public class FileObserverTest {
     @Test
     void testOnFileChangedWithNullPath() {
         logger.info("Testing onFileChanged() with a null file path...");
-        String nullPath = null;
 
         // Act
-        fileObserver.onFileChanged(nullPath);
+        fileObserver.onFileChanged(null);
 
         // Assert
         assertNull(fileObserver.getLastModifiedFilePath(),

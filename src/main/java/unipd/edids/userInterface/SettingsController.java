@@ -42,10 +42,10 @@ import java.util.Objects;
  * - themeComboBox: ComboBox for selecting the application UI theme.
  * - configManager: Singleton instance for centralized configuration management.
  * - stage: Stage reference for managing the settings window lifecycle.
- *
+ * <p>
  * Constructor:
  * Initializes dependencies including the configuration manager and logger setup.
- *
+ * <p>
  * Methods:
  * - setStage: Assigns the application `Stage` to the controller.
  * - selectApiKeyFile: Facilitates file selection for the API Key field.
@@ -63,7 +63,7 @@ import java.util.Objects;
  * - getPropertyOrDefault: Retrieves configuration properties or falls back to default values.
  * - closeSettings: Closes the settings window.
  * - applySettings: Validates and applies configuration changes to the application.
- * - getEmptyFields: Identifies text fields with missing required input.
+ * - getEmptyFields: Identifies text fields with missing required to be input.
  * - recursionSelection: Toggles enablement of recursion-related input fields.
  * - resetToDefault: Resets all configuration values back to their defined defaults.
  */
@@ -99,7 +99,7 @@ public class SettingsController {
     private CheckBox allowRecursiveSentencesCheck;
     @FXML
     private ComboBox<String> themeComboBox;
-    ConfigManager configManager = ConfigManager.getInstance();
+    final ConfigManager configManager = ConfigManager.getInstance();
 
     private Stage stage;
 
@@ -169,7 +169,7 @@ public class SettingsController {
             File projectDirectory = new File(System.getProperty("user.dir"));
             // Calculate relative path 
             String relativePath = projectDirectory.toURI().relativize(file.toURI()).getPath();
-            // Assign relative path to text field
+            // Assign a relative path to the text field
             field.setText(relativePath);
         }
     }
@@ -187,14 +187,14 @@ public class SettingsController {
 
     /**
      * Loads and initializes the settings fields with default or configured values.
-     *
+     * <p>
      * This method retrieves stored configuration values using `getPropertyOrDefault`
      * and assigns them to UI components such as text fields, combo boxes,
      * and checkboxes. If no configuration exists for a particular field,
      * a specified default value is used. Fields such as numeric inputs and
      * checkboxes are initialized with additional logic to handle interdependent states.
-     *
-     * Logs information about successful initialization of settings.
+     * <p>
+     * Logs information about the successful initialization of settings.
      */
     private void loadItems() {
 
@@ -237,7 +237,7 @@ public class SettingsController {
             // Try to get property value
             return configManager.getProperty(key);
         } catch (IllegalArgumentException | MissingApiKeyException e) {
-            // If property doesn't exist or API key is missing, return default value
+            // If a property doesn't exist or an API key is missing, return the default value
             logger.warn("Property '{}' not found. Using default value '{}'.", key, defaultValue);
             return defaultValue;
         }
@@ -251,7 +251,7 @@ public class SettingsController {
 
     /**
      * Applies and saves user-configured settings.
-     *
+     * <p>
      * This method performs the following operations:
      * - Validates that required fields are not empty, showing a warning if necessary.
      * - Updates the configuration manager with user-provided values from text fields, combo boxes, and checkboxes.
@@ -298,9 +298,9 @@ public class SettingsController {
 
     /**
      * Retrieves a list of field names that are empty.
-     *
+     * <p>
      * This method checks multiple text fields to determine whether their text values
-     * are null or empty, and returns a list of field names that need input.
+     * are null or empty and returns a list of field names that need input.
      *
      * @return A list of string names of the empty fields, indicating required input fields.
      */

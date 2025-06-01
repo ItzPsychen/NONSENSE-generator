@@ -30,7 +30,7 @@ public class OriginalWordStrategy implements WordSelectionStrategy {
      * Represents the source sentence used as input for processing strategies.
      * Stores original word lists and sentence structure.
      */
-    Sentence inputSentence;
+    final Sentence inputSentence;
 
     /**
      * <p>

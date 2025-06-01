@@ -3,7 +3,6 @@ package unipd.edids.logicBusiness.entities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
-import unipd.edids.logicBusiness.managers.ConfigManager;
 
 import java.io.File;
 import java.io.FileWriter;
