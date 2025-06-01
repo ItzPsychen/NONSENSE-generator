@@ -332,8 +332,6 @@ Detailed documentation of the codebase is available online. This documentation i
 - Design patterns implementation details
 - API documentation
 - Package structure
-- Sequence diagrams
-- Developer guidelines
 
 The documentation is generated automatically from code comments and is regularly updated to reflect the current state of the codebase.
 
