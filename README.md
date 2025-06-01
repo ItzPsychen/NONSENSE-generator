@@ -81,7 +81,7 @@ Before using this program, make sure your device meets the following requirement
 - **Java Development Kit (JDK) version 21** must be installed.
 - A valid **Google API Key** is required to access the application's services.
   
-## Installation
+**Installation**
 
 After verifying the requirements, proceed with the installation of the project on your local machine.
 
