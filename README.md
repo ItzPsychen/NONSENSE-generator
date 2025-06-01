@@ -295,3 +295,15 @@ Manages environmental configurations securely through an external file, ensuring
 
 ### JUnit 5 (JUnit Jupiter)
 Enables unit and integration testing, ensuring the application's codebase remains robust, reliable, and maintainable.
+
+
+## Deliverables
+
+The following deliverables have been produced for this project:
+
+- [**User Manual**](https://github.com/link-to-manual)
+- [**User Stories**](https://jira.com/link-to-user-stories)
+- [**Design Document**](https://github.com/link-to-design-document)
+- [**Source Code**](https://github.com/link-to-code)
+- [**System Test Document**](https://github.com/link-to-system-test)
+- [**Unit Test Report**](https://github.com/link-to-unit-test-report)
