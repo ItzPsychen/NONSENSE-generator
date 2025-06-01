@@ -151,3 +151,147 @@ The `WordFactory` class implements the Factory Method Pattern, providing a metho
 - `FormController`: Implements Facade and Command
 
 This architecture rich in design patterns makes the system highly modular, extensible, and with a clear separation of responsibilities, facilitating both maintenance and software evolution.
+
+## *Installation Guide*
+
+This guide describes how to run the NONSENSE Generator application either by downloading the pre-built JAR file or running the project from the source code using Maven.
+
+### 1. Prerequisites
+
+Before running the application, make sure you have the following tools installed and configured:
+
+#### Java Development Kit (JDK) 21 or later
+- Check the version with:
+  ```bash
+  java -version
+  ```
+- If not installed, download it from [Adoptium](https://adoptium.net/) or another trusted provider.
+
+#### Apache Maven (Minimum version: 3.8.0)
+- Verify the Maven installation with:
+  ```bash
+  mvn -version
+  ```
+- If Maven is not installed, download it at [Maven Official Website](https://maven.apache.org/download.cgi).
+
+#### JavaFX Runtime (Version 21.0.7 or later)
+- Download the JavaFX SDK from [OpenJFX Download Page](https://gluonhq.com/products/javafx/), and extract it to a directory (e.g., `/opt/javafx-sdk-21.0.7`).
+
+### 2. Running the Application
+
+#### Option 1: Using the Pre-Built JAR
+
+**Download the JAR File**
+
+- Navigate to our [latest release](https://github.com/ItzPsychen/NONSENSE-generator/releases/tag/V1.0) and download the latest
+  pre-built JAR file (e.g., `NONSENSE-generator.jar`).
+
+---
+
+#### ⚠️ IMPORTANT
+Please copy the JAR file into the main project directory, alongside the src/ folder.  This is necessary because the application currently loads resource files using relative paths from the execution directory. We apologize for the inconvenience — this is a known limitation and we're actively working to improve the resource handling in a future version, so that the application can properly load resources from within the JAR itself.
+
+Thank you for your understanding!
+
+---
+
+**Run the Application**
+- Use the following command to launch the application, making sure to specify the JavaFX SDK path. For example if your JavaFX SDK is into `/opt/javafx-sdk-21.0.7`, the command would look like:
+  ```bash
+  java --module-path /opt/javafx-sdk-21.0.7/lib \
+      --add-modules javafx.controls,javafx.fxml \
+      -jar NONSENSE-generator-1.0-SNAPSHOT.jar
+  ```
+
+#### Option 2: Running from Source with Maven
+
+If you'd like to run the project directly from the source code, follow these steps:
+
+**Clone the Repository**
+- Open a terminal and execute:
+  ```bash
+  git clone https://github.com/your-repo-link.git
+  cd nonsense-generator
+  ```
+
+**Run the Application via Maven**
+- Use the following Maven command to launch the application:
+  ```bash
+  mvn javafx:run
+  ```
+- Maven will automatically download dependencies and start the application.
+
+#### Option 3: Running from IDE (e.g. Intellij)
+
+You can easily run the NONSENSE Generator application directly from your IDE, such as IntelliJ IDEA. Follow these steps to set up and execute the project:
+
+1. Open Edit Configurations…
+2. Add New Configuration > maven
+3. In the run option write `javafx:run`
+
+
+
+
+## *Execution Environment Requirements*
+
+### Project Requirements
+- **Java Development Kit (JDK) 21**: The source and target compatibility are both set to Java 21 as specified in the pom.xml file:
+  ```xml
+  <properties>
+      <maven.compiler.source>21</maven.compiler.source>
+      <maven.compiler.target>21</maven.compiler.target>
+  </properties>
+  ```
+  This ensures compatibility with features introduced in Java 21.
+
+- **JavaFX (version 21.0.7)**: Required for the development of the graphical user interface (GUI). The required JavaFX modules are:
+  - javafx-controls
+  - javafx-fxml
+
+  To run the project with JavaFX, ensure that the Java environment is configured to support JavaFX.
+
+### Minimum System Requirements
+- **RAM**: A minimum of 2GB, as large linguistic models may consume significant memory.
+- **Processor**: Any modern processor supporting Java 21.
+- **Disk Space**: Approximately 500MB for runtime libraries, dependencies, and application files.
+- **Operating System Compatibility**:
+  The project can run on systems supporting Java 21 and JavaFX, including:
+  - Windows
+  - macOS
+  - Linux
+
+### Environment Variables
+The application is designed to handle configuration in a secure and automated manner using predefined files and environment variables. Specifically, it relies on the `.env` file to dynamically manage key configuration paths and settings.
+
+**Key Variables Managed by the Application**:
+- **CONFIG_FILE_PATH**: Specifies the path to the primary configuration file used to store and load application settings.
+- **DEFAULT_CONFIG_FILE_PATH**: Indicates the fallback configuration file path.
+- **LOG_LEVEL**: Defines the verbosity level of logs generated by the application.
+
+## *Project Dependencies*
+
+The project uses Apache Maven for dependency management and builds. Maven handles the downloading and organization of the required third-party libraries, ensuring they are integrated seamlessly into the build process. Below is a list of critical dependencies and a brief explanation of their role in the project:
+
+### JavaFX Modules
+Used for building the graphical interface with tools like javafx-controls and javafx-fxml to ensure a responsive and interactive UI.
+
+### Log4J (Apache Logging)
+Provides robust logging capabilities to track application actions, debug behavior, and handle runtime errors efficiently.
+
+### Stanford CoreNLP
+Offers advanced linguistic analysis, such as parsing the syntactic structure of sentences and recognizing parts of speech (e.g., nouns, verbs). The StanfordCoreNLP pipeline is primarily used to generate the syntax tree
+
+
+### Google Cloud APIs
+Facilitates integration with Google's Natural Language Processing services, supporting text analysis, toxicity evaluation, and content moderation. The project uses Google Cloud's Natural Language API for content classification and text moderation.
+
+
+
+### Apache Commons (Lang3)
+Contains utility functions for string manipulation, randomization, and validating complex input data.
+
+### Dotenv
+Manages environmental configurations securely through an external file, ensuring flexibility for sensitive variables like API keys and file paths (.env).
+
+### JUnit 5 (JUnit Jupiter)
+Enables unit and integration testing, ensuring the application's codebase remains robust, reliable, and maintainable.
