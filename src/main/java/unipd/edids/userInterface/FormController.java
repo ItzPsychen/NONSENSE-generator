@@ -148,6 +148,12 @@ public class FormController {
         syntaxArea.getChildren().clear();
         generateArea.getChildren().clear();
         appManager.clearAll();
+
+        animateProgressBar(toxicityBar, 0);
+        animateProgressBar(profanityBar, 0);
+        animateProgressBar(insultBar, 0);
+        animateProgressBar(sexualBar, 0);
+        animateProgressBar(politicsBar, 0);
     }
 
     /**
@@ -160,7 +166,16 @@ public class FormController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("NONSENSE Generator");
-        alert.setContentText("Created by team NoIdeaName\n\n" + "→ Casarotto Milo\n→ Donnagemma Davide\n→ Hu Stefania\n→ Maniglio Federico\n\n" + "2024/2025 Project\nAnalysis and Generation of syntactic nonsense from your Sentences!");
+        alert.setContentText("""
+                Created by team NoIdeaName
+                
+                → Casarotto Milo
+                → Donnagemma Davide
+                → Hu Stefania
+                → Maniglio Federico
+                
+                2024/2025 Project
+                Analysis and Generation of syntactic nonsense from your Sentences!""");
 
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
         alertStage.getIcons().add(new Image(ConfigManager.getInstance().getProperty("icon.about")));
@@ -179,7 +194,7 @@ public class FormController {
     /**
      * Initializes the user interface components and sets up the primary configurations
      * for the application.
-     *
+     * <p>
      * This method is responsible for:
      * - Applying the configured UI theme.
      * - Setting up toggle groups for radio buttons.
@@ -242,9 +257,7 @@ public class FormController {
         contextMenu.getItems().add(copyItem);
 
         // Associate context menu to TextFlow
-        textFlow.setOnContextMenuRequested(e -> {
-            contextMenu.show(textFlow, e.getScreenX(), e.getScreenY());
-        });
+        textFlow.setOnContextMenuRequested(e -> contextMenu.show(textFlow, e.getScreenX(), e.getScreenY()));
     }
 
     /**
@@ -317,7 +330,7 @@ public class FormController {
 
     /**
      * Handles the behavior when the "Analyze" button is clicked.
-     *
+     * <p>
      * 1. Starts a progress indicator to provide visual feedback to the user.
      * 2. Creates and executes a background task to analyze the given sentence with
      *    options determined by the user interface state.
@@ -608,7 +621,7 @@ public class FormController {
             return properties.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().toString()));
         } catch (IOException e) {
             System.err.println("Error loading properties file: " + filePath);
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             return Map.of(); // Return empty Map if error occurs
         }
     }
@@ -735,7 +748,7 @@ public class FormController {
 
     /**
      * Triggers an action when the "use generated" button is clicked.
-     *
+     * <p>
      * Updates the input text field with the generated output sentence,
      * if available from the application manager's output.
      */
