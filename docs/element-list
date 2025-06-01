@@ -1,0 +1,13 @@
+unipd.edids
+unipd.edids.logicBusiness
+unipd.edids.logicBusiness.entities
+unipd.edids.logicBusiness.exceptions
+unipd.edids.logicBusiness.factories
+unipd.edids.logicBusiness.managers
+unipd.edids.logicBusiness.observers.configObserver
+unipd.edids.logicBusiness.observers.fileObserver
+unipd.edids.logicBusiness.services
+unipd.edids.logicBusiness.strategies.structureStrategies
+unipd.edids.logicBusiness.strategies.tenseStrategies
+unipd.edids.logicBusiness.strategies.wordSelectionStrategies
+unipd.edids.userInterface
